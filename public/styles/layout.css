@@ -978,6 +978,36 @@ html.fab-anim-done .page-fab {
   }
 }
 
+/* Der FAB liegt fixiert ÜBER dem Scroll-Bereich. Ohne diese Reserve endet jede
+ * Liste unter ihm: auf dem Handy verdeckte er das letzte Element auf Dashboard,
+ * Aufgaben und Kalender gleichermaßen — es ließ sich nicht freischeiben, weil
+ * .app-content unten keinen Innenabstand hatte.
+ * `:has()` begrenzt die Reserve auf Seiten, die tatsächlich einen sichtbaren FAB
+ * rendern; Seiten ohne FAB bekommen keinen toten Raum am Listenende. */
+.app-content:has(.page-fab:not([hidden])) {
+  padding-bottom: calc(52px + var(--space-6) + var(--space-3));
+}
+
+/* Gleiches Problem, anderes Element: der Installations-Banner liegt ebenfalls
+ * fixiert über dem Scroll-Bereich und verdeckte das letzte Listenelement.
+ * `data-visible` spiegelt den Shadow-DOM-Zustand nach außen (siehe
+ * components/samla-install-prompt.js). */
+/* Der Banner ist Geschwister von .app-shell (beide direkt im <body>), nicht
+ * dessen Kind — deshalb muss der :has()-Anker <body> sein. */
+body:has(samla-install-prompt[data-visible]) .app-content {
+  padding-bottom: calc(96px + var(--space-3));
+}
+
+body:has(samla-install-prompt[data-visible]) .app-content:has(.page-fab:not([hidden])) {
+  padding-bottom: calc(96px + 52px + var(--space-3));
+}
+
+@media (min-width: 1024px) {
+  .app-content:has(.page-fab:not([hidden])) {
+    padding-bottom: calc(var(--target-lg) + var(--space-8) + var(--space-3));
+  }
+}
+
 /* ================================================================
  * Geteilte Page-Toolbar (Modul-Kopf)
  *

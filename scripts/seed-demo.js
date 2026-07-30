@@ -133,7 +133,7 @@ const cfgSet = db.prepare(`
   ON CONFLICT(key) DO UPDATE SET value = excluded.value
 `);
 cfgSet.run('currency', 'EUR');
-cfgSet.run('date_format', 'dmy_dot');
+cfgSet.run('date_format', 'dmy_slash');
 cfgSet.run('time_format', '24h');
 cfgSet.run('app_name', 'Samla');
 cfgSet.run('visible_meal_types', 'breakfast,lunch,dinner,snack');

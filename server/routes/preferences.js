@@ -22,10 +22,12 @@ const DEFAULT_CURRENCY = 'EUR';
 const DEFAULT_APP_NAME = 'Samla';
 
 const VALID_DATE_FORMATS = ['mdy', 'dmy', 'ymd', 'mdy_dot', 'dmy_dot', 'dmy_slash', 'ymd_dot', 'ymd_slash'];
-// Default an die übrigen europäischen Defaults (EUR, 24h) und den Client-i18n-
-// Default (dmy) angeglichen: ein nicht konfigurierter Account zeigt 30.06.2026
-// statt 06/30/2026. US-Nutzer können in den Einstellungen weiterhin mdy wählen.
-const DEFAULT_DATE_FORMAT = 'dmy';
+// An die Produktsprache (Italienisch) und den Client-i18n-Default angeglichen:
+// ein nicht konfigurierter Account zeigt 30/06/2026. Der frühere Wert 'dmy'
+// schrieb 30.06.2026 — die deutsche Punktschreibweise aus dem Ursprungsprojekt.
+// Muss mit DEFAULT_DATE_FORMAT in public/i18n.js übereinstimmen; wer eine Region
+// setzt, überschreibt beides (settings/region-presets.js).
+const DEFAULT_DATE_FORMAT = 'dmy_slash';
 const VALID_TIME_FORMATS = ['24h', '12h'];
 
 // Wochenstart (haushaltweit): mit welchem Wochentag Kalender-Ansichten beginnen.

@@ -1366,6 +1366,23 @@
   outline-offset: 1px;
 }
 
+/* Touch: die Chips maßen 22 px Höhe und verfehlten damit auch das AA-Minimum
+ * von 24×24 (WCAG 2.5.8); die Plattform-Empfehlung liegt bei 44. Nur für grobe
+ * Zeiger vergrößert, damit die Dichte auf dem Desktop unverändert bleibt.
+ * Die Monatsgitter-Zellen sind ausgenommen: dort ist die Höhe hart begrenzt und
+ * die Chips werden ohnehin geklippt (.month-day .cal-task-chip.is-clipped). */
+@media (pointer: coarse) {
+  .cal-task-chip {
+    min-height: 32px;
+    padding-block: var(--space-1h);
+  }
+
+  .month-day .cal-task-chip {
+    min-height: 0;
+    padding-block: var(--space-0h);
+  }
+}
+
 .cal-task-chip span {
   overflow: hidden;
   text-overflow: ellipsis;

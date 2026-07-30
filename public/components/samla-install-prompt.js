@@ -320,6 +320,11 @@ class SamlaInstallPrompt extends HTMLElement {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         banner.classList.add('banner--visible');
+        // Sichtbarkeit am Host spiegeln: `banner--visible` liegt im Shadow DOM und
+        // ist von außen nicht selektierbar. Ohne dieses Attribut kann das Layout
+        // keinen Platz reservieren, und das fixierte Banner verdeckt das letzte
+        // Listenelement (siehe .app-content-Regel in layout.css).
+        this.setAttribute('data-visible', '');
       });
     });
   }
@@ -406,6 +411,9 @@ class SamlaInstallPrompt extends HTMLElement {
     const banner = this._shadow.querySelector('.banner');
     if (!banner) return;
 
+    // Reservierten Platz sofort freigeben, nicht erst nach der Slide-out-Animation:
+    // sonst bliebe unter der Liste kurz ein leerer Streifen stehen.
+    this.removeAttribute('data-visible');
     banner.classList.remove('banner--visible');
     banner.addEventListener('transitionend', () => this.remove(), { once: true });
   }

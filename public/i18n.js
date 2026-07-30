@@ -12,7 +12,10 @@ const STORAGE_KEY = 'samla-locale';
 const DATE_FORMAT_KEY = 'samla-date-format';
 const TIME_FORMAT_KEY = 'samla-time-format';
 const NUMBER_LOCALE_KEY = 'samla-number-locale';
-const DEFAULT_DATE_FORMAT = 'dmy';
+// Passend zur Produktsprache: italienische Schreibweise 31/07/2026. Der frühere
+// Wert 'dmy' schrieb 31.07.2026 — die deutsche Konvention aus dem Ursprungsprojekt.
+// Wer die Region setzt, überschreibt das ohnehin (siehe settings/region-presets.js).
+const DEFAULT_DATE_FORMAT = 'dmy_slash';
 const DEFAULT_TIME_FORMAT = '24h';
 const VALID_TIME_FORMATS = ['24h', '12h'];
 

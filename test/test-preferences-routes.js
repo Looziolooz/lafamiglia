@@ -77,7 +77,7 @@ test('GET / liefert die dokumentierten Defaults', async () => {
   const { status, body } = await get();
   assert.equal(status, 200);
   assert.equal(body.data.currency, 'EUR');
-  assert.equal(body.data.date_format, 'dmy');
+  assert.equal(body.data.date_format, 'dmy_slash');
   assert.equal(body.data.time_format, '24h');
   assert.equal(body.data.week_start, 'monday');
   assert.equal(body.data.app_name, 'Samla');

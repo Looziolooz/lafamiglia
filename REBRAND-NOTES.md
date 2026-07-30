@@ -159,6 +159,40 @@ rebrand:
   credenziale di accesso è un'aspettativa comune. È una scelta di prodotto: se la
   cambi, allinea le tre regex nel server e quella in `public/pages/setup.js:15`.
 
+## 6c. Design mobile — corretto, e cosa resta
+
+Il mercato atteso usa il telefono, quindi le verifiche sono state fatte con un
+browser reale a 390×844 su dati demo (`scripts/capture-mobile.mjs`) e con misure
+oggettive del DOM (`scripts/audit-mobile.mjs`). Entrambi girano su Windows; lo
+script ufficiale `take-screenshots.mjs` punta a un percorso macOS di playwright
+ed è inutilizzabile qui.
+
+**Corretto**
+
+| Difetto | Causa |
+| --- | --- |
+| Il FAB copriva l'ultimo elemento di **ogni** lista | `.app-content` non riservava spazio per elementi `position: fixed` |
+| Il banner "Installa Samla" copriva l'ultima card | stesso schema; lo stato di visibilità era chiuso nello shadow DOM e non selezionabile dall'esterno → ora riflesso come `data-visible` sull'host |
+| Chip attività alti 22px | sotto il minimo AA di 24×24 (WCAG 2.5.8) → 32px sui soli puntatori grossolani, griglia mensile esclusa per non comprimerla |
+
+Le due regole di riserva usano `:has()`, già impiegato in cinque fogli di stile
+del progetto. Attenzione all'ancora del selettore: `<samla-install-prompt>` è
+**fratello** di `.app-shell`, non figlio — l'ancora deve essere `body`.
+
+**Resta aperto**
+- Aree tocco minori: `Assegnati a me` 28×28, `Solo spese` 105×28, i due
+  selettori di vista 40×48, `Rinomina lista` 326×25.
+- Nessun selettore di lingua prima del login (vedi §6b).
+- La misura dell'ingombro dei controlli in `audit-mobile.mjs` riporta `0px`: il
+  selettore del "primo contenuto" aggancia un nodo dell'intestazione. Da
+  sistemare prima di trarne conclusioni.
+
+**Nota sul contrasto:** l'app **non** ha problemi di contrasto sulle pagine
+principali (zero fallimenti AA misurati). Una prima versione dello strumento ne
+segnalava molti, ma erano suoi bug: leggeva i colori moderni (`color-mix`,
+`oklch`) come `rgb()` e ignorava l'alfa degli sfondi semitrasparenti invece di
+comporli. Se rivedi quei numeri in vecchi appunti, sono da buttare.
+
 ## 7. Test — due vincoli d'ambiente (nessuno dei due dovuto al rebrand)
 
 ### Node 22, non 24
