@@ -445,9 +445,9 @@ async function saveNavigationState(list, isAdmin) {
   const savedOrder = response?.data?.module_order ?? payload.module_order;
   if (isAdmin) {
     const savedDisabled = response?.data?.disabled_modules ?? payload.disabled_modules;
-    window.yuvomi?.setDisabledModules?.(savedDisabled);
+    window.samla?.setDisabledModules?.(savedDisabled);
   }
-  window.yuvomi?.setModuleOrder?.(savedOrder);
+  window.samla?.setModuleOrder?.(savedOrder);
 }
 
 function bindKitchenDisclosure(container) {
@@ -475,9 +475,9 @@ function bindModuleListEvents(container, user) {
     savingOrder = true;
     try {
       await saveNavigationState(list, isAdmin);
-      window.yuvomi?.showToast(t('settings.modulesSaved'), 'success');
+      window.samla?.showToast(t('settings.modulesSaved'), 'success');
     } catch (error) {
-      window.yuvomi?.showToast(error.message ?? t('common.errorGeneric'), 'danger');
+      window.samla?.showToast(error.message ?? t('common.errorGeneric'), 'danger');
       await render(container, { user });
     } finally {
       savingOrder = false;
@@ -550,15 +550,15 @@ function bindModuleListEvents(container, user) {
         async () => {
           if (input.dataset.thirdPartyModuleToggle) {
             await api.patch(`/modules/${encodeURIComponent(input.dataset.thirdPartyModuleToggle)}`, { enabled });
-            await window.yuvomi?.refreshThirdPartyModules?.();
+            await window.samla?.refreshThirdPartyModules?.();
           }
           await saveNavigationState(list, isAdmin);
-          window.yuvomi?.showToast(t('settings.thirdPartyModulesSaved'), 'success');
+          window.samla?.showToast(t('settings.thirdPartyModulesSaved'), 'success');
         },
         () => render(container, { user }),
       );
     } catch (error) {
-      window.yuvomi?.showToast(error.message ?? t('common.errorGeneric'), 'danger');
+      window.samla?.showToast(error.message ?? t('common.errorGeneric'), 'danger');
     }
   });
 }
@@ -575,12 +575,12 @@ function bindMobileNavigationEvents(container, user) {
       try {
         const response = await savePreferences(payload);
         const savedOrder = response?.data?.mobile_nav_order ?? payload.mobile_nav_order;
-        window.yuvomi?.setMobileNavOrder?.(savedOrder);
-        window.yuvomi?.showToast(t('settings.mobileNavigationSaved'), 'success');
+        window.samla?.setMobileNavOrder?.(savedOrder);
+        window.samla?.showToast(t('settings.mobileNavigationSaved'), 'success');
         await render(container, { user });
       } catch (error) {
         selects.forEach((select) => { select.disabled = false; });
-        window.yuvomi?.showToast(error.message ?? t('common.errorGeneric'), 'danger');
+        window.samla?.showToast(error.message ?? t('common.errorGeneric'), 'danger');
       }
     });
   });

@@ -153,7 +153,7 @@ test('i18n.js exports getFormatLocale + gecachten getNumberFormat als Zahl-Forma
   const src = await readFile(new URL('../public/i18n.js', import.meta.url), 'utf8');
   assert.match(src, /export function getFormatLocale\(/, 'getFormatLocale muss existieren');
   assert.match(src, /export function getNumberFormat\(/, 'gecachter getNumberFormat muss existieren');
-  assert.match(src, /NUMBER_LOCALE_KEY\s*=\s*'yuvomi-number-locale'/, 'localStorage-Schlüssel gepinnt');
+  assert.match(src, /NUMBER_LOCALE_KEY\s*=\s*'samla-number-locale'/, 'localStorage-Schlüssel gepinnt');
 });
 
 test('preferences route validates the region field shape', async () => {

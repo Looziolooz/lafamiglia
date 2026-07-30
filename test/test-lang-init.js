@@ -3,8 +3,12 @@
  * document.documentElement.lang vor dem Render auf die echte Nutzer-Locale setzt
  * (verhindert falsches „aus dem Deutschen übersetzen" in Chromium-Browsern).
  *
- * Die Resolve-Logik muss mit i18n.js (resolveLocale) übereinstimmen:
- *   manueller Override (localStorage) > navigator.languages Basis-Match > 'en'.
+ * Die Resolve-Logik muss mit i18n.js (resolveLocale) übereinstimmen. Italienisch
+ * ist die Produktsprache, deshalb steht FOLLOW_BROWSER_LANGUAGE in BEIDEN Dateien
+ * auf false:
+ *   manueller Override (localStorage) > DEFAULT_LOCALE ('it').
+ * Die Browsersprache wird bewusst NICHT ausgewertet — ein Kunde mit englischem
+ * Browser soll das Produkt trotzdem auf Italienisch starten sehen.
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -22,7 +26,7 @@ function runLangInitState({ stored = null, languages = undefined, language = und
     localStorage: {
       getItem(key) {
         if (throwOnStorage) throw new Error('blocked');
-        return key === 'yuvomi-locale' ? stored : null;
+        return key === 'samla-locale' ? stored : null;
       },
     },
   };
@@ -35,51 +39,52 @@ function runLangInit(options = {}) {
 }
 
 test('gültiger localStorage-Override gewinnt', () => {
-  assert.equal(runLangInit({ stored: 'fr', languages: ['de-DE'] }), 'fr');
+  assert.equal(runLangInit({ stored: 'it', languages: ['sv-SE'] }), 'it');
 });
 
-test('ungültiger localStorage-Wert wird ignoriert, Fallback auf navigator', () => {
-  assert.equal(runLangInit({ stored: 'xx', languages: ['en-US', 'de'] }), 'en');
+test('ungültiger localStorage-Wert wird ignoriert, Fallback auf die Standardsprache', () => {
+  assert.equal(runLangInit({ stored: 'xx', languages: ['en-US', 'sv'] }), 'it');
 });
 
-test('navigator.languages: erstes unterstütztes Basis-Tag gewinnt', () => {
-  assert.equal(runLangInit({ languages: ['en-US', 'de'] }), 'en');
+test('die Browsersprache wird NICHT ausgewertet: englischer Browser bleibt it', () => {
+  assert.equal(runLangInit({ languages: ['en-US', 'en'] }), 'it');
 });
 
-test('Region-Tag wird auf Basis-Sprache reduziert (de-AT → de)', () => {
-  assert.equal(runLangInit({ languages: ['de-AT'] }), 'de');
+test('auch ein schwedischer Browser startet auf der Produktsprache', () => {
+  assert.equal(runLangInit({ languages: ['sv-SE'] }), 'it');
 });
 
-test('nicht unterstützte Sprache fällt auf en zurück (th-TH → en)', () => {
-  assert.equal(runLangInit({ languages: ['th-TH'] }), 'en');
+test('nicht unterstützte Sprache landet ebenfalls auf it', () => {
+  assert.equal(runLangInit({ languages: ['th-TH'] }), 'it');
 });
 
-test('überspringt nicht unterstützte und nimmt das nächste unterstützte Tag', () => {
-  assert.equal(runLangInit({ languages: ['th-TH', 'nl-BE'] }), 'nl');
+test('die gemerkte Wahl schlägt jede Browsersprache — auch en und sv', () => {
+  assert.equal(runLangInit({ stored: 'en', languages: ['it-IT'] }), 'en');
+  assert.equal(runLangInit({ stored: 'sv', languages: ['it-IT'] }), 'sv');
 });
 
-test('navigator.language (Singular) als Fallback wenn languages fehlt', () => {
-  assert.equal(runLangInit({ language: 'pt-BR' }), 'pt');
+test('fehlendes navigator.languages fuehrt zu keinem Fehler', () => {
+  assert.equal(runLangInit({ language: 'sv-SE' }), 'it');
 });
 
 test('blockierter localStorage (Privatmodus) wirft nicht, nutzt navigator', () => {
   assert.equal(runLangInit({ throwOnStorage: true, languages: ['it-IT'] }), 'it');
 });
 
-test('keine brauchbaren Signale → en', () => {
-  assert.equal(runLangInit({ languages: [] }), 'en');
+test('keine brauchbaren Signale → it (Standardsprache)', () => {
+  assert.equal(runLangInit({ languages: [] }), 'it');
 });
 
-test('Arabisch setzt vor dem Rendern die Schreibrichtung auf rtl', () => {
+test('Schreibrichtung wird für die unterstützten Sprachen auf ltr gesetzt', () => {
   assert.deepEqual(
-    runLangInitState({ stored: 'ar', languages: ['de-DE'] }),
-    { lang: 'ar', dir: 'rtl' },
+    runLangInitState({ stored: 'sv', languages: ['it-IT'] }),
+    { lang: 'sv', dir: 'ltr' },
   );
 });
 
-test('Nicht-RTL-Sprachen setzen die Schreibrichtung explizit auf ltr zurück', () => {
+test('nicht unterstützte Browsersprache landet auf it mit ltr', () => {
   assert.deepEqual(
-    runLangInitState({ stored: 'de', languages: ['ar'] }),
-    { lang: 'de', dir: 'ltr' },
+    runLangInitState({ languages: ['ar-EG'] }),
+    { lang: 'it', dir: 'ltr' },
   );
 });

@@ -1,7 +1,7 @@
 /**
- * Demo Seed Script - Yuvomi
+ * Demo Seed Script - Samla
  * Fills the database with realistic English demo content for screenshots/mockups.
- * Usage: node scripts/seed-demo.js [--db /path/to/yuvomi.db]
+ * Usage: node scripts/seed-demo.js [--db /path/to/samla.db]
  *
  * Requires a database already migrated to the current schema (open the app once,
  * or run the server, before seeding). Populates EVERY module:
@@ -35,7 +35,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const args = process.argv.slice(2);
 const dbIdx = args.indexOf('--db');
-const DB_PATH = dbIdx !== -1 ? args[dbIdx + 1] : resolve(__dirname, '..', 'yuvomi.db');
+const DB_PATH = dbIdx !== -1 ? args[dbIdx + 1] : resolve(__dirname, '..', 'samla.db');
 
 const db = new Database(DB_PATH);
 db.pragma('journal_mode = WAL');
@@ -135,7 +135,7 @@ const cfgSet = db.prepare(`
 cfgSet.run('currency', 'EUR');
 cfgSet.run('date_format', 'dmy_dot');
 cfgSet.run('time_format', '24h');
-cfgSet.run('app_name', 'Yuvomi');
+cfgSet.run('app_name', 'Samla');
 cfgSet.run('visible_meal_types', 'breakfast,lunch,dinner,snack');
 // Weather widget — Dortmund via Open-Meteo (no API key required)
 cfgSet.run('weather_provider', 'open-meteo');
@@ -465,7 +465,7 @@ console.log('Inserting notes…');
 const insertNote = db.prepare('INSERT INTO notes (title, content, color, pinned, created_by) VALUES (?, ?, ?, ?, ?)');
 [
   ['Holiday Checklist 🌍', 'Passports (exp. 2028)\nTravel insurance — check!\nEuro cash — €300\nBook airport parking\nAsk Mike to water the plants\nPack sunscreen SPF 50', '#0EA5E9', 1, alexId],
-  ['WiFi & Smart Home',    'WiFi: Yuvomi_Home_5G (password in the router app)\nPhilips Hue: bridge 192.168.1.42\nThermostat: eco mode 18°C\nRouter admin: fritz.box', '#F59E0B', 1, alexId],
+  ['WiFi & Smart Home',    'WiFi: Samla_Home_5G (password in the router app)\nPhilips Hue: bridge 192.168.1.42\nThermostat: eco mode 18°C\nRouter admin: fritz.box', '#F59E0B', 1, alexId],
   ["Emma's School Info",   "Class: 3b — Mrs Bauer\nSchool starts: 08:10\nCollection: 13:30 (Tue/Thu 15:00)\nAllergy: mild lactose intolerance\nBest friends: Lena, Sophie, Tim", '#EC4899', 1, lindaId],
   ["Leo's Activities",     'Football: Tue & Sat 17:00 — SV West\nSwimming: Fri 16:00 — Westbad\nNeeds: boots size 35, goggles\nCoach: Herr Krüger', '#F97316', 1, lindaId],
   ['Emergency Numbers',    'Police: 110\nFire / Ambulance: 112\nPoison Control: 0800 192 11 10\nGP out-of-hours: 116 117\nNearest A&E: Klinikum Dortmund', '#EF4444', 1, alexId],

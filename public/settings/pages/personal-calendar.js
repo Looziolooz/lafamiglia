@@ -91,10 +91,10 @@ function bindEvents(container) {
     assignMe.disabled = true;
     try {
       await savePreferences({ calendar_default_assign_me: value });
-      window.yuvomi?.showToast(t('settings.calendarDefaultsSaved'), 'success');
+      window.samla?.showToast(t('settings.calendarDefaultsSaved'), 'success');
     } catch (error) {
       assignMe.checked = !value; // Rollback
-      window.yuvomi?.showToast(error.message || t('common.errorGeneric'), 'danger');
+      window.samla?.showToast(error.message || t('common.errorGeneric'), 'danger');
     } finally {
       if (assignMe.isConnected) assignMe.disabled = false;
     }
@@ -111,13 +111,13 @@ function bindEvents(container) {
     try {
       await savePreferences({ calendar_default_reminders: selected });
       persisted = selected;
-      if (remindersBox.isConnected) window.yuvomi?.showToast(t('settings.calendarDefaultsSaved'), 'success');
+      if (remindersBox.isConnected) window.samla?.showToast(t('settings.calendarDefaultsSaved'), 'success');
     } catch (error) {
       const keep = new Set(persisted);
       remindersBox.querySelectorAll('.js-default-reminder').forEach((el) => {
         el.checked = keep.has(Number(el.value));
       });
-      window.yuvomi?.showToast(error.message || t('common.errorGeneric'), 'danger');
+      window.samla?.showToast(error.message || t('common.errorGeneric'), 'danger');
     }
   }, 500);
 
@@ -126,7 +126,7 @@ function bindEvents(container) {
     if (!box) return;
     if (collectDefaultReminders(remindersBox).length > MAX_DEFAULT_REMINDERS) {
       box.checked = false; // Cap: die gerade gesetzte Auswahl zurücknehmen
-      window.yuvomi?.showToast(t('settings.calendarDefaultRemindersMax', { count: MAX_DEFAULT_REMINDERS }), 'warning');
+      window.samla?.showToast(t('settings.calendarDefaultRemindersMax', { count: MAX_DEFAULT_REMINDERS }), 'warning');
       return;
     }
     persistReminders();

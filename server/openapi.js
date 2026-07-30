@@ -6,9 +6,9 @@ function buildOpenApiSpec(req, appVersion) {
   return {
     openapi: '3.1.0',
     info: {
-      title: 'Yuvomi API',
+      title: 'Samla API',
       version: appVersion,
-      description: 'OpenAPI documentation for the Yuvomi family organizer backend.',
+      description: 'OpenAPI documentation for the Samla family organizer backend.',
     },
     servers: [{ url: '/', description: 'Current origin' }],
     tags: apiTags,
@@ -29,7 +29,7 @@ function buildOpenApiSpec(req, appVersion) {
         cookieAuth: {
           type: 'apiKey',
           in: 'cookie',
-          name: 'yuvomi.sid',
+          name: 'samla.sid',
           description: 'Browser session cookie. State-changing requests also require `X-CSRF-Token`.',
         },
       },

@@ -107,13 +107,13 @@ function bindPwaInstall(container) {
     try {
       const result = await promptPwaInstall();
       if (result.outcome === 'accepted') {
-        window.yuvomi?.showToast(t('settings.pwaInstallAcceptedToast'), 'success');
+        window.samla?.showToast(t('settings.pwaInstallAcceptedToast'), 'success');
       } else if (result.outcome === 'ios') {
-        window.yuvomi?.showToast(t('settings.pwaInstallIosToast'), 'default');
+        window.samla?.showToast(t('settings.pwaInstallIosToast'), 'default');
       } else if (result.outcome === 'installed') {
-        window.yuvomi?.showToast(t('settings.pwaInstallAlreadyInstalledToast'), 'default');
+        window.samla?.showToast(t('settings.pwaInstallAlreadyInstalledToast'), 'default');
       } else if (result.outcome === 'unavailable') {
-        window.yuvomi?.showToast(t('settings.pwaInstallUnavailableToast'), 'warning');
+        window.samla?.showToast(t('settings.pwaInstallUnavailableToast'), 'warning');
       }
     } catch (error) {
       errorElement.textContent = error.message || t('common.errorGeneric');

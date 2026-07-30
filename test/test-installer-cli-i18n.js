@@ -73,7 +73,7 @@ test('install.sh enthält die i18n-Maschinerie und das --lang-Flag', () => {
   assert.match(sh, /load_locale\b/, 'install.sh definiert load_locale nicht');
   assert.match(sh, /^t\(\)/m, 'install.sh definiert die t()-Funktion nicht');
   assert.match(sh, /--lang/, 'install.sh wertet --lang nicht aus');
-  assert.match(sh, /OIKOS_INSTALLER_LANG/, 'install.sh erkennt die Umgebungssprache nicht');
+  assert.match(sh, /SAMLA_INSTALLER_LANG/, 'install.sh erkennt die Umgebungssprache nicht');
 });
 
 test('SUPPORTED_LOCALES in install.sh deckt sich mit i18n-mini.js', () => {

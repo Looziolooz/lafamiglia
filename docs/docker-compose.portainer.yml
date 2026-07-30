@@ -1,4 +1,4 @@
-# Yuvomi - Standalone Docker Compose for Portainer / remote deployment
+# Samla - Standalone Docker Compose for Portainer / remote deployment
 # Pulls the pre-built image from GitHub Container Registry.
 # No git clone required.
 #
@@ -6,7 +6,7 @@
 #   1. Copy this file and the .env section below to your server
 #   2. Create a .env file next to this compose file (see below)
 #   3. docker compose -f docker-compose.portainer.yml up -d
-#   4. docker compose -f docker-compose.portainer.yml exec yuvomi node setup.js
+#   4. docker compose -f docker-compose.portainer.yml exec samla node setup.js
 #   5. Open http://<your-host>:3000
 #
 # Required .env variables:
@@ -17,9 +17,9 @@
 #   openssl rand -base64 32
 
 services:
-  yuvomi:
-    image: ghcr.io/ulsklyc/yuvomi:latest
-    container_name: yuvomi
+  samla:
+    image: ghcr.io/YOUR-ORG/samla:latest
+    container_name: samla
     restart: unless-stopped
     ports:
       - "3000:3000"
@@ -35,7 +35,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-      - DB_PATH=/data/yuvomi.db
+      - DB_PATH=/data/samla.db
       - BACKUP_DIR=/backups
       - SESSION_SECRET=${SESSION_SECRET:?Set SESSION_SECRET in .env}
       - DB_ENCRYPTION_KEY=${DB_ENCRYPTION_KEY:?Set DB_ENCRYPTION_KEY in .env}
@@ -51,9 +51,9 @@ services:
       - WEATHER_UNITS=${WEATHER_UNITS:-metric}
       # Weather (optional) — OpenWeatherMap (legacy; only if you already use it)
       - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY:-}
-      - OPENWEATHER_CITY=${OPENWEATHER_CITY:-Berlin}
+      - OPENWEATHER_CITY=${OPENWEATHER_CITY:-Stockholm}
       - OPENWEATHER_UNITS=${OPENWEATHER_UNITS:-metric}
-      - OPENWEATHER_LANG=${OPENWEATHER_LANG:-de}
+      - OPENWEATHER_LANG=${OPENWEATHER_LANG:-it}
       # Google Calendar (optional)
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}

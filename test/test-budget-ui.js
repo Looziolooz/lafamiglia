@@ -284,9 +284,9 @@ test('der „Nur Ausgaben"-Umschalter meldet seinen Zustand als echter Switch', 
 });
 
 test('der „Nur Ausgaben"-Zustand ist client-persistent und geräte-lokal', () => {
-  // Reine Anzeige-Präferenz über localStorage (yuvomi-*), kein Server-Roundtrip -
+  // Reine Anzeige-Präferenz über localStorage (samla-*), kein Server-Roundtrip -
   // Liste, Diagramm und CSV-Export bleiben unberührt.
-  assert.match(budget, /const EXPENSES_ONLY_KEY = 'yuvomi-budget-expenses-only';/);
+  assert.match(budget, /const EXPENSES_ONLY_KEY = 'samla-budget-expenses-only';/);
   assert.match(budget, /state\.expensesOnly = localStorage\.getItem\(EXPENSES_ONLY_KEY\) === '1';/);
   assert.match(budget, /localStorage\.setItem\(EXPENSES_ONLY_KEY, state\.expensesOnly \? '1' : '0'\)/);
 });
@@ -365,7 +365,7 @@ test('alle neuen Keys existieren in jeder Locale', () => {
     'subscriptions.filterLabelStatus', 'subscriptions.filterLabelSort',
   ];
   const files = readdirSync(new URL('../public/locales/', import.meta.url)).filter((f) => f.endsWith('.json'));
-  assert.ok(files.length >= 23, 'unerwartet wenige Locale-Dateien');
+  assert.ok(files.length >= 3, 'unerwartet wenige Locale-Dateien');
   for (const file of files) {
     const data = JSON.parse(read(`../public/locales/${file}`));
     for (const key of keys) {

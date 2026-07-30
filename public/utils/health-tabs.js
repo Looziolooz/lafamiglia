@@ -13,7 +13,7 @@ export const HEALTH_ROUTES = Object.freeze([
   '/health/labs',
   '/health/activity',
 ]);
-export const HEALTH_STORAGE_KEY = 'yuvomi-health-tab';
+export const HEALTH_STORAGE_KEY = 'samla-health-tab';
 
 // Der Zyklus-Tab ist ein haushaltweiter Opt-in (Settings → Module → Gesundheit).
 // Ist er deaktiviert, entfällt der Tab; die Route leitet auf die Übersicht um.
@@ -53,6 +53,6 @@ export function renderHealthTabsBar(container, activeRoute, { cycleEnabled = tru
     ariaLabel: t('nav.health'),
     title: t('nav.health'),
     insertPosition: 'afterbegin',
-    onChange: (route) => window.yuvomi?.navigate(route),
+    onChange: (route) => window.samla?.navigate(route),
   });
 }

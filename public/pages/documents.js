@@ -67,9 +67,9 @@ let state = {
   members: [],
   dmsAccounts: [],
   activeUploadBackend: 'local',
-  view: localStorage.getItem('yuvomi-documents-view') || 'grid',
-  sort: SORTS.includes(localStorage.getItem('yuvomi-documents-sort'))
-    ? localStorage.getItem('yuvomi-documents-sort')
+  view: localStorage.getItem('samla-documents-view') || 'grid',
+  sort: SORTS.includes(localStorage.getItem('samla-documents-sort'))
+    ? localStorage.getItem('samla-documents-sort')
     : 'updated',
   status: 'active',
   category: '',
@@ -279,7 +279,7 @@ function bindPageEvents() {
   wireScrollFade(_container.querySelector('#documents-category'));
   _container.querySelector('#documents-sort')?.addEventListener('change', (e) => {
     state.sort = SORTS.includes(e.target.value) ? e.target.value : 'updated';
-    localStorage.setItem('yuvomi-documents-sort', state.sort);
+    localStorage.setItem('samla-documents-sort', state.sort);
     applyFilters();
     renderDocuments();
   });
@@ -299,7 +299,7 @@ function bindPageEvents() {
     const btn = e.target.closest('[data-view]');
     if (!btn) return;
     state.view = btn.dataset.view;
-    localStorage.setItem('yuvomi-documents-view', state.view);
+    localStorage.setItem('samla-documents-view', state.view);
     _container.querySelectorAll('.documents-view-toggle__btn').forEach((el) => {
       const active = el === btn;
       el.classList.toggle('documents-view-toggle__btn--active', active);
@@ -700,13 +700,13 @@ async function renameFolder(folder) {
   if (!newName || newName === folder.name) return;
   try {
     await api.put(`/documents/folders/${folder.id}`, { name: newName });
-    window.yuvomi?.showToast(t('documents.folderRenamedToast'), 'success');
+    window.samla?.showToast(t('documents.folderRenamedToast'), 'success');
     // Dokumente mitladen: `folder_name` steckt im Server-Join und stünde sonst
     // auf den Karten weiter mit dem alten Namen.
     await Promise.all([loadFolders(), loadDocuments()]);
     renderAll();
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+    window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
   }
 }
 
@@ -718,13 +718,13 @@ async function deleteFolder(folder) {
   if (!confirmed) return;
   try {
     await api.delete(`/documents/folders/${folder.id}`);
-    window.yuvomi?.showToast(t('documents.folderDeletedToast'), 'default');
+    window.samla?.showToast(t('documents.folderDeletedToast'), 'default');
     if (String(state.folderId) === String(folder.id)) state.folderId = '';
     await loadFolders();
     await loadDocuments();
     renderAll();
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+    window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
   }
 }
 
@@ -945,7 +945,7 @@ async function runDocumentAction(action, doc) {
   }
   if (action === 'archive') {
     await api.patch(`/documents/${doc.id}/archive`, { archived: doc.status !== 'archived' });
-    window.yuvomi?.showToast(doc.status === 'archived' ? t('documents.restoredToast') : t('documents.archivedToast'), 'success');
+    window.samla?.showToast(doc.status === 'archived' ? t('documents.restoredToast') : t('documents.archivedToast'), 'success');
     await loadDocuments();
     renderAll();
   }
@@ -963,9 +963,9 @@ async function runDocumentAction(action, doc) {
     }
     try {
       await api.post('/documents/dms/push', { account_id: accountId, document_id: doc.id });
-      window.yuvomi?.showToast(t('documents.pushToDmsQueued'), 'success');
+      window.samla?.showToast(t('documents.pushToDmsQueued'), 'success');
     } catch (err) {
-      window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+      window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
     }
     return;
   }
@@ -1007,7 +1007,7 @@ function deleteDocuments(docs) {
     restore: (err) => {
       if (_container !== owner) return;
       restore();
-      if (err) window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+      if (err) window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
     },
   });
 }
@@ -1067,7 +1067,7 @@ async function archiveSelected() {
   exitSelectMode();
   try {
     await Promise.all(docs.map((doc) => api.patch(`/documents/${doc.id}/archive`, { archived: !archived })));
-    window.yuvomi?.showToast(
+    window.samla?.showToast(
       archived
         ? t('documents.bulkRestoredToast', { count: docs.length })
         : t('documents.bulkArchivedToast', { count: docs.length }),
@@ -1076,7 +1076,7 @@ async function archiveSelected() {
     await loadDocuments();
     renderAll();
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+    window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
   }
 }
 
@@ -1099,11 +1099,11 @@ async function moveSelected() {
       status: doc.status,
       allowed_member_ids: doc.allowed_member_ids || [],
     })));
-    window.yuvomi?.showToast(t('documents.bulkMovedToast', { count: docs.length }), 'success');
+    window.samla?.showToast(t('documents.bulkMovedToast', { count: docs.length }), 'success');
     await loadDocuments();
     renderAll();
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+    window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
   }
 }
 
@@ -1313,7 +1313,7 @@ async function saveDocument(event, doc, panel) {
     if (doc) {
       if (!payload.name) throw new Error(t('common.required'));
       await api.put(`/documents/${doc.id}`, payload);
-      window.yuvomi?.showToast(t('documents.savedToast'), 'success');
+      window.samla?.showToast(t('documents.savedToast'), 'success');
     } else {
       const files = Array.from(form.querySelector('#document-file').files || []);
       if (!files.length) throw new Error(t('documents.fileRequired'));
@@ -1342,7 +1342,7 @@ async function saveDocument(event, doc, panel) {
         });
       }
       submit.textContent = originalLabel;
-      window.yuvomi?.showToast(
+      window.samla?.showToast(
         files.length > 1
           ? t('documents.bulkUploadedToast', { count: files.length })
           : t('documents.uploadedToast'),
@@ -1384,7 +1384,7 @@ function openFolderModal() {
         error.hidden = true;
         try {
           const res = await api.post('/documents/folders', { name: input.value.trim() });
-          window.yuvomi?.showToast(t('documents.folderCreatedToast'), 'success');
+          window.samla?.showToast(t('documents.folderCreatedToast'), 'success');
           state.folderId = String(res.data?.id || '');
           await loadFolders();
           await loadDocuments();
@@ -1656,7 +1656,7 @@ async function linkDmsDocument(item, accountId) {
     renderAll();
     return true;
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+    window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
     return false;
   }
 }

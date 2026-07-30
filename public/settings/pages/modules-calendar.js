@@ -385,11 +385,11 @@ function bindWeekStart(container, preferences) {
       // Parität zu date-format-changed/time-format-changed: erlaubt offenen
       // Ansichten, den Wochenstart ohne Neuladen zu übernehmen.
       window.dispatchEvent(new CustomEvent('week-start-changed', { detail: { weekStart: value } }));
-      window.yuvomi?.showToast(t('settings.weekStartSaved'), 'success');
+      window.samla?.showToast(t('settings.weekStartSaved'), 'success');
     } catch (error) {
       current = previous;
       paint(previous); // Rollback bei Fehler
-      window.yuvomi?.showToast(error.message || t('common.errorGeneric'), 'danger');
+      window.samla?.showToast(error.message || t('common.errorGeneric'), 'danger');
     }
   });
 }
@@ -398,9 +398,9 @@ async function bindEvents(container, preferences) {
   bindWeekStart(container, preferences);
 
   container.querySelector('#calendar-personal-link')?.addEventListener('click', (event) => {
-    if (!window.yuvomi?.navigate) return;
+    if (!window.samla?.navigate) return;
     event.preventDefault();
-    window.yuvomi.navigate(PERSONAL_CALENDAR_PATH);
+    window.samla.navigate(PERSONAL_CALENDAR_PATH);
   });
 
   // Instant-Save wie beim Wochenstart – ein einzelner Wert braucht keinen
@@ -414,11 +414,11 @@ async function bindEvents(container, preferences) {
     durationSelect.disabled = true;
     try {
       await savePreferences({ calendar_default_duration: minutes });
-      window.yuvomi?.showToast(t('settings.calendarDurationSaved'), 'success');
+      window.samla?.showToast(t('settings.calendarDurationSaved'), 'success');
     } catch (error) {
       persistedDuration = previous;
       durationSelect.value = previous; // Rollback bei Fehler
-      window.yuvomi?.showToast(error.message || t('common.errorGeneric'), 'danger');
+      window.samla?.showToast(error.message || t('common.errorGeneric'), 'danger');
     } finally {
       if (durationSelect.isConnected) durationSelect.disabled = false;
     }
@@ -523,7 +523,7 @@ async function bindEvents(container, preferences) {
       discoveryState.persistedCountry = preferenceData.holiday_country;
       discoveryState.persistedSubdivision = preferenceData.holiday_subdivision;
       discoveryState.persistedGroup = preferenceData.holiday_group;
-      window.yuvomi?.showToast(t('settings.holidaySaved'), 'success');
+      window.samla?.showToast(t('settings.holidaySaved'), 'success');
     } catch (error) {
       errorElement.textContent = error.message || t('common.errorGeneric');
       errorElement.hidden = false;
@@ -533,7 +533,7 @@ async function bindEvents(container, preferences) {
   syncButton.addEventListener('click', async () => {
     const currentPreferenceData = holidayPreferenceData(container, discoveryState);
     if (!currentPreferenceData.holiday_country) {
-      window.yuvomi?.showToast(t('settings.holidayCountryRequired'), 'warning');
+      window.samla?.showToast(t('settings.holidayCountryRequired'), 'warning');
       return;
     }
 
@@ -566,9 +566,9 @@ async function bindEvents(container, preferences) {
       if (lastSyncLabel && response?.data?.last_sync) {
         lastSyncLabel.textContent = formatSyncTime(response.data.last_sync);
       }
-      window.yuvomi?.showToast(t('settings.holidaySynced'), 'success');
+      window.samla?.showToast(t('settings.holidaySynced'), 'success');
     } catch (error) {
-      window.yuvomi?.showToast(error.message || t('settings.holidaySyncError'), 'danger');
+      window.samla?.showToast(error.message || t('settings.holidaySyncError'), 'danger');
     } finally {
       updateSyncState();
     }

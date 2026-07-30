@@ -1,7 +1,7 @@
 {
-  "name": "Yuvomi Familienplaner",
-  "short_name": "Yuvomi",
-  "description": "Selbstgehosteter Familienplaner",
+  "name": "Samla Family Planner",
+  "short_name": "Samla",
+  "description": "Self-hosted family planner",
   "id": "/",
   "start_url": "/",
   "scope": "/",
@@ -10,7 +10,7 @@
   "orientation": "portrait-primary",
   "theme_color": "#007AFF",
   "background_color": "#F5F5F7",
-  "lang": "de-DE",
+  "lang": "it",
   "categories": ["productivity", "lifestyle"],
   "icons": [
     { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },

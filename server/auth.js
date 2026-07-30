@@ -25,7 +25,7 @@ const log = createLogger('Auth');
 const router = express.Router();
 // Präfix für NEUE API-Tokens. Bereits ausgegebene `oikos_`-Tokens bleiben gültig:
 // validiert wird über den Hash des gesamten Tokens, nicht über den Präfix.
-const API_TOKEN_PREFIX = 'yuvomi_';
+const API_TOKEN_PREFIX = 'samla_';
 const FAMILY_ROLES = ['dad', 'mom', 'parent', 'child', 'grandparent', 'relative', 'other'];
 // Platzhalter-Hash für den Timing-Attack-Schutz beim Login unbekannter Benutzer.
 const DUMMY_PASSWORD_HASH = '$2b$12$invalidhashfortimingprotection000000000000000000000';
@@ -127,11 +127,11 @@ if (!process.env.SESSION_SECRET) {
 }
 
 // Session-Cookie-Name. Legacy „Oikos"-Installationen nutzten `oikos.sid`; der
-// Name ist nun `yuvomi.sid`. Der Wechsel ist NAHTLOS (kein Zwangs-Logout): der
+// Name ist nun `samla.sid`. Der Wechsel ist NAHTLOS (kein Zwangs-Logout): der
 // signierte Session-Wert ist nur über den Wert (die sid) signiert, nicht über den
 // Cookie-Namen — daher kann ein vorhandenes `oikos.sid` transparent als
-// `yuvomi.sid` weitergereicht werden (siehe sessionMiddleware unten).
-const SESSION_COOKIE = 'yuvomi.sid';
+// `samla.sid` weitergereicht werden (siehe sessionMiddleware unten).
+const SESSION_COOKIE = 'samla.sid';
 const LEGACY_SESSION_COOKIE = 'oikos.sid';
 
 const expressSession = session({
@@ -154,7 +154,7 @@ const expressSession = session({
 
 /**
  * Session-Middleware mit nahtloser Legacy-Cookie-Migration.
- * Trägt ein vorhandenes `oikos.sid`-Cookie einmalig als `yuvomi.sid` nach, sodass
+ * Trägt ein vorhandenes `oikos.sid`-Cookie einmalig als `samla.sid` nach, sodass
  * bestehende Anmeldungen über das Rename hinweg gültig bleiben (gleiche signierte
  * sid, gleiches SESSION_SECRET). Das alte Cookie wird dabei verworfen.
  */
@@ -720,7 +720,7 @@ export function buildResetRoutes(targetRouter, {
           const link = `${origin}/reset-password?token=${token}`;
           await emailService.sendMail({
             to,
-            subject: 'Reset your Yuvomi password',
+            subject: 'Reset your Samla password',
             text: `Open this link to choose a new password (valid for 1 hour): ${link}`,
             html: `<p>Open this link to choose a new password (valid for 1 hour):</p>`
               + `<p><a href="${link}">${link}</a></p>`,

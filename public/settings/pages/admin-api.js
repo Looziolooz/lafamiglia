@@ -106,7 +106,7 @@ function renderPage(container) {
           </div>
           <div class="form-group">
             <label class="form-label" for="api-token-expires">${t('settings.apiTokenExpiresLabel')}</label>
-            <yuvomi-datepicker type="datetime" id="api-token-expires"></yuvomi-datepicker>
+            <samla-datepicker type="datetime" id="api-token-expires"></samla-datepicker>
             <p class="form-hint">${t('settings.apiTokenExpiresHint')}</p>
           </div>
           <div class="form-group">
@@ -218,7 +218,7 @@ function bindEvents(container, initialTokens) {
       window.lucide?.createIcons({ el: output });
       outputValue.focus();
       outputValue.select();
-      window.yuvomi?.showToast(t('settings.apiTokenCreatedToast'), 'success');
+      window.samla?.showToast(t('settings.apiTokenCreatedToast'), 'success');
     } catch (err) {
       showError(errorEl, err.message);
     } finally {
@@ -234,9 +234,9 @@ function bindEvents(container, initialTokens) {
     if (!value) return;
     try {
       await navigator.clipboard?.writeText(value);
-      window.yuvomi?.showToast(t('settings.apiTokenCopied'), 'success');
+      window.samla?.showToast(t('settings.apiTokenCopied'), 'success');
     } catch (err) {
-      window.yuvomi?.showToast(err.message || t('common.errorGeneric'), 'danger');
+      window.samla?.showToast(err.message || t('common.errorGeneric'), 'danger');
     }
   });
 
@@ -256,9 +256,9 @@ function bindEvents(container, initialTokens) {
         token.id === id ? { ...token, revoked_at: new Date().toISOString() } : token
       ));
       renderApiTokenList(container, tokens);
-      window.yuvomi?.showToast(t('settings.apiTokenRevokedToast'), 'default');
+      window.samla?.showToast(t('settings.apiTokenRevokedToast'), 'default');
     } catch (err) {
-      window.yuvomi?.showToast(err.message, 'danger');
+      window.samla?.showToast(err.message, 'danger');
     }
   });
 }

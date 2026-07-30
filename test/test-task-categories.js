@@ -62,7 +62,7 @@ console.log('\n[Task-Categories-Test] Migration + CRUD-Routen\n');
 // --------------------------------------------------------
 // 2) CRUD-Routen (echte db.js + Express + fetch)
 // --------------------------------------------------------
-process.env.DB_PATH = path.join(os.tmpdir(), `yuvomi-taskcat-${process.pid}.db`);
+process.env.DB_PATH = path.join(os.tmpdir(), `samla-taskcat-${process.pid}.db`);
 process.env.SESSION_SECRET = 'task-categories-test-secret-32bytes-long';
 const db = await import('../server/db.js');
 const { default: tasksRouter } = await import('../server/routes/tasks.js');

@@ -226,7 +226,7 @@ body::after {
         
       </svg>
     </div>
-    <div class="name">Yuvomi</div>
+    <div class="name">Samla</div>
   </div>
 
   <div class="kicker"><span class="dot"></span>Self-hosted · Open Source</div>
@@ -258,10 +258,10 @@ body::after {
       <span class="addr">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
              stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        yuvomi.local
+        samla.local
       </span>
     </div>
-    <img src="${imgSrc}" alt="Yuvomi Dashboard">
+    <img src="${imgSrc}" alt="Samla Dashboard">
   </div>
 </div>
 

@@ -8,8 +8,8 @@ import {
   createStatusSummary,
 } from '/settings/components.js';
 
-const APP_NAME_STORAGE_KEY = 'yuvomi-app-name';
-const DEFAULT_APP_NAME = 'Yuvomi';
+const APP_NAME_STORAGE_KEY = 'samla-app-name';
+const DEFAULT_APP_NAME = 'Samla';
 
 function safeStorageSet(key, value) {
   try {
@@ -120,7 +120,7 @@ function bindAppNameEvents(container) {
       await savePreferences({ app_name: value });
       input.value = value || DEFAULT_APP_NAME;
       refreshBranding(value);
-      window.yuvomi?.showToast(t('settings.appNameSavedToast'), 'success');
+      window.samla?.showToast(t('settings.appNameSavedToast'), 'success');
     } catch (error) {
       errorElement.textContent = error.message || t('common.errorGeneric');
       errorElement.hidden = false;

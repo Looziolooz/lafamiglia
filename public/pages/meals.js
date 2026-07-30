@@ -1,7 +1,7 @@
 /**
  * Modul: Essensplan (Meals)
  * Zweck: Wochenansicht mit Mahlzeit-CRUD, Zutaten-Verwaltung und Einkaufslisten-Integration
- * Abhängigkeiten: /api.js, /router.js (window.yuvomi)
+ * Abhängigkeiten: /api.js, /router.js (window.samla)
  */
 
 import { api } from '/api.js';
@@ -167,7 +167,7 @@ async function loadWeek(week) {
     console.error('[Meals] loadWeek Fehler:', err);
     state.meals       = [];
     state.currentWeek = getMondayOf(week);
-    window.yuvomi?.showToast(t('meals.loadError'), 'danger');
+    window.samla?.showToast(t('meals.loadError'), 'danger');
   }
 }
 
@@ -285,7 +285,7 @@ export async function render(container, { user }) {
 // Rezept-Spalte ein-/ausklappen
 // --------------------------------------------------------
 
-const RAIL_STORAGE_KEY = 'yuvomi-meals-rail';
+const RAIL_STORAGE_KEY = 'samla-meals-rail';
 
 /**
  * Klappt die Rezept-Spalte weg. Sie belegt auf 1024-1439px 272px und ab 1440px
@@ -708,7 +708,7 @@ async function addRecipeToSlot(recipe, date, mealType, { replaceMeals = [] } = {
     }
     renderWeekGrid();
   } catch (err) {
-    window.yuvomi?.showToast(window.yuvomi?.friendlyError?.(err) ?? t('common.errorGeneric'), 'danger');
+    window.samla?.showToast(window.samla?.friendlyError?.(err) ?? t('common.errorGeneric'), 'danger');
   }
 }
 
@@ -784,7 +784,7 @@ async function runRandomize(panel) {
   });
 
   if (!plan.assignments.length) {
-    window.yuvomi?.showToast(
+    window.samla?.showToast(
       plan.reason === 'week_full' ? t('meals.randomizeWeekFull') : t('meals.randomizeNoRecipes'),
       'info'
     );
@@ -797,10 +797,10 @@ async function runRandomize(panel) {
     await loadWeek(state.currentWeek);
     closeModal({ force: true });
     renderWeekGrid();
-    window.yuvomi?.showToast(t('meals.randomizeSuccess', { count: plan.assignments.length }), 'success');
+    window.samla?.showToast(t('meals.randomizeSuccess', { count: plan.assignments.length }), 'success');
   } catch (err) {
     runBtn.disabled = false;
-    window.yuvomi?.showToast(window.yuvomi?.friendlyError?.(err) ?? t('common.errorGeneric'), 'danger');
+    window.samla?.showToast(window.samla?.friendlyError?.(err) ?? t('common.errorGeneric'), 'danger');
   }
 }
 
@@ -1109,9 +1109,9 @@ function openMealModal(opts) {
             recipeSelect.value = String(created.data.id);
           }
 
-          window.yuvomi?.showToast(t('recipes.created'), 'success');
+          window.samla?.showToast(t('recipes.created'), 'success');
         } catch (err) {
-          window.yuvomi?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+          window.samla?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
         } finally {
           saveAsRecipeBtn.disabled = false;
         }
@@ -1146,16 +1146,16 @@ function openMealModal(opts) {
         try {
           const res = await api.post(`/meals/${state.modal.meal.id}/to-shopping-list`, { listId });
           if (res.data.transferred > 0) {
-            window.yuvomi?.showToast(res.data.transferred !== 1 ? t('meals.transferSuccessPlural', { count: res.data.transferred }) : t('meals.transferSuccess', { count: res.data.transferred }), 'success');
+            window.samla?.showToast(res.data.transferred !== 1 ? t('meals.transferSuccessPlural', { count: res.data.transferred }) : t('meals.transferSuccess', { count: res.data.transferred }), 'success');
             await loadWeek(state.currentWeek);
             closeModal({ force: true });
             renderWeekGrid();
           } else {
-            window.yuvomi?.showToast(t('meals.transferAlreadyDone'), 'info');
+            window.samla?.showToast(t('meals.transferAlreadyDone'), 'info');
             btn.disabled = false;
           }
         } catch (err) {
-          window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+          window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
           btn.disabled = false;
         }
       });
@@ -1253,7 +1253,7 @@ function buildModalContent({ mode, date, mealType, meal, presetRecipeId = null }
     <div class="modal-grid modal-grid--2">
       <div class="form-group">
         <label class="form-label" for="modal-date">${t('meals.dateLabel')}</label>
-        <yuvomi-datepicker type="date" id="modal-date" value="${formatDateInput(date)}"></yuvomi-datepicker>
+        <samla-datepicker type="date" id="modal-date" value="${formatDateInput(date)}"></samla-datepicker>
       </div>
       <div class="form-group">
         <label class="form-label" for="modal-type">${t('meals.mealTypeLabel')}</label>
@@ -1368,9 +1368,9 @@ async function saveModal(overlay) {
 
     closeModal({ force: true });
     renderWeekGrid();
-    window.yuvomi?.showToast(mode === 'create' ? t('meals.addMealTitle') : t('meals.editMeal'), 'success');
+    window.samla?.showToast(mode === 'create' ? t('meals.addMealTitle') : t('meals.editMeal'), 'success');
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+    window.samla?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
     saveBtn.disabled    = false;
     saveBtn.textContent = state.modal?.mode === 'edit' ? t('common.save') : t('common.add');
   }
@@ -1407,9 +1407,9 @@ async function deleteMeal(mealId) {
         await api.delete(`/meals/${mealId}?scope=series`);
         await loadWeek(state.currentWeek);
         renderWeekGrid();
-        window.yuvomi?.showToast(t('meals.seriesDeletedToast'), 'success');
+        window.samla?.showToast(t('meals.seriesDeletedToast'), 'success');
       } catch (err) {
-        window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+        window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
       }
       return;
     }
@@ -1429,7 +1429,7 @@ async function deleteMeal(mealId) {
     },
     restore: (err) => {
       if (itemEl) itemEl.style.display = '';
-      if (err) window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+      if (err) window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
     },
   });
 }
@@ -1440,7 +1440,7 @@ async function deleteMeal(mealId) {
 
 async function transferMeal(mealId) {
   if (!state.lists.length) {
-    window.yuvomi?.showToast(t('meals.noShoppingLists'), 'danger');
+    window.samla?.showToast(t('meals.noShoppingLists'), 'danger');
     return;
   }
 
@@ -1456,14 +1456,14 @@ async function transferMeal(mealId) {
   try {
     const res = await api.post(`/meals/${mealId}/to-shopping-list`, { listId });
     if (res.data.transferred > 0) {
-      window.yuvomi?.showToast(res.data.transferred !== 1 ? t('meals.transferSuccessPlural', { count: res.data.transferred }) : t('meals.transferSuccess', { count: res.data.transferred }), 'success');
+      window.samla?.showToast(res.data.transferred !== 1 ? t('meals.transferSuccessPlural', { count: res.data.transferred }) : t('meals.transferSuccess', { count: res.data.transferred }), 'success');
       await loadWeek(state.currentWeek);
       renderWeekGrid();
     } else {
-      window.yuvomi?.showToast(t('meals.transferAlreadyDone'), 'info');
+      window.samla?.showToast(t('meals.transferAlreadyDone'), 'info');
     }
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+    window.samla?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
   }
 }
 

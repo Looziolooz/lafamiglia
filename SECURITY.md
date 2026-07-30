@@ -2,9 +2,9 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in Yuvomi, please report it responsibly. **Do not open a public issue.**
+If you discover a security vulnerability in Samla, please report it responsibly and privately, by email to **security@samla.family**.
 
-Instead, use [GitHub Private Vulnerability Reporting](https://github.com/ulsklyc/yuvomi/security/advisories/new) to submit your report. This creates a private advisory visible only to you and the maintainers.
+Do not disclose it publicly until a fix has been released.
 
 Include:
 
@@ -17,7 +17,7 @@ You should receive an acknowledgment within 48 hours. Fixes for confirmed vulner
 
 ## Scope
 
-Yuvomi is designed for self-hosted deployment on a private network behind a reverse proxy with SSL. The security model assumes:
+Samla is designed for self-hosted deployment on a private network behind a reverse proxy with SSL. The security model assumes:
 
 - The server is not directly exposed to the public internet without Nginx + TLS
 - The admin controls all user accounts (no public registration)
@@ -49,13 +49,17 @@ Vulnerabilities that require physical access to the host or root on the server a
 
 ## Authorization Model
 
-Yuvomi uses a flat family authorization model:
+Samla uses a flat family authorization model:
 
 - **Admin** can create, edit, and delete all user accounts and all shared data.
 - **Member** can read and write all shared data (tasks, shopping lists, meals, calendar events, notes, contacts, budget entries) but cannot manage user accounts.
 
-There is no per-user data isolation - all family members see and can edit all data. This is intentional: Yuvomi is a shared family planner, not a multi-tenant application.
+There is no per-user data isolation - all family members see and can edit all data. This is intentional: Samla is a shared family planner, not a multi-tenant application.
 
 ## Supported Versions
 
-Only the latest version on `main` receives security updates. There are no LTS branches.
+Only the current release receives security updates. There are no LTS branches.
+
+Samla derives from the MIT-licensed Yuvomi project and tracks its security fixes.
+Vulnerabilities found in code inherited from upstream are also reported there, so
+that other users of that project benefit from the fix.

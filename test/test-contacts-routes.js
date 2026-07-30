@@ -22,7 +22,7 @@ function assert(cond, msg) { if (!cond) throw new Error(msg || 'Assertion fehlge
 
 console.log('\n[Contacts-Routes-Test] HTTP-Schicht der Kontakt-Routen\n');
 
-process.env.DB_PATH = path.join(os.tmpdir(), `yuvomi-contacts-routes-${process.pid}.db`);
+process.env.DB_PATH = path.join(os.tmpdir(), `samla-contacts-routes-${process.pid}.db`);
 process.env.SESSION_SECRET = 'contacts-routes-test-secret-32bytes-long';
 
 const db = await import('../server/db.js');

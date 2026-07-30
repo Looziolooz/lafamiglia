@@ -1,15 +1,15 @@
 /**
- * i18n-mini — schlanke Internationalisierung für den Yuvomi-Installer.
+ * i18n-mini — schlanke Internationalisierung für den Samla-Installer.
  * Spiegelt die Locale-Auflösung der App (public/i18n.js:26-34) wider, ohne
  * deren Abhängigkeiten. Keine externen Libs, reine Fetch-/DOM-/Intl-APIs.
  *
- * de ist die Referenzlocale, en der Fallback für fehlende Schlüssel.
+ * it ist die Referenz- und Fallback-Locale für fehlende Schlüssel.
  */
 
-export const SUPPORTED_LOCALES = ['de', 'en', 'es', 'fr', 'it', 'sv', 'el', 'ru', 'tr', 'zh', 'ja', 'ar', 'hi', 'pt', 'uk', 'pl', 'nl', 'cs', 'vi', 'hu', 'ko', 'id', 'fa'];
-const FALLBACK_LOCALE = 'en';
-const RTL_LOCALES = ['ar', 'fa'];
-const STORAGE_KEY = 'yuvomi-installer-locale';
+export const SUPPORTED_LOCALES = ['en', 'it', 'sv'];
+const FALLBACK_LOCALE = 'it';
+const RTL_LOCALES = [];
+const STORAGE_KEY = 'samla-installer-locale';
 
 let translations = {};
 let fallbackTranslations = {};
@@ -23,14 +23,16 @@ function storedLocale() {
   } catch { return null; }
 }
 
-/** Gemerkte Wahl > Browsersprache > Englisch, analog public/i18n.js:31-34. */
+/**
+ * Gemerkte Wahl > FALLBACK_LOCALE, analog public/i18n.js. Die Browsersprache
+ * wird wie in der App bewusst nicht ausgewertet: Italienisch ist die
+ * Produktsprache. Der Sprachumschalter oben im Assistenten bleibt der Weg zu
+ * einer anderen Sprache, und die Wahl landet in localStorage.
+ */
 export function resolveLocale(languages = navigator.languages || [navigator.language]) {
   const stored = storedLocale();
   if (stored) return stored;
-  for (const tag of languages) {
-    const base = (tag || '').split('-')[0].toLowerCase();
-    if (SUPPORTED_LOCALES.includes(base)) return base;
-  }
+  void languages;
   return FALLBACK_LOCALE;
 }
 

@@ -896,7 +896,7 @@ function openVitalModal(opts = {}) {
         <div class="modal-grid modal-grid--2">
           <div class="form-field">
             <label class="label" for="vital-measured-at">${esc(t('health.vitals.field.measuredAt'))}</label>
-            <yuvomi-datepicker id="vital-measured-at" type="datetime" value="${esc(localDateTimeValue(now))}"></yuvomi-datepicker>
+            <samla-datepicker id="vital-measured-at" type="datetime" value="${esc(localDateTimeValue(now))}"></samla-datepicker>
           </div>
           <div class="form-field">
             <label class="label" for="vital-visibility">${esc(t('health.vitals.field.visibility'))}</label>
@@ -943,13 +943,13 @@ function openVitalModal(opts = {}) {
         try {
           await api.post('/health/vitals', body);
           closeModal({ force: true });
-          window.yuvomi?.showToast(t('health.vitals.saved'), 'success');
+          window.samla?.showToast(t('health.vitals.saved'), 'success');
           await reloadAfterSave(body.type);
           await opts.onSaved?.();
         } catch (err) {
           console.error('[Health] vitals save error:', err);
           submitBtn.disabled = false;
-          window.yuvomi?.showToast(err?.data?.error || t('health.vitals.saveError'), 'danger');
+          window.samla?.showToast(err?.data?.error || t('health.vitals.saveError'), 'danger');
         }
       });
     },
@@ -1378,12 +1378,12 @@ async function handleDose(btn, action) {
       }
     }
 
-    window.yuvomi?.showToast(t('health.meds.doseSaved'), 'success');
+    window.samla?.showToast(t('health.meds.doseSaved'), 'success');
     await reloadMeds();
   } catch (err) {
     console.error('[Health] dose error:', err);
     btn.disabled = false;
-    window.yuvomi?.showToast(err?.data?.error || t('health.meds.doseError'), 'danger');
+    window.samla?.showToast(err?.data?.error || t('health.meds.doseError'), 'danger');
   }
 }
 
@@ -1481,12 +1481,12 @@ function openMedModal(med) {
           if (isEdit) await api.patch(`/health/medications/${med.id}`, body);
           else await api.post('/health/medications', body);
           closeModal({ force: true });
-          window.yuvomi?.showToast(t('health.meds.saved'), 'success');
+          window.samla?.showToast(t('health.meds.saved'), 'success');
           await reloadMeds();
         } catch (err) {
           console.error('[Health] med save error:', err);
           submitBtn.disabled = false;
-          window.yuvomi?.showToast(err?.data?.error || t('health.meds.saveError'), 'danger');
+          window.samla?.showToast(err?.data?.error || t('health.meds.saveError'), 'danger');
         }
       });
     },
@@ -1523,11 +1523,11 @@ async function deleteMed(med) {
   try {
     await api.delete(`/health/medications/${med.id}`);
     closeModal({ force: true });
-    window.yuvomi?.showToast(t('health.meds.deleted'), 'success');
+    window.samla?.showToast(t('health.meds.deleted'), 'success');
     await reloadMeds();
   } catch (err) {
     console.error('[Health] med delete error:', err);
-    window.yuvomi?.showToast(err?.data?.error || t('health.meds.deleteError'), 'danger');
+    window.samla?.showToast(err?.data?.error || t('health.meds.deleteError'), 'danger');
   }
 }
 
@@ -1555,7 +1555,7 @@ function renderSchedEditor(panel, med) {
       <div class="modal-grid modal-grid--2">
         <div class="form-field">
           <label class="label" for="sched-time">${esc(t('health.meds.schedule.time'))}</label>
-          <yuvomi-datepicker id="sched-time" type="time" value="08:00"></yuvomi-datepicker>
+          <samla-datepicker id="sched-time" type="time" value="08:00"></samla-datepicker>
         </div>
         <div class="form-field">
           <label class="label" for="sched-dose">${esc(t('health.meds.schedule.dose'))}</label>
@@ -1623,7 +1623,7 @@ function wireSchedEditor(panel, med) {
     } catch (err) {
       console.error('[Health] schedule add error:', err);
       addBtn.disabled = false;
-      window.yuvomi?.showToast(err?.data?.error || t('health.meds.saveError'), 'danger');
+      window.samla?.showToast(err?.data?.error || t('health.meds.saveError'), 'danger');
     }
   });
 
@@ -1638,7 +1638,7 @@ function wireSchedEditor(panel, med) {
       } catch (err) {
         console.error('[Health] schedule delete error:', err);
         btn.disabled = false;
-        window.yuvomi?.showToast(err?.data?.error || t('health.meds.saveError'), 'danger');
+        window.samla?.showToast(err?.data?.error || t('health.meds.saveError'), 'danger');
       }
     }));
 }
@@ -2083,7 +2083,7 @@ function openLabModal(report) {
         <div class="modal-grid modal-grid--2">
           <div class="form-field">
             <label class="label" for="lab-date">${esc(t('health.labs.field.reportDate'))}</label>
-            <yuvomi-datepicker id="lab-date" type="date" value="${esc(dateValue)}"></yuvomi-datepicker>
+            <samla-datepicker id="lab-date" type="date" value="${esc(dateValue)}"></samla-datepicker>
           </div>
           <div class="form-field">
             <label class="label" for="lab-name">${esc(t('health.labs.field.labName'))}</label>
@@ -2140,12 +2140,12 @@ function openLabModal(report) {
             if (created?.data?.id != null) labs.selectedReportId = created.data.id;
           }
           closeModal({ force: true });
-          window.yuvomi?.showToast(t('health.labs.saved'), 'success');
+          window.samla?.showToast(t('health.labs.saved'), 'success');
           await reloadLabs();
         } catch (err) {
           console.error('[Health] lab save error:', err);
           submitBtn.disabled = false;
-          window.yuvomi?.showToast(err?.data?.error || t('health.labs.saveError'), 'danger');
+          window.samla?.showToast(err?.data?.error || t('health.labs.saveError'), 'danger');
         }
       });
     },
@@ -2170,12 +2170,12 @@ async function deleteLabReport(report) {
   try {
     await api.delete(`/health/labs/${report.id}`);
     closeModal({ force: true });
-    window.yuvomi?.showToast(t('health.labs.deleted'), 'success');
+    window.samla?.showToast(t('health.labs.deleted'), 'success');
     if (labs.selectedReportId === report.id) labs.selectedReportId = null;
     await reloadLabs();
   } catch (err) {
     console.error('[Health] lab delete error:', err);
-    window.yuvomi?.showToast(err?.data?.error || t('health.labs.deleteError'), 'danger');
+    window.samla?.showToast(err?.data?.error || t('health.labs.deleteError'), 'danger');
   }
 }
 
@@ -2294,7 +2294,7 @@ function wireResultEditor(panel, report) {
     } catch (err) {
       console.error('[Health] lab result add error:', err);
       addBtn.disabled = false;
-      window.yuvomi?.showToast(err?.data?.error || t('health.labs.saveError'), 'danger');
+      window.samla?.showToast(err?.data?.error || t('health.labs.saveError'), 'danger');
     }
   });
 
@@ -2310,7 +2310,7 @@ function wireResultEditor(panel, report) {
       } catch (err) {
         console.error('[Health] lab result delete error:', err);
         btn.disabled = false;
-        window.yuvomi?.showToast(err?.data?.error || t('health.labs.saveError'), 'danger');
+        window.samla?.showToast(err?.data?.error || t('health.labs.saveError'), 'danger');
       }
     }));
 }
@@ -2659,7 +2659,7 @@ function openActivityModal(row, opts = {}) {
         </div>
         <div class="form-field">
           <label class="label" for="activity-performed-at">${esc(t('health.activity.field.performedAt'))}</label>
-          <yuvomi-datepicker id="activity-performed-at" type="datetime" value="${esc(dateValue)}"></yuvomi-datepicker>
+          <samla-datepicker id="activity-performed-at" type="datetime" value="${esc(dateValue)}"></samla-datepicker>
         </div>
         <div class="modal-grid modal-grid--3">
           <div class="form-field">
@@ -2718,7 +2718,7 @@ function openActivityModal(row, opts = {}) {
         const submitBtn = panel.querySelector('[type="submit"]');
         const body = collectActivityBody(panel);
         if (!body) {
-          window.yuvomi?.showToast(t('health.activity.invalid'), 'danger');
+          window.samla?.showToast(t('health.activity.invalid'), 'danger');
           return;
         }
         submitBtn.disabled = true;
@@ -2730,13 +2730,13 @@ function openActivityModal(row, opts = {}) {
             activity.anchor = toLocalDateKey(new Date(body.performed_at));
           }
           closeModal({ force: true });
-          window.yuvomi?.showToast(t('health.activity.saved'), 'success');
+          window.samla?.showToast(t('health.activity.saved'), 'success');
           await reloadActivity();
           await opts.onSaved?.();
         } catch (err) {
           console.error('[Health] activity save error:', err);
           submitBtn.disabled = false;
-          window.yuvomi?.showToast(err?.data?.error || t('health.activity.saveError'), 'danger');
+          window.samla?.showToast(err?.data?.error || t('health.activity.saveError'), 'danger');
         }
       });
     },
@@ -2787,11 +2787,11 @@ async function deleteActivity(row) {
   try {
     await api.delete(`/health/activities/${row.id}`);
     closeModal({ force: true });
-    window.yuvomi?.showToast(t('health.activity.deleted'), 'success');
+    window.samla?.showToast(t('health.activity.deleted'), 'success');
     await reloadActivity();
   } catch (err) {
     console.error('[Health] activity delete error:', err);
-    window.yuvomi?.showToast(err?.data?.error || t('health.activity.deleteError'), 'danger');
+    window.samla?.showToast(err?.data?.error || t('health.activity.deleteError'), 'danger');
   }
 }
 
@@ -3047,12 +3047,12 @@ async function handleOverviewDose(btn, action) {
       }
     }
 
-    window.yuvomi?.showToast(t('health.meds.doseSaved'), 'success');
+    window.samla?.showToast(t('health.meds.doseSaved'), 'success');
     await reloadOverview();
   } catch (err) {
     console.error('[Health] overview dose error:', err);
     btn.disabled = false;
-    window.yuvomi?.showToast(err?.data?.error || t('health.meds.doseError'), 'danger');
+    window.samla?.showToast(err?.data?.error || t('health.meds.doseError'), 'danger');
   }
 }
 
@@ -3209,11 +3209,11 @@ function overviewExportMarkup() {
       <div class="health-overview__export-range">
         <div class="form-field">
           <label class="label" for="ov-export-from">${esc(t('health.export.rangeFrom'))}</label>
-          <yuvomi-datepicker id="ov-export-from" type="date" value="${esc(from || '')}"></yuvomi-datepicker>
+          <samla-datepicker id="ov-export-from" type="date" value="${esc(from || '')}"></samla-datepicker>
         </div>
         <div class="form-field">
           <label class="label" for="ov-export-to">${esc(t('health.export.rangeTo'))}</label>
-          <yuvomi-datepicker id="ov-export-to" type="date" value="${esc(to || '')}"></yuvomi-datepicker>
+          <samla-datepicker id="ov-export-to" type="date" value="${esc(to || '')}"></samla-datepicker>
         </div>
       </div>
       <div class="health-overview__export-buttons" id="ov-export-buttons">${exportButtonsMarkup()}</div>
@@ -3247,7 +3247,7 @@ function wireOverview() {
   overview.root.querySelectorAll('[data-vital-nav]').forEach((card) =>
     card.addEventListener('click', () => {
       vitals.selectedType = card.dataset.vitalNav;
-      window.yuvomi?.navigate('/health/vitals');
+      window.samla?.navigate('/health/vitals');
     }));
 
   overview.root.querySelector('[data-action="ov-add-vital"]')
@@ -3255,7 +3255,7 @@ function wireOverview() {
   overview.root.querySelector('[data-action="ov-add-activity"]')
     ?.addEventListener('click', () => openActivityModal(null, { onSaved: () => reloadOverview() }));
   overview.root.querySelector('[data-action="ov-go-meds"]')
-    ?.addEventListener('click', () => window.yuvomi?.navigate('/health/meds'));
+    ?.addEventListener('click', () => window.samla?.navigate('/health/meds'));
 
   const fromEl = overview.root.querySelector('#ov-export-from');
   const toEl = overview.root.querySelector('#ov-export-to');
@@ -3666,24 +3666,24 @@ async function cycleStartPeriodToday() {
   try {
     await api.post('/health/cycle/periods', { start_date: today });
     cycle.anchor = today;
-    window.yuvomi?.showToast(t('health.cycle.today.startedToast'), 'success');
+    window.samla?.showToast(t('health.cycle.today.startedToast'), 'success');
     await reloadCycle();
   } catch (err) {
     console.error('[Health] cycle start error:', err);
-    window.yuvomi?.showToast(err?.data?.error || t('health.cycle.saveError'), 'danger');
+    window.samla?.showToast(err?.data?.error || t('health.cycle.saveError'), 'danger');
   }
 }
 
 async function cycleEndPeriodToday() {
   const open = cycleOpenPeriod();
-  if (!open) { window.yuvomi?.showToast(t('health.cycle.today.noOpenPeriod'), 'info'); return; }
+  if (!open) { window.samla?.showToast(t('health.cycle.today.noOpenPeriod'), 'info'); return; }
   try {
     await api.patch(`/health/cycle/periods/${open.id}`, { end_date: toLocalDateKey(new Date()) });
-    window.yuvomi?.showToast(t('health.cycle.today.endedToast'), 'success');
+    window.samla?.showToast(t('health.cycle.today.endedToast'), 'success');
     await reloadCycle();
   } catch (err) {
     console.error('[Health] cycle end error:', err);
-    window.yuvomi?.showToast(err?.data?.error || t('health.cycle.saveError'), 'danger');
+    window.samla?.showToast(err?.data?.error || t('health.cycle.saveError'), 'danger');
   }
 }
 
@@ -3865,11 +3865,11 @@ function openPeriodModal(period) {
         <div class="modal-grid modal-grid--2">
           <div class="form-field">
             <label class="label" for="cycle-start">${esc(t('health.cycle.field.startDate'))}</label>
-            <yuvomi-datepicker id="cycle-start" type="date" value="${esc(startVal)}"></yuvomi-datepicker>
+            <samla-datepicker id="cycle-start" type="date" value="${esc(startVal)}"></samla-datepicker>
           </div>
           <div class="form-field">
             <label class="label" for="cycle-end">${esc(t('health.cycle.field.endDate'))}</label>
-            <yuvomi-datepicker id="cycle-end" type="date" value="${esc(endVal)}"></yuvomi-datepicker>
+            <samla-datepicker id="cycle-end" type="date" value="${esc(endVal)}"></samla-datepicker>
           </div>
         </div>
         <div class="form-field">
@@ -3897,8 +3897,8 @@ function openPeriodModal(period) {
         const submitBtn = panel.querySelector('[type="submit"]');
         const start = panel.querySelector('#cycle-start').value;
         const end = panel.querySelector('#cycle-end').value;
-        if (!start) { window.yuvomi?.showToast(t('health.cycle.invalid'), 'danger'); return; }
-        if (end && end < start) { window.yuvomi?.showToast(t('health.cycle.invalid'), 'danger'); return; }
+        if (!start) { window.samla?.showToast(t('health.cycle.invalid'), 'danger'); return; }
+        if (end && end < start) { window.samla?.showToast(t('health.cycle.invalid'), 'danger'); return; }
         const body = {
           start_date: start,
           end_date: end || null,
@@ -3910,12 +3910,12 @@ function openPeriodModal(period) {
           if (isEdit) await api.patch(`/health/cycle/periods/${period.id}`, body);
           else { await api.post('/health/cycle/periods', body); cycle.anchor = start; }
           closeModal({ force: true });
-          window.yuvomi?.showToast(t('health.cycle.saved'), 'success');
+          window.samla?.showToast(t('health.cycle.saved'), 'success');
           await reloadCycle();
         } catch (err) {
           console.error('[Health] cycle period save error:', err);
           submitBtn.disabled = false;
-          window.yuvomi?.showToast(err?.data?.error || t('health.cycle.saveError'), 'danger');
+          window.samla?.showToast(err?.data?.error || t('health.cycle.saveError'), 'danger');
         }
       });
     },
@@ -3928,11 +3928,11 @@ async function deletePeriod(period) {
   try {
     await api.delete(`/health/cycle/periods/${period.id}`);
     closeModal({ force: true });
-    window.yuvomi?.showToast(t('health.cycle.deleted'), 'success');
+    window.samla?.showToast(t('health.cycle.deleted'), 'success');
     await reloadCycle();
   } catch (err) {
     console.error('[Health] cycle period delete error:', err);
-    window.yuvomi?.showToast(err?.data?.error || t('health.cycle.deleteError'), 'danger');
+    window.samla?.showToast(err?.data?.error || t('health.cycle.deleteError'), 'danger');
   }
 }
 
@@ -4024,12 +4024,12 @@ function openDayLogModal(dateKey) {
         try {
           await api.post('/health/cycle/logs', body);
           closeModal({ force: true });
-          window.yuvomi?.showToast(t('health.cycle.saved'), 'success');
+          window.samla?.showToast(t('health.cycle.saved'), 'success');
           await reloadCycle();
         } catch (err) {
           console.error('[Health] cycle log save error:', err);
           submitBtn.disabled = false;
-          window.yuvomi?.showToast(err?.data?.error || t('health.cycle.saveError'), 'danger');
+          window.samla?.showToast(err?.data?.error || t('health.cycle.saveError'), 'danger');
         }
       });
     },
@@ -4042,11 +4042,11 @@ async function deleteDayLog(log) {
   try {
     await api.delete(`/health/cycle/logs/${log.id}`);
     closeModal({ force: true });
-    window.yuvomi?.showToast(t('health.cycle.deleted'), 'success');
+    window.samla?.showToast(t('health.cycle.deleted'), 'success');
     await reloadCycle();
   } catch (err) {
     console.error('[Health] cycle log delete error:', err);
-    window.yuvomi?.showToast(err?.data?.error || t('health.cycle.deleteError'), 'danger');
+    window.samla?.showToast(err?.data?.error || t('health.cycle.deleteError'), 'danger');
   }
 }
 
@@ -4120,7 +4120,7 @@ function openCycleSettingsModal() {
         </label>
         <div class="form-field" id="cs-due-field" ${s.pregnancy_mode ? '' : 'hidden'}>
           <label class="label" for="cs-due">${esc(t('health.cycle.settings.dueDate'))}</label>
-          <yuvomi-datepicker id="cs-due" type="date" value="${esc(s.pregnancy_due_date || '')}" min="${esc(dueMin)}" max="${esc(dueMax)}"></yuvomi-datepicker>
+          <samla-datepicker id="cs-due" type="date" value="${esc(s.pregnancy_due_date || '')}" min="${esc(dueMin)}" max="${esc(dueMax)}"></samla-datepicker>
         </div>
         <p class="cycle-hint" id="cs-pregnancy-hint">${esc(t('health.cycle.settings.pregnancyHint'))}</p>
         <div class="modal-actions">
@@ -4164,11 +4164,11 @@ function openCycleSettingsModal() {
           const { data } = await api.patch('/health/cycle/visibility', { visibility: selectedVisibility() });
           const count = (data?.periods || 0) + (data?.logs || 0);
           showBulk(false);
-          window.yuvomi?.showToast(t('health.cycle.settings.applyToAllDone', { count }), 'success');
+          window.samla?.showToast(t('health.cycle.settings.applyToAllDone', { count }), 'success');
           await reloadCycle();
         } catch (err) {
           console.error('[Health] cycle bulk visibility error:', err);
-          window.yuvomi?.showToast(err?.data?.error || t('health.cycle.saveError'), 'danger');
+          window.samla?.showToast(err?.data?.error || t('health.cycle.saveError'), 'danger');
         } finally {
           bulkRun.disabled = false;
         }
@@ -4195,12 +4195,12 @@ function openCycleSettingsModal() {
         try {
           cycle.settings = (await api.put('/health/cycle/settings', body)).data || body;
           closeModal({ force: true });
-          window.yuvomi?.showToast(t('health.cycle.settings.saved'), 'success');
+          window.samla?.showToast(t('health.cycle.settings.saved'), 'success');
           renderCycleShell();
         } catch (err) {
           console.error('[Health] cycle settings save error:', err);
           submitBtn.disabled = false;
-          window.yuvomi?.showToast(err?.data?.error || t('health.cycle.saveError'), 'danger');
+          window.samla?.showToast(err?.data?.error || t('health.cycle.saveError'), 'danger');
         }
       });
     },

@@ -1,11 +1,11 @@
 manifestVersion: 1
-id: yuvomi
+id: samla
 category: files
-name: Yuvomi
+name: Samla
 version: "0.66.0"
 tagline: Self-hosted family planner — calendar, tasks, shopping, meals & budget
 description: >-
-  Yuvomi is a self-hosted, privacy-focused family planner that bundles everything
+  Samla is a self-hosted, privacy-focused family planner that bundles everything
   a household needs into a single fast PWA — no cloud, no tracking, no ads.
 
 
@@ -40,7 +40,7 @@ description: >-
   🔒 PRIVACY
 
 
-  Yuvomi keeps all data in a local SQLite database (optionally encrypted with
+  Samla keeps all data in a local SQLite database (optionally encrypted with
   SQLCipher). Nothing leaves your device unless you explicitly enable a calendar
   or contacts sync to a provider you choose.
 
@@ -48,14 +48,14 @@ description: >-
   🛠️ SET-UP
 
 
-  Open Yuvomi from your Umbrel dashboard and create the first account — that
+  Open Samla from your Umbrel dashboard and create the first account — that
   account becomes the family admin and can invite the rest of the household.
 releaseNotes: ""
 developer: Ulas Kalayci
-website: https://github.com/ulsklyc/yuvomi
+website: https://github.com/YOUR-ORG/samla
 dependencies: []
-repo: https://github.com/ulsklyc/yuvomi
-support: https://github.com/ulsklyc/yuvomi/issues
+repo: https://github.com/YOUR-ORG/samla
+support: https://github.com/YOUR-ORG/samla/issues
 port: 8181
 # Must stay empty for submission — the Umbrel team populates icon/gallery from
 # the assets in umbrel-apps-gallery (see deploy/umbrel/icon.svg + gallery/).

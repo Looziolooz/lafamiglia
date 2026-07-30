@@ -27,7 +27,7 @@ import { test } from 'node:test';
 
 import { SETTINGS_LEAVES } from '../public/settings/registry.js';
 
-const de = JSON.parse(readFileSync(new URL('../public/locales/de.json', import.meta.url), 'utf8'));
+const de = JSON.parse(readFileSync(new URL('../public/locales/en.json', import.meta.url), 'utf8'));
 const translate = (key) => key.split('.').reduce((value, segment) => value?.[segment], de);
 
 const SENTENCE_SPLIT = /[.!?]+\s+/;

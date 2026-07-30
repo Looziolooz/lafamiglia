@@ -34,7 +34,7 @@ function buildCalDAVICS(event) {
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Yuvomi//CalDAV Sync//EN',
+    'PRODID:-//Samla//CalDAV Sync//EN',
     'BEGIN:VEVENT',
     `UID:${uid}`,
     `DTSTAMP:${now}`,
@@ -481,7 +481,7 @@ async function sync({ createClient } = {}) {
       // Fetch all calendars from server
       const serverCalendars = await client.fetchCalendars();
 
-      // Inbound sync: CalDAV → Yuvomi
+      // Inbound sync: CalDAV → Samla
       let accountEventCount = 0;
       let accountChangedCount = 0;
       let processedObjects = 0; // Zähler für den Event-Loop-Yield (#519)
@@ -646,7 +646,7 @@ async function sync({ createClient } = {}) {
         log.error(`Outbound changes failed for account ${account.id}:`, err.message);
       }
 
-      // Outbound sync: Yuvomi → CalDAV (events with target_caldav_account_id)
+      // Outbound sync: Samla → CalDAV (events with target_caldav_account_id)
       const localEvents = db.get().prepare(`
         SELECT * FROM calendar_events
         WHERE external_source = 'local' AND target_caldav_account_id = ?

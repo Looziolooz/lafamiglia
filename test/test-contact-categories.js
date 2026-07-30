@@ -61,7 +61,7 @@ console.log('\n[Contact-Categories-Test] Migration + CRUD-Routen\n');
 // --------------------------------------------------------
 // 2) CRUD-Routen (echte db.js + Express + fetch)
 // --------------------------------------------------------
-process.env.DB_PATH = path.join(os.tmpdir(), `yuvomi-contactcat-${process.pid}.db`);
+process.env.DB_PATH = path.join(os.tmpdir(), `samla-contactcat-${process.pid}.db`);
 process.env.SESSION_SECRET = 'contact-categories-test-secret-32bytes';
 const db = await import('../server/db.js');
 const { default: contactsRouter } = await import('../server/routes/contacts.js');

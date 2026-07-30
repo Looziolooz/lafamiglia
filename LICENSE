@@ -1,21 +1,112 @@
-MIT License
+Samla — Software License Agreement
 
-Copyright (c) 2026 ulsklyc
+Copyright (c) 2026 Lorenzo Dastoli. All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Samla is a derivative work of Yuvomi (https://github.com/ulsklyc/yuvomi),
+Copyright (c) 2026 ulsklyc, licensed under the MIT License. See
+THIRD-PARTY-LICENSES.md, which forms part of this distribution and must be
+distributed with it.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+1. DEFINITIONS
+
+   "Software" means the Samla application as distributed, including its source
+   code, documentation, configuration templates and bundled assets.
+
+   "Licensor" means the copyright holder named above.
+
+   "Licensee" means the natural or legal person that has acquired a license to
+   the Software from the Licensor.
+
+   "Upstream Components" means those portions of the Software that originate
+   from Yuvomi or from the third-party components listed in
+   THIRD-PARTY-LICENSES.md.
+
+
+2. GRANT OF LICENSE
+
+   Subject to payment of the agreed fee and to compliance with this Agreement,
+   the Licensor grants the Licensee a non-exclusive, non-transferable,
+   perpetual license to install, operate and modify the Software on servers
+   controlled by the Licensee, for the Licensee's own use.
+
+
+3. RESTRICTIONS
+
+   Except as permitted under Section 4, the Licensee shall not:
+
+   (a) distribute, resell, sublicense, rent, lease or lend the Software, or
+       make it available to third parties as a hosted or managed service;
+
+   (b) remove or alter any copyright, trademark or license notice contained in
+       the Software, including THIRD-PARTY-LICENSES.md;
+
+   (c) use the name "Samla", its logo, or any Licensor trademark to identify a
+       derivative product distributed to third parties.
+
+
+4. UPSTREAM COMPONENTS
+
+   The Upstream Components remain governed by their own licenses, which are
+   reproduced in THIRD-PARTY-LICENSES.md. Nothing in this Agreement limits any
+   right the Licensee holds in respect of those components under those
+   licenses. Section 3 applies only to the Software as a compilation and to
+   those portions authored by the Licensor.
+
+
+5. OWNERSHIP
+
+   The Software is licensed, not sold. The Licensor retains all right, title
+   and interest in the Software and in all modifications authored by the
+   Licensor, subject to Section 4.
+
+
+6. SUPPORT AND UPDATES
+
+   This Agreement does not include support, maintenance or updates unless
+   agreed separately in writing.
+
+
+7. WARRANTY DISCLAIMER
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
+
+8. LIMITATION OF LIABILITY
+
+   TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE LICENSOR SHALL NOT BE
+   LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL OR CONSEQUENTIAL DAMAGES, OR
+   FOR LOSS OF DATA, PROFITS OR BUSINESS, ARISING OUT OF OR IN CONNECTION WITH
+   THE SOFTWARE. THE LICENSOR'S TOTAL AGGREGATE LIABILITY SHALL NOT EXCEED THE
+   FEE PAID BY THE LICENSEE FOR THE SOFTWARE.
+
+   Nothing in this Agreement excludes or limits liability that cannot be
+   excluded or limited under applicable mandatory law, including liability for
+   intent or gross negligence, or statutory rights of consumers.
+
+
+9. DATA PROTECTION
+
+   The Software is self-hosted. The Licensee operates it on its own
+   infrastructure and is the controller of all personal data processed by it.
+   The Licensor has no access to that data and processes none of it.
+
+
+10. TERM AND TERMINATION
+
+   This Agreement takes effect on delivery of the Software and continues until
+   terminated. It terminates automatically if the Licensee materially breaches
+   Section 3 and fails to remedy the breach within 30 days of written notice.
+   On termination the Licensee shall cease using and delete all copies of the
+   Software, save for the Upstream Components as permitted under Section 4.
+
+
+11. GOVERNING LAW
+
+   This Agreement is governed by the laws of Sweden, excluding its conflict of
+   law rules and the UN Convention on Contracts for the International Sale of
+   Goods. The courts of Stockholm shall have exclusive jurisdiction, subject to
+   any mandatory consumer protection rules of the Licensee's country of
+   residence.

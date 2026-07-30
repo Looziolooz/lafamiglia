@@ -23,7 +23,7 @@ import fs from 'node:fs';
 import http from 'node:http';
 
 // ── Isolierte Temp-Umgebung VOR den dynamischen Imports einrichten ──────────────
-const TMP_ROOT = fs.mkdtempSync(path.join(os.tmpdir(), 'yuvomi-backup-routes-'));
+const TMP_ROOT = fs.mkdtempSync(path.join(os.tmpdir(), 'samla-backup-routes-'));
 const DB_DIR = path.join(TMP_ROOT, 'db');
 const BACKUP_DIR = path.join(TMP_ROOT, 'backups');
 fs.mkdirSync(DB_DIR, { recursive: true });
@@ -50,7 +50,7 @@ const { default: backupRouter } = await import('../server/routes/backup.js');
 const database = () => dbmod.get(); // frisch lesen: restore re-initialisiert das Singleton
 
 // ── Loopback-WebDAV-Stub (in-process, kein externes Netz) ───────────────────────
-const REMOTE_FILE = 'yuvomi-backup-2026-01-01T00-00-00-000Z.db';
+const REMOTE_FILE = 'samla-backup-2026-01-01T00-00-00-000Z.db';
 const davSeen = []; // Methoden-Log für Assertions
 const davServer = http.createServer((req, res) => {
   davSeen.push(req.method);
@@ -178,7 +178,7 @@ test('GET /database: lädt eine valide SQLite-Backup-Datei herunter', async () =
   assert.equal(r.status, 200);
   assert.ok(r.buf.length > 0, 'Body nicht leer');
   assert.equal(r.buf.subarray(0, 16).toString('latin1').startsWith('SQLite format 3'), true);
-  // Muss eine echte Yuvomi-DB sein (schema_migrations vorhanden) → für den späteren
+  // Muss eine echte Samla-DB sein (schema_migrations vorhanden) → für den späteren
   // Restore-Roundtrip wiederverwendbar.
   assert.ok(r.buf.length < 4 * 1024 * 1024, 'Schema-Backup liegt unter dem 4mb-Limit');
 });

@@ -35,7 +35,7 @@ function bindSpaNavigation(link, href) {
       || event.ctrlKey
       || event.shiftKey
       || event.altKey
-      || !window.yuvomi?.navigate
+      || !window.samla?.navigate
     ) {
       return;
     }
@@ -43,7 +43,7 @@ function bindSpaNavigation(link, href) {
     // Alle Wege aus einem Blatt heraus laufen ueber diese Links: Seitenleiste,
     // Suchtreffer, Breadcrumb und der Zurueck-Link.
     if (!(await confirmLeafExit())) return;
-    window.yuvomi.navigate(href);
+    window.samla.navigate(href);
   });
 }
 

@@ -22,10 +22,10 @@ const ENV_PASS     = process.env.WEBDAV_BACKUP_PASSWORD;
 const ENV_PATH     = process.env.WEBDAV_BACKUP_PATH;
 const ENV_KEEP     = process.env.WEBDAV_BACKUP_KEEP;
 
-// New backups use the `yuvomi-` prefix; pre-rebrand files use `oikos-`.
+// New backups use the `samla-` prefix; pre-rebrand files use `oikos-`.
 // Both are still recognised for listing/rotation so legacy backups are not
 // orphaned (never rotated, invisible to the UI) after the rename.
-const BACKUP_FILE_PREFIX = 'yuvomi-backup-';
+const BACKUP_FILE_PREFIX = 'samla-backup-';
 const LEGACY_FILE_PREFIX = 'oikos-backup-';
 const BACKUP_FILE_SUFFIX = '.db';
 
@@ -75,7 +75,7 @@ export function getConfig() {
   const username = ENV_USER ?? cfgGet('webdav_backup_username')  ?? null;
   const password = ENV_PASS ?? cfgGet('webdav_backup_password')  ?? null;
 
-  const rawPath  = ENV_PATH ?? cfgGet('webdav_backup_path') ?? '/yuvomi/backups/';
+  const rawPath  = ENV_PATH ?? cfgGet('webdav_backup_path') ?? '/samla/backups/';
   const remotePath = rawPath.endsWith('/') ? rawPath : `${rawPath}/`;
 
   const keepRaw  = ENV_KEEP ?? cfgGet('webdav_backup_keep') ?? '7';
@@ -111,7 +111,7 @@ export function saveConfig(data) {
     cfgSet('webdav_backup_password', data.password);
   }
   if (data.remotePath !== undefined) {
-    const p = String(data.remotePath).trim() || '/yuvomi/backups/';
+    const p = String(data.remotePath).trim() || '/samla/backups/';
     cfgSet('webdav_backup_path', p.endsWith('/') ? p : `${p}/`);
   }
   if (data.keep !== undefined) {

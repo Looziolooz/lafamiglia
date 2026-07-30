@@ -27,7 +27,7 @@ function enabledReminderListCount(lists) {
 }
 
 function showToast(message, tone = 'default') {
-  window.yuvomi?.showToast(message, tone);
+  window.samla?.showToast(message, tone);
 }
 
 function renderPage(container) {

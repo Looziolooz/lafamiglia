@@ -722,7 +722,7 @@ function adjustQuantity(item, direction, row) {
       if (!row.isConnected) return;
       refreshRowQuantity(row, item);
       if (renderFilters().wasReset) renderList();
-      window.yuvomi?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+      window.samla?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
     }
   }, QUANTITY_DEBOUNCE_MS);
 
@@ -789,12 +789,12 @@ async function sendToShopping(items) {
   try {
     lists = await ensureLists();
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+    window.samla?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
     return;
   }
 
   if (!lists.length) {
-    window.yuvomi?.showToast(t('pantry.noLists'), 'warning');
+    window.samla?.showToast(t('pantry.noLists'), 'warning');
     return;
   }
 
@@ -815,15 +815,15 @@ async function sendToShopping(items) {
     });
     const { added = 0, skipped = 0 } = res.data ?? {};
     if (!added) {
-      window.yuvomi?.showToast(t('pantry.toShoppingNone'), 'info');
+      window.samla?.showToast(t('pantry.toShoppingNone'), 'info');
       return;
     }
     const message = skipped
       ? `${t('pantry.toShoppingDone', { count: added })} · ${t('pantry.toShoppingSkipped', { count: skipped })}`
       : t('pantry.toShoppingDone', { count: added });
-    window.yuvomi?.showToast(message, 'success');
+    window.samla?.showToast(message, 'success');
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+    window.samla?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
   }
 }
 
@@ -878,8 +878,8 @@ function openItemModal(mode, item = null) {
       </div>
       <div class="form-group">
         <label class="form-label" for="pantry-expires">${esc(t('pantry.expiresLabel'))}</label>
-        <yuvomi-datepicker id="pantry-expires" type="date"
-                           value="${esc(isEdit && item.expires_on ? item.expires_on : '')}"></yuvomi-datepicker>
+        <samla-datepicker id="pantry-expires" type="date"
+                           value="${esc(isEdit && item.expires_on ? item.expires_on : '')}"></samla-datepicker>
         <p class="form-hint">${esc(t('pantry.expiresHint'))}</p>
       </div>
       ${advancedSection(`
@@ -961,10 +961,10 @@ async function saveItem(panel, mode, item) {
     closeSharedModal({ force: true });
     renderFilters();
     renderList();
-    window.yuvomi?.showToast(mode === 'create' ? t('pantry.created') : t('pantry.updated'), 'success');
+    window.samla?.showToast(mode === 'create' ? t('pantry.created') : t('pantry.updated'), 'success');
   } catch (err) {
     saveBtn.disabled = false;
-    window.yuvomi?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+    window.samla?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
   }
 }
 
@@ -983,7 +983,7 @@ async function removeItem(item) {
     },
     restore: (err) => {
       if (rowEl_) rowEl_.style.display = '';
-      if (err) window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+      if (err) window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
     },
   });
 }
@@ -1006,9 +1006,9 @@ async function openLocationManager() {
   let manager = null;
   openSharedModal({
     title: t('pantry.manageLocations'),
-    content: '<yuvomi-category-manager></yuvomi-category-manager>',
+    content: '<samla-category-manager></samla-category-manager>',
     onSave: (panel) => {
-      manager = panel.querySelector('yuvomi-category-manager');
+      manager = panel.querySelector('samla-category-manager');
       if (!manager) return;
       manager.addEventListener('category-manager-changed', onChanged);
       // Dieselbe geteilte Komponente wie Einkaufskategorien: die Lagerort-API

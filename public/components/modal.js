@@ -202,8 +202,8 @@ function _resumeSuspendedModal({ overlay, id, snapshot }) {
   _initialFormSnapshot = snapshot;
   document.body.style.overflow = 'hidden';
   modalState = 'open';
-  if (window.yuvomi?.setThemeColor) {
-    window.yuvomi.setThemeColor(OVERLAY_THEME_COLOR, OVERLAY_THEME_COLOR);
+  if (window.samla?.setThemeColor) {
+    window.samla.setThemeColor(OVERLAY_THEME_COLOR, OVERLAY_THEME_COLOR);
   }
 }
 
@@ -238,8 +238,8 @@ function _doClose(overlayEl) {
     }
 
     // Standalone: Statusbar-Farbe zur aktuellen Route wiederherstellen
-    if (window.yuvomi?.restoreThemeColor) {
-      window.yuvomi.restoreThemeColor();
+    if (window.samla?.restoreThemeColor) {
+      window.samla.restoreThemeColor();
     }
   }
 }
@@ -379,8 +379,8 @@ export function openModal({ title, content, onSave, onDelete, onClose, size = 'm
   }, { capture: true });
 
   // Standalone: Statusbar abdunkeln
-  if (window.yuvomi?.setThemeColor) {
-    window.yuvomi.setThemeColor(OVERLAY_THEME_COLOR, OVERLAY_THEME_COLOR);
+  if (window.samla?.setThemeColor) {
+    window.samla.setThemeColor(OVERLAY_THEME_COLOR, OVERLAY_THEME_COLOR);
   }
 
   modalState = 'open';
@@ -663,7 +663,7 @@ function _ensureFieldError(group, input, message) {
  * ein Toast unten links den Fehler - bei langen Formularen blieb das Feld
  * unsichtbar (Critique P1). */
 function _focusField(input) {
-  // Custom Elements (z. B. yuvomi-datepicker) sind selbst nicht fokussierbar:
+  // Custom Elements (z. B. samla-datepicker) sind selbst nicht fokussierbar:
   // stattdessen ihren inneren Formular-Knoten fokussieren.
   const isNative = typeof input.matches === 'function' && input.matches('input, select, textarea, button');
   const focusTarget = (!isNative && typeof input.querySelector === 'function'

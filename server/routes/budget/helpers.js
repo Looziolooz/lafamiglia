@@ -56,10 +56,7 @@ export function mayEdit(req, row) {
 }
 
 const LOCALE_CACHE = new Map();
-const SUPPORTED_LANGS = new Set([
-  'ar', 'cs', 'de', 'el', 'en', 'es', 'fr', 'hi', 'it', 'ja',
-  'nl', 'pl', 'pt', 'ru', 'sv', 'tr', 'uk', 'vi', 'zh',
-]);
+const SUPPORTED_LANGS = new Set(['en', 'it', 'sv']);
 const CATEGORY_LABEL_KEYS = {
   housing: 'catHousing',
   food: 'catFood',
@@ -120,9 +117,9 @@ const SUBCATEGORY_LABEL_KEYS = {
 };
 
 export function normalizeLang(raw) {
-  const lang = String(raw || 'en').trim().toLowerCase();
+  const lang = String(raw || 'it').trim().toLowerCase();
   const base = lang.split(/[-_]/)[0];
-  return SUPPORTED_LANGS.has(base) ? base : 'en';
+  return SUPPORTED_LANGS.has(base) ? base : 'it';
 }
 
 export function budgetMessages(lang) {

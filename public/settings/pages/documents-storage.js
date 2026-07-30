@@ -18,7 +18,7 @@ function formatSyncTime(value) {
 }
 
 function showToast(message, tone = "default") {
-  window.yuvomi?.showToast(message, tone);
+  window.samla?.showToast(message, tone);
 }
 
 function documentStorageTarget(data) {
@@ -413,7 +413,7 @@ function buildDriveSetupHint() {
   });
   const link = document.createElement("a");
   link.href =
-    "https://github.com/ulsklyc/yuvomi/blob/main/docs/installation.md#google-drive-document-storage-optional";
+    "https://samla.family/docs/installation#google-drive-document-storage";
   link.target = "_blank";
   link.rel = "noopener noreferrer";
   link.textContent = t("settings.documentStorageGoogleDriveSetupLink");
@@ -450,7 +450,7 @@ function buildGoogleDriveProvider(data, reload) {
   provider.appendChild(
     createInfoList([
       { label: t("settings.documentStorageGoogleDriveAccount"), value: drive.account_email || "–" },
-      { label: t("settings.documentStorageGoogleDriveFolder"), value: drive.folder_name || "Yuvomi/Documents" },
+      { label: t("settings.documentStorageGoogleDriveFolder"), value: drive.folder_name || "Samla/Documents" },
       { label: t("settings.documentStorageGoogleDriveCount"), value: String(Number(drive.document_count ?? 0)) },
       {
         label: t("settings.documentStorageLastTest"),

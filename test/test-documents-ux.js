@@ -18,7 +18,7 @@ const page = read('../public/pages/documents.js');
 const css = read('../public/styles/documents.css');
 const chipCss = read('../public/styles/filter-chip.css');
 const indexHtml = read('../public/index.html');
-const de = JSON.parse(read('../public/locales/de.json'));
+const de = JSON.parse(read('../public/locales/en.json'));
 
 // --------------------------------------------------------
 // P0 — Leerzustände
@@ -192,7 +192,7 @@ test('die Listenansicht trägt Datum und Größe als eigene Spalten', () => {
 
 test('die Liste ist sortierbar und merkt sich die Wahl', () => {
   assert.match(page, /const SORTS = \['updated', 'name', 'size'\]/);
-  assert.match(page, /localStorage\.setItem\('yuvomi-documents-sort'/);
+  assert.match(page, /localStorage\.setItem\('samla-documents-sort'/);
   assert.match(page, /function sortDocuments\(/);
 });
 

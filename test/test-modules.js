@@ -25,7 +25,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 
 // ── Isolierte Temp-Modul-Umgebung VOR den dynamischen Imports einrichten ─────────
-const TMP_ROOT = fs.mkdtempSync(path.join(os.tmpdir(), 'yuvomi-modules-'));
+const TMP_ROOT = fs.mkdtempSync(path.join(os.tmpdir(), 'samla-modules-'));
 const MODULES_DIR = path.join(TMP_ROOT, 'modules');
 fs.mkdirSync(MODULES_DIR, { recursive: true });
 

@@ -434,8 +434,8 @@ function renderModalContent({ task = null, users = [], reminder = null } = {}) {
       <div class="modal-grid modal-grid--2" style="margin-top:var(--space-4)">
         <div class="form-group">
           <label class="label" for="task-start-date">${t('tasks.startDateLabel')}</label>
-          <yuvomi-datepicker type="date" id="task-start-date" name="start_date"
-                 value="${esc(formatDateInput(task?.start_date))}"></yuvomi-datepicker>
+          <samla-datepicker type="date" id="task-start-date" name="start_date"
+                 value="${esc(formatDateInput(task?.start_date))}"></samla-datepicker>
         </div>
         <div class="form-group">
           <label class="label" for="task-points">${t('tasks.pointsLabel')}</label>
@@ -471,13 +471,13 @@ function renderModalContent({ task = null, users = [], reminder = null } = {}) {
       <div class="modal-grid modal-grid--2">
         <div class="form-group">
           <label class="label" for="task-due-date">${t('tasks.dueDateLabel')}</label>
-          <yuvomi-datepicker type="date" id="task-due-date" name="due_date"
-                 value="${esc(formatDateInput(task?.due_date))}"></yuvomi-datepicker>
+          <samla-datepicker type="date" id="task-due-date" name="due_date"
+                 value="${esc(formatDateInput(task?.due_date))}"></samla-datepicker>
         </div>
         <div class="form-group">
           <label class="label" for="task-due-time">${t('tasks.dueTimeLabel')}</label>
-          <yuvomi-datepicker type="time" id="task-due-time" name="due_time"
-                 value="${esc(formatTimeInput(task?.due_time ?? ''))}"></yuvomi-datepicker>
+          <samla-datepicker type="time" id="task-due-time" name="due_time"
+                 value="${esc(formatTimeInput(task?.due_time ?? ''))}"></samla-datepicker>
         </div>
       </div>
 
@@ -830,10 +830,10 @@ function openTaskCategoryManager(container) {
   };
   openSharedModal({
     title: t('tasks.manageCategories'),
-    content: '<yuvomi-category-manager></yuvomi-category-manager>',
+    content: '<samla-category-manager></samla-category-manager>',
     size: 'lg',
     onSave: (panel) => {
-      manager = panel.querySelector('yuvomi-category-manager');
+      manager = panel.querySelector('samla-category-manager');
       manager.addEventListener('category-manager-changed', onChanged);
       manager.configure({
         basePath: '/tasks/categories',
@@ -936,11 +936,11 @@ async function handleFormSubmit(e, container) {
     let savedTaskId = taskId;
     if (taskId) {
       await api.put(`/tasks/${taskId}`, body);
-      window.yuvomi.showToast(t('tasks.savedToast'), 'success');
+      window.samla.showToast(t('tasks.savedToast'), 'success');
     } else {
       const res = await api.post('/tasks', body);
       savedTaskId = res.data?.id;
-      window.yuvomi.showToast(t('tasks.createdToast'), 'success');
+      window.samla.showToast(t('tasks.createdToast'), 'success');
     }
 
     // Erinnerung speichern oder löschen (Vorbedingungen bereits oben geprüft)
@@ -987,7 +987,7 @@ async function handleDeleteTask(id, container) {
     },
     restore: (err) => {
       if (itemEl) itemEl.style.display = '';
-      if (err) window.yuvomi.showToast(err.message ?? t('common.unknownError'), 'danger');
+      if (err) window.samla.showToast(err.message ?? t('common.unknownError'), 'danger');
     },
   });
 }
@@ -999,7 +999,7 @@ async function handleAddSubtask(parentId, container) {
     await api.post('/tasks', { title, parent_task_id: parentId });
     await loadTasks(container);
   } catch (err) {
-    window.yuvomi.showToast(err.message, 'danger');
+    window.samla.showToast(err.message, 'danger');
   }
 }
 
@@ -1191,7 +1191,7 @@ function wireKanbanDrag(container) {
       await api.patch(`/tasks/${taskId}/status`, { status: newStatus });
       await loadTasks(container); // sync
     } catch (err) {
-      window.yuvomi.showToast(err.message, 'danger');
+      window.samla.showToast(err.message, 'danger');
       await loadTasks(container);
     }
   });
@@ -1213,7 +1213,7 @@ function wireKanbanDrag(container) {
         await api.patch(`/tasks/${taskId}/status`, { status: newStatus });
         await loadTasks(container);
       } catch (err) {
-        window.yuvomi.showToast(err.message, 'danger');
+        window.samla.showToast(err.message, 'danger');
         await loadTasks(container);
       }
       return;
@@ -1230,7 +1230,7 @@ function wireKanbanDrag(container) {
         ]);
         openTaskModal({ task, users: state.users, reminder }, container);
       } catch (err) {
-        window.yuvomi.showToast(t('tasks.loadError'), 'danger');
+        window.samla.showToast(t('tasks.loadError'), 'danger');
       }
     }
   });
@@ -1339,7 +1339,7 @@ function wireKanbanTouch(container) {
       await api.patch(`/tasks/${tid}/status`, { status: newStatus });
       await loadTasks(container);
     } catch (err) {
-      window.yuvomi.showToast(err.message, 'danger');
+      window.samla.showToast(err.message, 'danger');
       await loadTasks(container);
     }
   }, { passive: true });
@@ -1637,12 +1637,12 @@ const SWIPE_THRESHOLD    = 80;   // px - Mindestweg für Aktion
 const SWIPE_MAX_VERT     = 12;   // px - vertikaler Bewegungs-Toleranzbereich (darunter: kein Scroll-Abbruch)
 const SWIPE_LOCK_VERT    = 30;   // px - ab diesem Weg gilt es als Scroll (Swipe abgebrochen)
 
-const SWIPE_HINT_KEY  = 'yuvomi:swipeHintSeen';
+const SWIPE_HINT_KEY  = 'samla:swipeHintSeen';
 const SWIPE_HINT_MAX  = 3;
-const RECENT_FILTERS_KEY = 'yuvomi:recentTaskFilters';
+const RECENT_FILTERS_KEY = 'samla:recentTaskFilters';
 const RECENT_FILTERS_MAX = 3;
-const SHOW_FUTURE_KEY = 'yuvomi:taskShowFuture';
-const ASSIGNED_TO_ME_KEY = 'yuvomi:taskAssignedToMe';
+const SHOW_FUTURE_KEY = 'samla:taskShowFuture';
+const ASSIGNED_TO_ME_KEY = 'samla:taskAssignedToMe';
 
 // „Mir zugewiesen" ist ein Schnellzugriff auf den assigned_to-Filter mit der
 // eigenen User-ID. Wird pro Gerät gemerkt und beim Laden aus dem gespeicherten
@@ -1770,7 +1770,7 @@ function wireSwipeGestures(container) {
           try {
             await toggleTaskStatus(taskId, capturedStatus);
             await loadTasks(container);
-            window.yuvomi.showToast(
+            window.samla.showToast(
               t(nextStatus === 'done' ? 'tasks.swipedDoneToast' : 'tasks.swipedOpenToast'),
               'default',
               5000,
@@ -1779,12 +1779,12 @@ function wireSwipeGestures(container) {
                   await toggleTaskStatus(taskId, nextStatus);
                   await loadTasks(container);
                 } catch (err) {
-                  window.yuvomi.showToast(err.message, 'danger');
+                  window.samla.showToast(err.message, 'danger');
                 }
               },
             );
           } catch (err) {
-            window.yuvomi.showToast(err.message, 'danger');
+            window.samla.showToast(err.message, 'danger');
             await loadTasks(container);
           }
         }, 200);
@@ -1800,7 +1800,7 @@ function wireSwipeGestures(container) {
           ]);
           openTaskModal({ task, users: state.users, reminder }, container);
         } catch (err) {
-          window.yuvomi.showToast(t('tasks.loadError'), 'danger');
+          window.samla.showToast(t('tasks.loadError'), 'danger');
         }
 
       } else {
@@ -1898,7 +1898,7 @@ function wireViewToggle(container) {
   toggle.querySelectorAll('[data-view]').forEach((btn) => {
     btn.addEventListener('click', () => {
       state.viewMode = btn.dataset.view;
-      localStorage.setItem('yuvomi-tasks-view', state.viewMode);
+      localStorage.setItem('samla-tasks-view', state.viewMode);
       renderFilters(container);
       toggle.querySelectorAll('[data-view]').forEach((b) => {
         const on = b.dataset.view === state.viewMode;
@@ -2036,17 +2036,17 @@ function wireBulkActions(container) {
       if (action === 'bulk-mark-done' || action === 'bulk-mark-open') {
         const status = btn.dataset.status;
         await Promise.all(taskIds.map(id => api.patch(`/tasks/${id}/status`, { status })));
-        window.yuvomi.showToast(t('tasks.bulkStatusChanged'), 'success');
+        window.samla.showToast(t('tasks.bulkStatusChanged'), 'success');
       } else if (action === 'bulk-archive') {
         await Promise.all(taskIds.map(id => api.patch(`/tasks/${id}/status`, { status: 'archived' })));
-        window.yuvomi.showToast(t('tasks.bulkArchived'), 'success');
+        window.samla.showToast(t('tasks.bulkArchived'), 'success');
       }
 
       state.selectedTaskIds.clear();
       updateBulkActionsBar(container);
       await loadTasks(container);
     } catch (err) {
-      window.yuvomi.showToast(err.message ?? t('common.errorGeneric'), 'danger');
+      window.samla.showToast(err.message ?? t('common.errorGeneric'), 'danger');
     }
   });
 }
@@ -2077,7 +2077,7 @@ function handleBulkDelete(taskIds, container) {
     },
     restore: (err) => {
       restore();
-      if (err) window.yuvomi.showToast(err.message ?? t('common.unknownError'), 'danger');
+      if (err) window.samla.showToast(err.message ?? t('common.unknownError'), 'danger');
     },
   });
 }
@@ -2101,7 +2101,7 @@ function wireTaskList(container) {
         await toggleTaskStatus(id, status);
         await loadTasks(container);
       } catch (err) {
-        window.yuvomi.showToast(err.message, 'danger');
+        window.samla.showToast(err.message, 'danger');
         await loadTasks(container);
       }
     }
@@ -2119,7 +2119,7 @@ function wireTaskList(container) {
         await toggleSubtaskStatus(id, target.dataset.status);
         await loadTasks(container);
       } catch (err) {
-        window.yuvomi.showToast(err.message, 'danger');
+        window.samla.showToast(err.message, 'danger');
       }
     }
 
@@ -2131,17 +2131,17 @@ function wireTaskList(container) {
         ]);
         openTaskModal({ task, users: state.users, reminder }, container);
       } catch (err) {
-        window.yuvomi.showToast(t('tasks.loadError'), 'danger');
+        window.samla.showToast(t('tasks.loadError'), 'danger');
       }
     }
 
     if (action === 'archive-task') {
       try {
         await api.patch(`/tasks/${id}/status`, { status: 'archived' });
-        window.yuvomi.showToast(t('tasks.archivedToast'), 'success');
+        window.samla.showToast(t('tasks.archivedToast'), 'success');
         await loadTasks(container);
       } catch (err) {
-        window.yuvomi.showToast(err.message, 'danger');
+        window.samla.showToast(err.message, 'danger');
       }
     }
 
@@ -2167,7 +2167,7 @@ export async function render(container, { user }) {
 
   // View-Mode: URL-Parameter > localStorage > Default 'list'
   const urlView = new URLSearchParams(window.location.search).get('view');
-  const savedView = localStorage.getItem('yuvomi-tasks-view');
+  const savedView = localStorage.getItem('samla-tasks-view');
   state.viewMode = (urlView === 'kanban' || urlView === 'list') ? urlView
     : (savedView === 'kanban' || savedView === 'list') ? savedView
     : 'list';
@@ -2291,7 +2291,7 @@ export async function render(container, { user }) {
     state.defaultPoints = Number(metaData.default_points) || 0;
   } catch (err) {
     console.error('[Tasks] Ladefehler:', err.message);
-    window.yuvomi.showToast(t('tasks.loadError'), 'danger');
+    window.samla.showToast(t('tasks.loadError'), 'danger');
     state.tasks = [];
     state.users = [];
     state.categories = [];

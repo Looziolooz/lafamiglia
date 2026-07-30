@@ -2,7 +2,7 @@
 
 _Abgeleitet aus der graphify-Wissensgraph-Analyse (`graphify-out/`). Verifiziert am 2026-07-08 gegen die Quelle per grep-Gegencheck._
 
-Die zentralsten Frontend-/Server-Utilities von Yuvomi ("God-Nodes" im Wissensgraph)
+Die zentralsten Frontend-/Server-Utilities von Samla ("God-Nodes" im Wissensgraph)
 zerfallen in **zwei Klassen**, die der Graph an der Provenienz ihrer Kanten trennt
 (`INFERRED calls` vs. `EXTRACTED imports`):
 

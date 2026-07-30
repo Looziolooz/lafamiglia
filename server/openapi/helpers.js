@@ -84,11 +84,11 @@ function langParam() {
     name: 'lang',
     in: 'query',
     required: false,
-    description: 'Language code for localized labels. Supported values: ar, de, el, en, es, fr, hi, it, ja, pt, ru, sv, tr, uk, zh. Defaults to en.',
+    description: 'Language code for localized labels. Supported values: en, it, sv. Defaults to it.',
     schema: {
       type: 'string',
-      default: 'en',
-      enum: ['ar', 'de', 'el', 'en', 'es', 'fr', 'hi', 'it', 'ja', 'pt', 'ru', 'sv', 'tr', 'uk', 'zh'],
+      default: 'it',
+      enum: ['en', 'it', 'sv'],
     },
   };
 }

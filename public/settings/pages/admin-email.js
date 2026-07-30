@@ -10,7 +10,7 @@ import { createInlineError } from '/settings/components.js';
 
 const DEFAULTS = {
   host: '', port: 587, secure: 'starttls', user: '',
-  fromAddress: '', fromName: 'Yuvomi', passwordSet: false,
+  fromAddress: '', fromName: 'Samla', passwordSet: false,
 };
 
 export async function render(container, { user } = {}) {
@@ -87,7 +87,7 @@ export async function render(container, { user } = {}) {
   const showError = (msg) => notice.replaceChildren(createInlineError(msg));
   const showSuccess = (msg) => {
     notice.replaceChildren();
-    window.yuvomi?.showToast(msg, 'success');
+    window.samla?.showToast(msg, 'success');
   };
 
   function collect() {

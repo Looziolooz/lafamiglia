@@ -101,7 +101,7 @@ function binaryResponse(bytes, { contentLength, contentType = 'application/octet
 test('initialize: liefert serverInfo, Capabilities und Protokollversion', async () => {
   const res = await rpc('initialize', { protocolVersion: LATEST_PROTOCOL_VERSION });
   assert.equal(res.result.protocolVersion, LATEST_PROTOCOL_VERSION);
-  assert.equal(res.result.serverInfo.name, 'yuvomi');
+  assert.equal(res.result.serverInfo.name, 'samla');
   assert.ok(res.result.serverInfo.version, 'Version muss gesetzt sein');
   assert.ok(res.result.capabilities.tools, 'tools-Capability muss vorhanden sein');
 });

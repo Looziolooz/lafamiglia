@@ -141,8 +141,8 @@ export function renderRRuleFields(prefix, existingRule, opts = {}) {
         <div class="rrule-row rrule-end-inputs">
           <div class="form-group rrule-until-field" id="${prefix}-rrule-until-wrap" ${endType === 'until' ? '' : 'hidden'} style="margin-bottom:0">
             <label class="label form-label" for="${prefix}-rrule-until">${t('rrule.labelUntil')}</label>
-            <yuvomi-datepicker type="date" id="${prefix}-rrule-until"
-                   value="${formatDateInput(parsed.until)}"></yuvomi-datepicker>
+            <samla-datepicker type="date" id="${prefix}-rrule-until"
+                   value="${formatDateInput(parsed.until)}"></samla-datepicker>
           </div>
           ${allowCount ? `<div class="form-group rrule-count-field" id="${prefix}-rrule-count-wrap" ${endType === 'count' ? '' : 'hidden'} style="margin-bottom:0">
             <label class="label form-label" for="${prefix}-rrule-count">${t('rrule.labelCount')}</label>

@@ -65,7 +65,7 @@ test('verifyPassword scheitert an einem Nicht-bcrypt-Hash statt zu werfen', asyn
 // Integration: Login-, Setup- und Change-Password-Routen
 // --------------------------------------------------------
 
-const tmpDir = mkdtempSync(join(tmpdir(), 'yuvomi-password-nfc-test-'));
+const tmpDir = mkdtempSync(join(tmpdir(), 'samla-password-nfc-test-'));
 
 process.env.SESSION_SECRET = 'test-password-nfc-secret-minimum-32ch';
 process.env.DB_PATH = join(tmpDir, 'test.db');

@@ -65,7 +65,7 @@ async function loadCategories() {
 // Ist das Einkaufsmodul deaktiviert oder gibt es keine Liste, bleibt state.lists
 // leer und die Karte zeigt die Übernahme-Aktion gar nicht erst an.
 async function loadShoppingLists() {
-  if (window.yuvomi?.isModuleDisabled?.('shopping')) {
+  if (window.samla?.isModuleDisabled?.('shopping')) {
     state.lists = [];
     return;
   }
@@ -182,7 +182,7 @@ export async function render(container) {
     }
 
     if (actionBtn.dataset.action === 'add-to-meals') {
-      window.yuvomi?.navigate(`/meals?recipe=${recipe.id}`);
+      window.samla?.navigate(`/meals?recipe=${recipe.id}`);
     }
   });
 
@@ -551,10 +551,10 @@ async function saveRecipe(panel, mode, recipe) {
 
     closeModal({ force: true });
     renderRecipeList();
-    window.yuvomi?.showToast(mode === 'create' ? t('recipes.created') : t('recipes.updated'), 'success');
+    window.samla?.showToast(mode === 'create' ? t('recipes.created') : t('recipes.updated'), 'success');
   } catch (err) {
     saveBtn.disabled = false;
-    window.yuvomi?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+    window.samla?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
   }
 }
 
@@ -571,7 +571,7 @@ async function saveRecipe(panel, mode, recipe) {
  */
 async function transferRecipe(recipe, btn) {
   if (!state.lists.length) {
-    window.yuvomi?.showToast(t('meals.noShoppingLists'), 'danger');
+    window.samla?.showToast(t('meals.noShoppingLists'), 'danger');
     return;
   }
 
@@ -591,14 +591,14 @@ async function transferRecipe(recipe, btn) {
 
     if (added > 0) {
       // t() wählt die _one-Form selbst, sobald count numerisch ist (i18n.js).
-      window.yuvomi?.showToast(t('recipes.toShoppingSuccess', { count: added }), 'success');
+      window.samla?.showToast(t('recipes.toShoppingSuccess', { count: added }), 'success');
     } else if (skipped > 0) {
-      window.yuvomi?.showToast(t('recipes.toShoppingAllPresent'), 'info');
+      window.samla?.showToast(t('recipes.toShoppingAllPresent'), 'info');
     } else {
-      window.yuvomi?.showToast(t('recipes.toShoppingNoIngredients'), 'info');
+      window.samla?.showToast(t('recipes.toShoppingNoIngredients'), 'info');
     }
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+    window.samla?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
   } finally {
     if (btn) btn.disabled = false;
   }
@@ -618,7 +618,7 @@ async function removeRecipe(recipe) {
     },
     restore: (err) => {
       if (itemEl) itemEl.style.display = '';
-      if (err) window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+      if (err) window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
     },
   });
 }
@@ -638,8 +638,8 @@ async function duplicateRecipe(recipe) {
     const res = await api.post('/recipes', { title, notes, recipe_url, ingredients });
     state.recipes.push(res.data);
     renderRecipeList();
-    window.yuvomi?.showToast(t('recipes.duplicated'), 'success');
+    window.samla?.showToast(t('recipes.duplicated'), 'success');
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+    window.samla?.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
   }
 }

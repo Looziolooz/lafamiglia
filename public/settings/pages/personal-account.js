@@ -98,7 +98,7 @@ async function readImageAsDataUrl(file) {
   return cropped;
 }
 
-const SETTINGS_NOTICE_KEY = 'yuvomi:settings:notice';
+const SETTINGS_NOTICE_KEY = 'samla:settings:notice';
 
 // Einmaliger Zugriffs-Hinweis: wurde ein Mitglied von einem unzulässigen Blatt
 // hierher umgeleitet, hinterlässt der Controller eine Notiz, die wir genau
@@ -170,7 +170,7 @@ function renderPage(container, user, refreshFailed, accessNotice) {
             </div>
             <div class="form-group">
               <label class="form-label" for="profile-birth-date">${t('settings.memberBirthDateLabel')}</label>
-              <yuvomi-datepicker type="date" id="profile-birth-date" value="${esc(user?.birth_date || '')}" aria-describedby="profile-error"></yuvomi-datepicker>
+              <samla-datepicker type="date" id="profile-birth-date" value="${esc(user?.birth_date || '')}" aria-describedby="profile-error"></samla-datepicker>
               <p class="form-hint">${t('settings.memberContactBirthdayHint')}</p>
             </div>
           </fieldset>
@@ -276,7 +276,7 @@ function bindEvents(container, user, profileState) {
         profileState.avatarData = response.user.avatar_data ?? null;
         updatePreview();
       }
-      window.yuvomi?.showToast(t('settings.profileSavedToast'), 'success');
+      window.samla?.showToast(t('settings.profileSavedToast'), 'success');
     } catch (error) {
       showError(profileError, error.message);
     } finally {
@@ -306,7 +306,7 @@ function bindEvents(container, user, profileState) {
         new_password: newPassword,
       });
       passwordForm.reset();
-      window.yuvomi?.showToast(t('settings.passwordSavedToast'), 'success');
+      window.samla?.showToast(t('settings.passwordSavedToast'), 'success');
     } catch (error) {
       showError(passwordError, error.message);
     } finally {
@@ -318,8 +318,8 @@ function bindEvents(container, user, profileState) {
     try {
       await auth.logout();
     } finally {
-      window.yuvomi?.clearSession?.();
-      window.yuvomi?.navigate('/login');
+      window.samla?.clearSession?.();
+      window.samla?.navigate('/login');
     }
   });
 }

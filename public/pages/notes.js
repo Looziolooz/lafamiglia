@@ -1,7 +1,7 @@
 /**
  * Modul: Pinnwand / Notizen (Notes)
  * Zweck: Masonry-Grid mit farbigen Sticky Notes, Pin-Toggle, CRUD
- * Abhängigkeiten: /api.js, /router.js (window.yuvomi)
+ * Abhängigkeiten: /api.js, /router.js (window.samla)
  */
 
 import { api } from '/api.js';
@@ -719,9 +719,9 @@ function openNoteModal({ mode, note = null }) {
           }
           closeModal({ force: true });
           renderGrid();
-          window.yuvomi?.showToast(mode === 'create' ? t('notes.createdToast') : t('notes.savedToast'), 'success');
+          window.samla?.showToast(mode === 'create' ? t('notes.createdToast') : t('notes.savedToast'), 'success');
         } catch (err) {
-          window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+          window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
           btnError(saveBtn);
           saveBtn.disabled    = false;
           saveBtn.textContent = isEdit ? t('common.save') : t('common.create');
@@ -743,7 +743,7 @@ async function togglePin(id) {
     state.notes.sort((a, b) => b.pinned - a.pinned);
     renderGrid();
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+    window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
   }
 }
 
@@ -762,7 +762,7 @@ async function deleteNote(id) {
         state.notes = [...state.notes, note].sort((a, b) => b.pinned - a.pinned);
         renderGrid();
       }
-      if (err) window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+      if (err) window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
     },
   });
 }

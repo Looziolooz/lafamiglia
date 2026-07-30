@@ -1,5 +1,5 @@
 /**
- * Test-Suite: Legacy-DB-Migration oikos.db → yuvomi.db (Boot-Zeit-Auto-Rename).
+ * Test-Suite: Legacy-DB-Migration oikos.db → samla.db (Boot-Zeit-Auto-Rename).
  *
  * Deckt den Resolver + die einmalige Dateimigration in server/db.js ab. Jedes
  * Szenario lädt eine frische db.js-Instanz (dynamischer Import mit Cache-Busting-
@@ -40,13 +40,13 @@ function seedLegacyDb(filePath, marker) {
 }
 
 function tmpDir() {
-  return mkdtempSync(join(tmpdir(), 'yuvomi-rename-'));
+  return mkdtempSync(join(tmpdir(), 'samla-rename-'));
 }
 
 test('Stale Legacy-Sidecars (-wal/-shm) werden nach erfolgreichem Checkpoint entfernt', async () => {
   const dir = tmpDir();
   const legacy = join(dir, 'oikos.db');
-  const target = join(dir, 'yuvomi.db');
+  const target = join(dir, 'samla.db');
   seedLegacyDb(legacy, 'sidecar-cleanup');
   // Verwaiste Sidecars simulieren (z. B. aus einem früheren WAL-Lauf).
   writeFileSync(`${legacy}-wal`, '');
@@ -54,39 +54,39 @@ test('Stale Legacy-Sidecars (-wal/-shm) werden nach erfolgreichem Checkpoint ent
 
   const mod = await bootDb(legacy);
 
-  assert.ok(existsSync(target), 'yuvomi.db muss existieren');
+  assert.ok(existsSync(target), 'samla.db muss existieren');
   assert.ok(!existsSync(`${legacy}-wal`), 'Legacy -wal muss entfernt sein');
   assert.ok(!existsSync(`${legacy}-shm`), 'Legacy -shm muss entfernt sein');
   const row = mod.get().prepare('SELECT note FROM rename_marker').get();
   assert.equal(row.note, 'sidecar-cleanup', 'Daten müssen erhalten bleiben');
 });
 
-test('Legacy-Default: DB_PATH=…/oikos.db wird nach yuvomi.db migriert (Daten erhalten)', async () => {
+test('Legacy-Default: DB_PATH=…/oikos.db wird nach samla.db migriert (Daten erhalten)', async () => {
   const dir = tmpDir();
   const legacy = join(dir, 'oikos.db');
-  const target = join(dir, 'yuvomi.db');
+  const target = join(dir, 'samla.db');
   seedLegacyDb(legacy, 'legacy-default');
 
   const mod = await bootDb(legacy);
 
-  assert.ok(existsSync(target), 'yuvomi.db muss nach der Migration existieren');
+  assert.ok(existsSync(target), 'samla.db muss nach der Migration existieren');
   assert.ok(!existsSync(legacy), 'oikos.db darf nach der Migration nicht mehr existieren');
   assert.equal(mod.getPath(), target, 'getPath() muss den neuen Pfad liefern');
   const row = mod.get().prepare('SELECT note FROM rename_marker').get();
   assert.equal(row.note, 'legacy-default', 'Marker-Daten müssen erhalten bleiben');
 });
 
-test('Compose-Update-Falle: DB_PATH=…/yuvomi.db migriert vorhandene oikos.db trotzdem', async () => {
+test('Compose-Update-Falle: DB_PATH=…/samla.db migriert vorhandene oikos.db trotzdem', async () => {
   const dir = tmpDir();
   const legacy = join(dir, 'oikos.db');
-  const target = join(dir, 'yuvomi.db');
+  const target = join(dir, 'samla.db');
   seedLegacyDb(legacy, 'compose-update');
 
   // Nutzer hat seine Compose-Datei auf den neuen Default aktualisiert, Daten
   // liegen aber noch in oikos.db → Migration muss greifen.
   const mod = await bootDb(target);
 
-  assert.ok(existsSync(target), 'yuvomi.db muss existieren');
+  assert.ok(existsSync(target), 'samla.db muss existieren');
   assert.ok(!existsSync(legacy), 'oikos.db muss migriert worden sein');
   const row = mod.get().prepare('SELECT note FROM rename_marker').get();
   assert.equal(row.note, 'compose-update');
@@ -110,10 +110,10 @@ test('Custom-Pfad: DB_PATH=…/familie.db wird respektiert, oikos.db bleibt unan
   assert.equal(marker, undefined, 'Custom-DB darf die oikos-Marker-Daten nicht enthalten');
 });
 
-test('Doppelzustand: existieren beide, gewinnt yuvomi.db und oikos.db bleibt liegen', async () => {
+test('Doppelzustand: existieren beide, gewinnt samla.db und oikos.db bleibt liegen', async () => {
   const dir = tmpDir();
   const legacy = join(dir, 'oikos.db');
-  const target = join(dir, 'yuvomi.db');
+  const target = join(dir, 'samla.db');
   seedLegacyDb(legacy, 'legacy-loser');
   seedLegacyDb(target, 'target-winner');
 
@@ -121,23 +121,23 @@ test('Doppelzustand: existieren beide, gewinnt yuvomi.db und oikos.db bleibt lie
 
   assert.ok(existsSync(legacy), 'oikos.db muss im Doppelzustand erhalten bleiben');
   const row = mod.get().prepare('SELECT note FROM rename_marker').get();
-  assert.equal(row.note, 'target-winner', 'Die bestehende yuvomi.db gewinnt');
+  assert.equal(row.note, 'target-winner', 'Die bestehende samla.db gewinnt');
 });
 
-test('Frische Installation: kein Legacy-File → yuvomi.db wird neu angelegt', async () => {
+test('Frische Installation: kein Legacy-File → samla.db wird neu angelegt', async () => {
   const dir = tmpDir();
-  const target = join(dir, 'yuvomi.db');
+  const target = join(dir, 'samla.db');
 
   const mod = await bootDb(target);
 
-  assert.ok(existsSync(target), 'yuvomi.db muss frisch angelegt werden');
+  assert.ok(existsSync(target), 'samla.db muss frisch angelegt werden');
   assert.ok(!existsSync(join(dir, 'oikos.db')), 'keine oikos.db bei frischer Installation');
 });
 
-test('Migration ist idempotent: zweiter Boot mit bereits migrierter yuvomi.db ist ein No-Op', async () => {
+test('Migration ist idempotent: zweiter Boot mit bereits migrierter samla.db ist ein No-Op', async () => {
   const dir = tmpDir();
   const legacy = join(dir, 'oikos.db');
-  const target = join(dir, 'yuvomi.db');
+  const target = join(dir, 'samla.db');
   seedLegacyDb(legacy, 'idempotent');
 
   await bootDb(legacy);              // erster Boot migriert

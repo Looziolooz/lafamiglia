@@ -41,7 +41,7 @@ export function corePaths() {
       get: op({
         summary: 'Get release changelog',
         tag: 'System',
-        description: 'Returns the current installed version, latest upstream release version, and sanitized release notes from the Yuvomi GitHub releases feed.',
+        description: 'Returns the current installed version, latest upstream release version, and sanitized release notes from the Samla GitHub releases feed.',
       }),
     },
     '/openapi.json': {

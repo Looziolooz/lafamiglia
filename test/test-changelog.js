@@ -11,13 +11,13 @@ import changelogRouter, { buildRouter, __test } from '../server/routes/changelog
 test('parseReleaseBody keeps release sections and removes GitHub noise', () => {
   const sections = __test.parseReleaseBody(`
 ## Added
-- New dashboard changelog modal ([#455](https://github.com/ulsklyc/yuvomi/pull/455))
+- New dashboard changelog modal ([#455](https://github.com/YOUR-ORG/samla/pull/455))
 - Internal commit 9f4a12bc should not leak
 
 ## Fixed
 - Better widget sizing
 
-Full Changelog: https://github.com/ulsklyc/yuvomi/compare/v1.0.0...v1.1.0
+Full Changelog: https://github.com/YOUR-ORG/samla/compare/v1.0.0...v1.1.0
 Assets
 `);
 
@@ -62,8 +62,9 @@ test('changelog router fetches and sanitizes GitHub release JSON', async () => {
   app.use(buildRouter({
     appVersion: '1.2.1',
     now: () => 1000,
+    releasesUrl: 'https://api.github.com/repos/example/samla/releases?per_page=30',
     fetchFn: async (url, options) => {
-      assert.match(url, /api\.github\.com\/repos\/ulsklyc\/yuvomi\/releases/);
+      assert.match(url, /api\.github\.com\/repos\/example\/samla\/releases/);
       assert.equal(options.headers.Accept, 'application/vnd.github+json');
       return {
         ok: true,
@@ -71,7 +72,7 @@ test('changelog router fetches and sanitizes GitHub release JSON', async () => {
           {
             tag_name: 'v1.2.1',
             body: '## Added\n- Live changelog\n\nFull Changelog: https://example.test',
-            html_url: 'https://github.com/ulsklyc/yuvomi/releases/tag/v1.2.1',
+            html_url: 'https://github.com/example/samla/releases/tag/v1.2.1',
           },
         ],
       };

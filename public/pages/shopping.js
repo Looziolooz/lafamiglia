@@ -91,7 +91,7 @@ async function toggleShoppingItem(id, checked, container) {
       updateListCounter(state.activeListId, 0, newVal ? -1 : 1);
       renderTabs(container);
     }
-    window.yuvomi.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+    window.samla.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
   }
 }
 
@@ -427,7 +427,7 @@ function wireQuickAdd(container) {
       nameInput.classList.add('quick-add__input--flash');
       nameInput.addEventListener('animationend', () => nameInput.classList.remove('quick-add__input--flash'), { once: true });
     } catch (err) {
-      window.yuvomi.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+      window.samla.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
     }
   });
 }
@@ -437,7 +437,7 @@ function wireQuickAdd(container) {
 // Zeigt den Nudge-Hinweis maximal 3x (gespeichert in localStorage).
 // --------------------------------------------------------
 
-const SWIPE_HINT_KEY  = 'yuvomi:swipeHintSeen';
+const SWIPE_HINT_KEY  = 'samla:swipeHintSeen';
 const SWIPE_HINT_MAX  = 3;
 
 function maybeShowSwipeHint(container) {
@@ -570,7 +570,7 @@ function wireSwipeGestures(container) {
               updateListCounter(state.activeListId, 0, newVal ? -1 : 1);
               renderTabs(container);
             }
-            window.yuvomi.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+            window.samla.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
           }
         }, 200);
 
@@ -589,7 +589,7 @@ function wireSwipeGestures(container) {
             renderTabs(container);
           } catch (err) {
             resetCard(true);
-            window.yuvomi.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+            window.samla.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
           }
         }, 200);
 
@@ -718,7 +718,7 @@ function openItemDetails(itemId, container) {
           refreshItemMeta(container, item);
           closeModal();
         } catch (err) {
-          window.yuvomi.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+          window.samla.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
         }
       });
     },
@@ -782,7 +782,7 @@ async function openPantryTransfer(container) {
     const res = await api.get('/pantry/locations');
     locations = res.data ?? [];
   } catch (err) {
-    window.yuvomi.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+    window.samla.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
     return;
   }
 
@@ -863,13 +863,13 @@ async function openPantryTransfer(container) {
           }
 
           closeModal({ force: true });
-          window.yuvomi.showToast(
+          window.samla.showToast(
             stored ? t('shopping.toPantryDone', { count: stored }) : t('shopping.toPantryNothing'),
             stored ? 'success' : 'info'
           );
         } catch (err) {
           btn.disabled = false;
-          window.yuvomi.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+          window.samla.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
         }
       });
     },
@@ -890,7 +890,7 @@ function updateCheckedActions(container) {
   wrap.replaceChildren();
   if (!checkedCount) return;
 
-  const pantryEnabled = !window.yuvomi?.isModuleDisabled?.('pantry');
+  const pantryEnabled = !window.samla?.isModuleDisabled?.('pantry');
   wrap.insertAdjacentHTML('beforeend', `
     ${pantryEnabled ? `
       <button class="btn btn--ghost list-header__pantry-btn" data-action="to-pantry">
@@ -924,11 +924,11 @@ function openMealPlanImport(container) {
       <form id="shopping-import-meals-form" class="shopping-import-meals-form" novalidate autocomplete="off">
         <div class="form-group">
           <label class="form-label" for="shopping-import-from">${t('calendar.fromLabel')}</label>
-          <yuvomi-datepicker type="date" id="shopping-import-from" value="${esc(today)}"></yuvomi-datepicker>
+          <samla-datepicker type="date" id="shopping-import-from" value="${esc(today)}"></samla-datepicker>
         </div>
         <div class="form-group">
           <label class="form-label" for="shopping-import-to">${t('calendar.toLabel')}</label>
-          <yuvomi-datepicker type="date" id="shopping-import-to" value="${esc(defaultTo)}"></yuvomi-datepicker>
+          <samla-datepicker type="date" id="shopping-import-to" value="${esc(defaultTo)}"></samla-datepicker>
         </div>
         <p class="form-hint" id="shopping-import-preview" role="status" aria-live="polite"></p>
         <div class="modal-actions">
@@ -976,7 +976,7 @@ function openMealPlanImport(container) {
         try {
           const data = await api.post(`/shopping/${state.activeListId}/import-meal-plan`, { from, to });
           if (!data.data?.transferred) {
-            window.yuvomi.showToast(t('shopping.importMealsEmpty'), 'default');
+            window.samla.showToast(t('shopping.importMealsEmpty'), 'default');
             return;
           }
           await Promise.all([loadLists(), loadItems(state.activeListId)]);
@@ -985,9 +985,9 @@ function openMealPlanImport(container) {
           wireListContentEvents(container);
           closeModal();
           const count = Number(data.data.transferred) || 0;
-          window.yuvomi.showToast(count === 1 ? t('meals.transferSuccess', { count }) : t('meals.transferSuccessPlural', { count }), 'success');
+          window.samla.showToast(count === 1 ? t('meals.transferSuccess', { count }) : t('meals.transferSuccessPlural', { count }), 'success');
         } catch (err) {
-          window.yuvomi.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+          window.samla.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
         }
       });
     },
@@ -1005,7 +1005,7 @@ async function loadLists() {
   } catch (err) {
     console.error('[Shopping] loadLists Fehler:', err);
     state.lists = [];
-    window.yuvomi?.showToast(t('shopping.listsLoadError'), 'danger');
+    window.samla?.showToast(t('shopping.listsLoadError'), 'danger');
   }
 }
 
@@ -1038,7 +1038,7 @@ async function switchList(listId, container) {
     console.error('[Shopping] loadItems Fehler:', err);
     state.items = [];
     state.activeList = state.lists.find((l) => l.id === listId) ?? null;
-    window.yuvomi?.showToast(t('shopping.itemsLoadError'), 'danger');
+    window.samla?.showToast(t('shopping.itemsLoadError'), 'danger');
   }
   renderListContent(container);
   wireListContentEvents(container);
@@ -1065,7 +1065,7 @@ function wireTabBar(container) {
         state.lists.push({ ...data.data, item_total: 0, item_checked: 0 });
         await switchList(data.data.id, container);
       } catch (err) {
-        window.yuvomi.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+        window.samla.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
       }
     }
   });
@@ -1133,7 +1133,7 @@ function wireListContentEvents(container) {
             updateListCounter(state.activeListId, 1, snapshot.is_checked ? 1 : 0);
             renderTabs(container);
           }
-          if (err) window.yuvomi.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+          if (err) window.samla.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
         },
       });
     }
@@ -1161,7 +1161,7 @@ function wireListContentEvents(container) {
           updateItemsList(container);
           updateListCounter(state.activeListId, count, count);
           renderTabs(container);
-          if (err) window.yuvomi.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+          if (err) window.samla.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
         },
       });
     }
@@ -1192,7 +1192,7 @@ function wireListContentEvents(container) {
         renderListContent(container);
         wireListContentEvents(container);
       } catch (err) {
-        window.yuvomi.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
+        window.samla.showToast(err.data?.error ?? t('common.errorGeneric'), 'danger');
       }
     }
 
@@ -1210,7 +1210,7 @@ function wireListContentEvents(container) {
 
       try {
         await api.delete(`/shopping/${deletedListId}`);
-        window.yuvomi.showToast(t('shopping.deletedListToast'), 'default');
+        window.samla.showToast(t('shopping.deletedListToast'), 'default');
         await loadLists();
         state.activeListId = state.lists[0]?.id ?? null;
         if (state.activeListId) {
@@ -1222,7 +1222,7 @@ function wireListContentEvents(container) {
           renderListContent(container);
         }
       } catch (err) {
-        window.yuvomi.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+        window.samla.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
         await loadLists();
         renderTabs(container);
       }
@@ -1269,9 +1269,9 @@ async function openCategoryManager(container, { fromDeepLink = false } = {}) {
   let manager = null;
   openModal({
     title: t('shopping.manageCategories'),
-    content: '<yuvomi-category-manager></yuvomi-category-manager>',
+    content: '<samla-category-manager></samla-category-manager>',
     onSave: (panel) => {
-      manager = panel.querySelector('yuvomi-category-manager');
+      manager = panel.querySelector('samla-category-manager');
       if (!manager) return;
       manager.addEventListener('category-manager-changed', onCategoriesChanged);
       manager.configure({
@@ -1292,7 +1292,7 @@ async function openCategoryManager(container, { fromDeepLink = false } = {}) {
       }
       // Deep-Link-Query entfernen, wenn der Manager über die URL geöffnet wurde.
       if (fromDeepLink && new URLSearchParams(window.location.search).has('manage')) {
-        window.yuvomi?.navigate?.('/shopping');
+        window.samla?.navigate?.('/shopping');
       }
     },
   });
@@ -1329,7 +1329,7 @@ export async function render(container, { user }) {
     }
   } catch (err) {
     console.error('[Shopping] Ladefehler:', err.message);
-    window.yuvomi.showToast(t('shopping.listsLoadError'), 'danger');
+    window.samla.showToast(t('shopping.listsLoadError'), 'danger');
   }
 
   container.replaceChildren();

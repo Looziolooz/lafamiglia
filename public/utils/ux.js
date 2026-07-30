@@ -93,7 +93,7 @@ export function scheduleUndoableDelete({ commit, restore, message, duration = 50
   entry.flush = () => { finish({ keepalive: true }); };
   entry.timer = setTimeout(() => finish(), duration);
   _pendingDeletes.add(entry);
-  window.yuvomi?.showToast(message, 'default', duration, () => {
+  window.samla?.showToast(message, 'default', duration, () => {
     if (settled) return;
     settled = true;
     _pendingDeletes.delete(entry);

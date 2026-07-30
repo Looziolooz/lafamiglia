@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title data-i18n="title">Yuvomi Setup</title>
+  <title data-i18n="title">Samla Setup</title>
   <!-- Fallback-Tokens VOR dem tokens.css-Link: lädt tokens.css (inkl. Dark-Mode-
        Media-Query), gewinnen dessen spätere :root-Regeln per Cascade. Fehlt
-       tokens.css (falscher OIKOS_INSTALLER_ROOT, Packaging-/Volume-Fehler), bleibt
+       tokens.css (falscher SAMLA_INSTALLER_ROOT, Packaging-/Volume-Fehler), bleibt
        der Installer trotzdem lesbar statt Serif-auf-Transparent zu rendern —
        genau die fehlkonfigurierte Umgebung, in der ein Installer läuft. -->
   <style>
@@ -323,12 +323,12 @@
   </div>
 
   <main class="card">
-    <h1 class="vh" data-i18n="title">Yuvomi Setup</h1>
+    <h1 class="vh" data-i18n="title">Samla Setup</h1>
 
     <!-- Step: Welcome / mode selection -->
     <div class="step" id="step-welcome">
       <div class="card-head">
-        <h2 tabindex="-1" data-i18n="welcome.title">Welcome to Yuvomi</h2>
+        <h2 tabindex="-1" data-i18n="welcome.title">Welcome to Samla</h2>
         <p data-i18n="welcome.subtitle">Let's get your private family planner running. Choose how you'd like to set it up.</p>
       </div>
       <div class="card-body">
@@ -346,7 +346,7 @@
                 <div class="mode-card__badge" data-i18n="welcome.simpleBadge">Recommended</div>
               </div>
             </div>
-            <div class="mode-card__desc" data-i18n="welcome.simpleDesc">We handle the technical details for you. Perfect for running Yuvomi at home.</div>
+            <div class="mode-card__desc" data-i18n="welcome.simpleDesc">We handle the technical details for you. Perfect for running Samla at home.</div>
             <div class="mode-card__meta">
               <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
               <span data-i18n="welcome.simpleTime">About 2 minutes</span>
@@ -402,7 +402,7 @@
       </div>
       <div class="card-foot">
         <button class="btn btn-ghost" data-back data-i18n="common.back">Back</button>
-        <button class="btn btn-primary" id="simple-next" data-i18n="simple.start">Set up &amp; start Yuvomi</button>
+        <button class="btn btn-primary" id="simple-next" data-i18n="simple.start">Set up &amp; start Samla</button>
       </div>
     </div>
 
@@ -411,7 +411,7 @@
       <div class="card-head">
         <div class="step-tag"></div>
         <h2 tabindex="-1" data-i18n="config.title">Basic Configuration</h2>
-        <p data-i18n="config.subtitle">How will you access Yuvomi?</p>
+        <p data-i18n="config.subtitle">How will you access Samla?</p>
       </div>
       <div class="card-body">
         <div class="info-banner" id="cfg-existing" style="display:none" data-i18n="config.existing">
@@ -423,7 +423,7 @@
         <div class="field">
           <label for="cfg-host" data-i18n="config.hostLabel">Domain or IP address</label>
           <input type="text" id="cfg-host" value="localhost" placeholder="localhost or 192.168.1.x">
-          <div class="hint" data-i18n="config.hostHint">The address you'll use to open Yuvomi in your browser.</div>
+          <div class="hint" data-i18n="config.hostHint">The address you'll use to open Samla in your browser.</div>
         </div>
         <div class="field">
           <label for="cfg-port" data-i18n="config.portLabel">Port</label>
@@ -431,7 +431,7 @@
         </div>
         <div class="field">
           <label for="cfg-tz" data-i18n="config.tzLabel">Timezone</label>
-          <input type="text" id="cfg-tz" placeholder="Europe/Berlin">
+          <input type="text" id="cfg-tz" placeholder="Europe/Stockholm">
         </div>
         <div class="error-banner" id="cfg-err" role="alert"></div>
       </div>
@@ -519,7 +519,7 @@
           </div>
           <div class="field">
             <label for="wea-city" data-i18n="weather.cityLabel">City name (optional)</label>
-            <input type="text" id="wea-city" placeholder="Berlin">
+            <input type="text" id="wea-city" placeholder="Stockholm">
           </div>
           <div class="field">
             <label for="wea-units" data-i18n="weather.unitsLabel">Units</label>
@@ -542,7 +542,7 @@
       <div class="card-head">
         <div class="step-tag"></div>
         <h2 tabindex="-1" data-i18n="calendar.title">Calendar Sync</h2>
-        <p data-i18n="calendar.subtitle">Connect Yuvomi to Google Calendar or Apple iCloud. Both optional — expand to configure.</p>
+        <p data-i18n="calendar.subtitle">Connect Samla to Google Calendar or Apple iCloud. Both optional — expand to configure.</p>
       </div>
       <div class="card-body">
         <div class="toggle-card">
@@ -642,12 +642,12 @@
           </div>
           <div class="field">
             <label for="email-from" data-i18n="email.fromLabel">Sender address</label>
-            <input type="email" id="email-from" placeholder="yuvomi@example.com">
+            <input type="email" id="email-from" placeholder="samla@example.com">
             <div class="hint" data-i18n="email.fromHint">The “from” address recipients will see. Many providers require it to match your username.</div>
           </div>
           <div class="field">
             <label for="email-from-name"><span data-i18n="email.fromNameLabel">Sender name</span> <span class="opt" data-i18n="calendar.appleUrlOpt">(optional)</span></label>
-            <input type="text" id="email-from-name" placeholder="Yuvomi">
+            <input type="text" id="email-from-name" placeholder="Samla">
           </div>
         </div>
         <div class="error-banner" id="email-err" role="alert"></div>
@@ -668,7 +668,7 @@
       <div class="card-body">
         <div class="group-label" data-i18n="advanced.sectionNetwork">Networking</div>
         <div class="field field-emphasis">
-          <label for="adv-proxy" data-i18n="advanced.proxyLabel">How is Yuvomi exposed?</label>
+          <label for="adv-proxy" data-i18n="advanced.proxyLabel">How is Samla exposed?</label>
           <select id="adv-proxy">
             <option value="proxy" data-i18n="advanced.proxyBehindHttps">Behind a reverse proxy with HTTPS (Caddy, nginx, Traefik)</option>
             <option value="direct" data-i18n="advanced.proxyDirect">Direct access over localhost / HTTP</option>
@@ -754,7 +754,7 @@
             </div>
             <div class="field">
               <label for="adv-webdav-backup-path" data-i18n="advanced.webdavBackupPathLabel">Remote path</label>
-              <input type="text" id="adv-webdav-backup-path" placeholder="/yuvomi/backups/">
+              <input type="text" id="adv-webdav-backup-path" placeholder="/samla/backups/">
             </div>
           </div>
         </div>
@@ -806,8 +806,8 @@
             </div>
             <div class="field">
               <label for="adv-document-webdav-path" data-i18n="advanced.documentWebdavPathLabel">Base path</label>
-              <input type="text" id="adv-document-webdav-path" placeholder="yuvomi-documents">
-              <div class="hint" data-i18n="advanced.documentWebdavPathHint">Remote folder for document files. Leave empty to use yuvomi-documents.</div>
+              <input type="text" id="adv-document-webdav-path" placeholder="samla-documents">
+              <div class="hint" data-i18n="advanced.documentWebdavPathHint">Remote folder for document files. Leave empty to use samla-documents.</div>
             </div>
           </div>
         </div>
@@ -900,7 +900,7 @@
     <div class="step" id="step-docker">
       <div class="card-head">
         <div class="step-tag"></div>
-        <h2 tabindex="-1" data-i18n="docker.title">Starting Yuvomi</h2>
+        <h2 tabindex="-1" data-i18n="docker.title">Starting Samla</h2>
         <p data-i18n="docker.subtitle">Pulling the image and starting the Docker container.</p>
       </div>
       <div class="card-body">
@@ -925,7 +925,7 @@
       <div class="card-head">
         <div class="step-tag"></div>
         <h2 tabindex="-1" data-i18n="admin.title">Create Admin Account</h2>
-        <p data-i18n="admin.subtitle">Set up your first login. This account has full access to Yuvomi.</p>
+        <p data-i18n="admin.subtitle">Set up your first login. This account has full access to Samla.</p>
       </div>
       <div class="card-body">
         <div class="field">
@@ -964,7 +964,7 @@
       <div class="card-body">
         <div class="done-wrap">
           <div class="icon">&#x1F389;</div>
-          <h2 tabindex="-1" data-i18n="done.title">Yuvomi is ready!</h2>
+          <h2 tabindex="-1" data-i18n="done.title">Samla is ready!</h2>
           <p data-i18n="done.subtitle">Your family planner is running and your admin account is set up.</p>
           <div class="warn-banner" role="note" style="text-align:start">
             <span class="warn-icon" aria-hidden="true">&#x26A0;</span>
@@ -976,7 +976,7 @@
               <span data-i18n="done.download">Download .env file</span>
             </button>
             <div class="hint" id="done-path" style="display:none; margin:0; font-family:var(--font-mono); word-break:break-all"></div>
-            <a id="done-link" class="open-link" href="#" target="_blank" rel="noopener" data-i18n="done.open">Open Yuvomi &#x2192;</a>
+            <a id="done-link" class="open-link" href="#" target="_blank" rel="noopener" data-i18n="done.open">Open Samla &#x2192;</a>
           </div>
         </div>
       </div>
@@ -1156,7 +1156,7 @@ function buildEnv() {
     DOCUMENT_STORAGE_WEBDAV_PASSWORD: S.DOCUMENT_STORAGE_WEBDAV_PASSWORD,
     DOCUMENT_STORAGE_WEBDAV_PATH: S.DOCUMENT_STORAGE_WEBDAV_PATH,
     SYNC_INTERVAL_MINUTES: '15',
-    TZ: S.tz, OIKOS_HTTP_PORT: S.port,
+    TZ: S.tz, SAMLA_HTTP_PORT: S.port,
   };
 }
 
@@ -1170,7 +1170,7 @@ function encodeEnvValueClient(str) {
   return dollarSafe;
 }
 function renderEnvClient(env) {
-  const lines = ['# Generated by Yuvomi Installer'];
+  const lines = ['# Generated by Samla Installer'];
   for (const [k, v] of Object.entries(env)) {
     if (v == null || v === '') {
       // Bewahrte Schlüssel kennt der Browser nicht — sie stehen nur in der .env

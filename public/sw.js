@@ -16,14 +16,14 @@
  */
 
 const APP_RELEASE   = '1.57.0';
-const SHELL_CACHE   = `yuvomi-shell-${APP_RELEASE}`;
-const PAGES_CACHE   = `yuvomi-pages-${APP_RELEASE}`;
-const LOCALES_CACHE = `yuvomi-locales-${APP_RELEASE}`;
-const ASSETS_CACHE  = `yuvomi-assets-${APP_RELEASE}`;
+const SHELL_CACHE   = `samla-shell-${APP_RELEASE}`;
+const PAGES_CACHE   = `samla-pages-${APP_RELEASE}`;
+const LOCALES_CACHE = `samla-locales-${APP_RELEASE}`;
+const ASSETS_CACHE  = `samla-assets-${APP_RELEASE}`;
 // API-Cache bewusst NICHT in ALL_CACHES: er wird bei jedem SW-Update neu benannt
 // (Version im Namen) und bei Logout/Session-Ende gezielt geleert.
-const API_CACHE     = `yuvomi-api-${APP_RELEASE}`;
-const BYPASS_CACHE  = 'yuvomi-bypass-flag';
+const API_CACHE     = `samla-api-${APP_RELEASE}`;
+const BYPASS_CACHE  = 'samla-bypass-flag';
 const ALL_CACHES    = [SHELL_CACHE, PAGES_CACHE, LOCALES_CACHE, ASSETS_CACHE];
 
 // GET-API-Pfade (nach /api/v1), die für Read-only-Offline gecacht werden dürfen.
@@ -63,7 +63,7 @@ const APP_SHELL = [
   '/styles/settings.css',
   '/styles/recipes.css',
   '/styles/pantry.css',
-  '/components/yuvomi-install-prompt.js',
+  '/components/samla-install-prompt.js',
   '/offline.html',
   '/manifest.json',
   '/favicon.ico',
@@ -76,29 +76,9 @@ const APP_SHELL = [
 ];
 
 const APP_LOCALES = [
-  '/locales/ar.json',
-  '/locales/cs.json',
-  '/locales/de.json',
-  '/locales/el.json',
   '/locales/en.json',
-  '/locales/es.json',
-  '/locales/fa.json',
-  '/locales/fr.json',
-  '/locales/hi.json',
-  '/locales/hu.json',
-  '/locales/id.json',
   '/locales/it.json',
-  '/locales/ja.json',
-  '/locales/ko.json',
-  '/locales/nl.json',
-  '/locales/pl.json',
-  '/locales/pt.json',
-  '/locales/ru.json',
   '/locales/sv.json',
-  '/locales/tr.json',
-  '/locales/uk.json',
-  '/locales/vi.json',
-  '/locales/zh.json',
 ];
 
 // Seiten-Module: lazy geladen, aber vorab gecacht für Offline
@@ -204,7 +184,7 @@ self.addEventListener('activate', (event) => {
         keys
           // Versions-Caches der laufenden Release behalten; alles andere entfernen —
           // inklusive alter Vorversions-Caches UND der Legacy-`oikos-*`-Caches aus der
-          // Zeit vor dem Yuvomi-Rename (Cache-Invalidierung, kein User-Eingriff nötig).
+          // Zeit vor dem Samla-Rename (Cache-Invalidierung, kein User-Eingriff nötig).
           .filter((key) => !ALL_CACHES.includes(key) && key !== API_CACHE)
           .map((key) => caches.delete(key))
       )
@@ -448,14 +428,14 @@ self.addEventListener('push', (event) => {
   try {
     payload = event.data ? event.data.json() : {};
   } catch {
-    payload = { title: 'Yuvomi', body: event.data ? event.data.text() : '' };
+    payload = { title: 'Samla', body: event.data ? event.data.text() : '' };
   }
-  const title = payload.title || 'Yuvomi';
+  const title = payload.title || 'Samla';
   const options = {
     body: payload.body || '',
     icon: '/icons/icon-192.png',
     badge: '/icons/icon-192.png',
-    tag: payload.tag || 'yuvomi-push',
+    tag: payload.tag || 'samla-push',
     data: { url: payload.url || '/reminders' },
   };
   event.waitUntil(self.registration.showNotification(title, options));

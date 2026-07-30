@@ -17,7 +17,7 @@ import { parseVTODO } from './ics-parser.js';
 // --------------------------------------------------------
 
 /**
- * Map an RFC-5545 VTODO PRIORITY (1–9, 0/undefined) to an Yuvomi task priority.
+ * Map an RFC-5545 VTODO PRIORITY (1–9, 0/undefined) to an Samla task priority.
  * 1–4 → high, 5 → medium, 6–9 → low, else none.
  */
 function mapVtodoPriority(p) {
@@ -168,7 +168,7 @@ function updateReminderSelection(accountId, listUrl, { enabled, targetModule } =
 }
 
 // --------------------------------------------------------
-// Upsert Helpers (read-only inbound: iCloud → Yuvomi)
+// Upsert Helpers (read-only inbound: iCloud → Samla)
 // --------------------------------------------------------
 
 function upsertTask(todo, accountId, createdBy) {

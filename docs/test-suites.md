@@ -9,10 +9,10 @@ Neue Suite: `test/test-[module].js` anlegen + `test:[module]`-Skript in `package
 ```bash
 npm test             # Alle Suiten (Node >=22)
 npm run test:db
-npm run test:rename-migration   # Oikos→Yuvomi Identifier-Migration: seamless rename invariants
+npm run test:rename-migration   # Oikos→Samla Identifier-Migration: seamless rename invariants
 npm run test:schema-reconcile   # Schema-Selbstheilung gegen Migrations-Drift (#538): reconcileCriticalSchema ergänzt fehlende Spalten, obwohl die Migration als angewendet vermerkt ist
 npm run test:db-encryption      # DB_ENCRYPTION_KEY wirkt wirklich: Datei-Header verschlüsselt, Bestands-DB wird migriert, falscher Key bricht den Start ab
-npm run test:db-isolation       # Test-Isolation: keine Suite lädt server/db.js ohne wirksames DB_PATH (init() beim Import würde sonst eine echte yuvomi.db im Repo-Root anlegen); prüft auch die Reihenfolge, da eine Zuweisung nach einem statischen Import zu spät kommt
+npm run test:db-isolation       # Test-Isolation: keine Suite lädt server/db.js ohne wirksames DB_PATH (init() beim Import würde sonst eine echte samla.db im Repo-Root anlegen); prüft auch die Reihenfolge, da eine Zuweisung nach einem statischen Import zu spät kommt
 npm run test:tasks
 npm run test:tasks-recurrence   # recurring task catch-up: nextOccurrenceAfter + PATCH status follow-up
 npm run test:tasks-routes       # Tasks-Routen-Schicht: PUT/:id, meta/options, Kategorie-CRUD (404/400/409), Filter, Verschachtelung, PATCH-Status, DELETE
@@ -92,7 +92,7 @@ npm run test:ics-import     # einmaliger ICS-/Feed-Import als bearbeitbare lokal
 npm run test:modal-utils
 npm run test:category-manager   # generic oikos-category-manager component + budget wiring
 npm run test:sortable-reorder   # SortableJS-Wrapper + Drag-and-Drop-Reorder im Category-Manager (Teil-Render, Fokus-Restore, aria-live, SW-Precache)
-npm run test:datepicker         # yuvomi-datepicker: ISO-Wertkontrakt, form-association, Popover/Touch, min/max, i18n-Vollständigkeit
+npm run test:datepicker         # samla-datepicker: ISO-Wertkontrakt, form-association, Popover/Touch, min/max, i18n-Vollständigkeit
 npm run test:ux-utils        # UX-Helfer: stagger/vibrate/withBusy, Datums-/Zeit-Parser, WCAG-Ink-Wahl; Undo-Löschen läuft ausschließlich über scheduleUndoableDelete (Undo verhindert den Server-Delete, ohne Undo commit nach Ablauf) - die alte deleteWithUndo-API löschte sofort und ist gesperrt
 npm run test:skeleton-utils
 npm run test:date-utils
@@ -112,16 +112,16 @@ npm run test:caldav-recurrence   # CalDAV/iOS-Serien mit Wochentags-Wiederholung
 npm run test:caldav-reminders
 npm run test:caldav-event-target
 npm run test:google-multi   # multiple Google calendars + per-event sync target
-npm run test:google-outbound   # Löschen + Ändern + Umziehen Yuvomi → Google (#593): Tombstones, Dirty-Marker, events.move, 404/410, Retry-Limit, Inbound-Konfliktschutz; dazu Serien als Master (EXDATE aus Absagen/Verschiebungen, Altbestand-Zusammenführung nur beim Full-Resync)
+npm run test:google-outbound   # Löschen + Ändern + Umziehen Samla → Google (#593): Tombstones, Dirty-Marker, events.move, 404/410, Retry-Limit, Inbound-Konfliktschutz; dazu Serien als Master (EXDATE aus Absagen/Verschiebungen, Altbestand-Zusammenführung nur beim Full-Resync)
 npm run test:calendar-outbound-migration   # Migrationen v103-v106 gegen befüllte Bestands-DB: additiv, kein Rebuild, Marker starten neutral
-npm run test:caldav-outbound   # Löschen + Ändern + Umziehen Yuvomi → CalDAV/Apple (#593): ICS-Patcher (Teilnehmer/Alarme/Overrides bleiben), Objekt-URL-Auflösung, Umzug = create+delete, Sofortversuch ohne Kalenderabruf
+npm run test:caldav-outbound   # Löschen + Ändern + Umziehen Samla → CalDAV/Apple (#593): ICS-Patcher (Teilnehmer/Alarme/Overrides bleiben), Objekt-URL-Auflösung, Umzug = create+delete, Sofortversuch ohne Kalenderabruf
 npm run test:google-calendar   # Google: Datumskonvertierung, Farbauflösung (#427/#219), unveränderte Events werden beim Full-Resync nicht neu geschrieben
 npm run test:housekeeping
 npm run test:housekeeping-routes   # Housekeeping-Routen: Worker-Anlage (Admin-Gate), Check-in/out-Lifecycle + Doppelbuchungs-Guard, Pay/Delete, Decay-CRUD, Supply-Requests, Maintenance-Log
 npm run test:documents          # Dokument-Preview: CSP-Header je MIME-Typ
 npm run test:documents-ux       # Dokumente-UX-Verträge: Leerzustände, Kategorie-Facetten, Upload-Modal, Auswahlmodus, Popover-Menü
 npm run test:document-storage   # Dokument-Storage-Migration und Invarianten
-npm run test:google-drive-storage   # Google Drive als Dokument-Ablage: eigenes Credential-Paar (fail-closed bei halber Konfiguration), OAuth-Callback legt Yuvomi/Documents an und wählt nie Drive als Kalender
+npm run test:google-drive-storage   # Google Drive als Dokument-Ablage: eigenes Credential-Paar (fail-closed bei halber Konfiguration), OAuth-Callback legt Samla/Documents an und wählt nie Drive als Kalender
 npm run test:document-folders   # Dokument-Ordner-Routen: umbenennen/löschen (PUT/DELETE) + ON DELETE SET NULL (#453)
 npm run test:task-documents     # Task↔Dokument-Verknüpfungen (#503): GET/PUT /tasks/:id/documents, Sichtbarkeit, Replace-Set, document_count, CASCADE
 npm run test:dms-adapter        # DMS-Adapter: Paperless-ngx

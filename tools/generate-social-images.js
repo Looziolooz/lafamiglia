@@ -40,7 +40,7 @@ async function createSocialImage(filename, width, height) {
 
         <!-- Title -->
         <text x="0" y="80" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="700" fill="#FFFFFF">
-          Yuvomi
+          Samla
         </text>
 
         <!-- Description -->

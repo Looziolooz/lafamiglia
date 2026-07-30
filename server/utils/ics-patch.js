@@ -2,14 +2,14 @@
 // Gezieltes Ändern einzelner Properties in einem bestehenden iCalendar-Objekt (#593).
 //
 // CalDAV kennt kein PATCH: eine Änderung ist immer ein PUT des kompletten
-// Kalenderobjekts. Würde Yuvomi das Objekt aus seinen eigenen Feldern neu bauen,
-// verlöre ein importierter Termin auf dem Server alles, was Yuvomi nicht kennt -
+// Kalenderobjekts. Würde Samla das Objekt aus seinen eigenen Feldern neu bauen,
+// verlöre ein importierter Termin auf dem Server alles, was Samla nicht kennt -
 // Teilnehmer, Erinnerungen, Kategorien, Organisator, Anhänge. Deshalb wird das
 // Original bearbeitet statt ersetzt: nur die gespiegelten Properties werden
 // getauscht, jede andere Zeile bleibt Zeichen für Zeichen stehen.
 // --------------------------------------------------------
 
-// Properties, die Yuvomi verwaltet und daher ersetzen darf.
+// Properties, die Samla verwaltet und daher ersetzen darf.
 const MANAGED = new Set(['SUMMARY', 'DESCRIPTION', 'LOCATION', 'DTSTART', 'DTEND', 'RRULE']);
 
 /** RFC 5545 §3.1: Fortsetzungszeilen beginnen mit Space oder Tab. */

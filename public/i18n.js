@@ -5,13 +5,13 @@
  * Dependencies: none (vanilla JS, Fetch API, Intl API)
  */
 
-const SUPPORTED_LOCALES = ['de', 'en', 'es', 'fr', 'it', 'sv', 'el', 'ru', 'tr', 'zh', 'ja', 'ar', 'hi', 'pt', 'uk', 'pl', 'nl', 'cs', 'vi', 'hu', 'ko', 'id', 'fa'];
-const RTL_LOCALES = new Set(['ar', 'fa']);
-const DEFAULT_LOCALE = 'de';
-const STORAGE_KEY = 'yuvomi-locale';
-const DATE_FORMAT_KEY = 'yuvomi-date-format';
-const TIME_FORMAT_KEY = 'yuvomi-time-format';
-const NUMBER_LOCALE_KEY = 'yuvomi-number-locale';
+const SUPPORTED_LOCALES = ['en', 'it', 'sv'];
+const RTL_LOCALES = new Set();
+const DEFAULT_LOCALE = 'it';
+const STORAGE_KEY = 'samla-locale';
+const DATE_FORMAT_KEY = 'samla-date-format';
+const TIME_FORMAT_KEY = 'samla-time-format';
+const NUMBER_LOCALE_KEY = 'samla-number-locale';
 const DEFAULT_DATE_FORMAT = 'dmy';
 const DEFAULT_TIME_FORMAT = '24h';
 const VALID_TIME_FORMATS = ['24h', '12h'];
@@ -30,17 +30,26 @@ function applyDocumentLocale(locale) {
   document.documentElement.dir = RTL_LOCALES.has(locale) ? 'rtl' : 'ltr';
 }
 
-/** Resolve locale: manual override > navigator.language > English > default */
+// Italienisch ist die Produktsprache: die App startet in DEFAULT_LOCALE, egal
+// welche Sprache der Browser meldet. Wer eine andere Sprache will, wählt sie in
+// den Einstellungen; die Wahl liegt in localStorage und gewinnt immer.
+// Auf true setzen, um stattdessen der Browsersprache zu folgen (der frühere
+// Standard) — dann muss auch FOLLOW_BROWSER_LANGUAGE in lang-init.js mitziehen.
+const FOLLOW_BROWSER_LANGUAGE = false;
+
+/** Resolve locale: manuelle Wahl > (optional Browsersprache) > DEFAULT_LOCALE */
 function resolveLocale() {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored && SUPPORTED_LOCALES.includes(stored)) return stored;
 
-  const browserLocales = navigator.languages || [navigator.language];
-  for (const tag of browserLocales) {
-    const base = tag.split('-')[0].toLowerCase();
-    if (SUPPORTED_LOCALES.includes(base)) return base;
+  if (FOLLOW_BROWSER_LANGUAGE) {
+    const browserLocales = navigator.languages || [navigator.language];
+    for (const tag of browserLocales) {
+      const base = tag.split('-')[0].toLowerCase();
+      if (SUPPORTED_LOCALES.includes(base)) return base;
+    }
   }
-  return 'en';
+  return DEFAULT_LOCALE;
 }
 
 /** Lade eine Locale-JSON-Datei */

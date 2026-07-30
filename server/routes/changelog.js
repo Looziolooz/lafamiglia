@@ -11,11 +11,15 @@ import { createLogger } from '../logger.js';
 
 const log = createLogger('Changelog');
 
-const RELEASES_URL = 'https://api.github.com/repos/ulsklyc/yuvomi/releases?per_page=30';
+// Quelle der Release Notes. Standardmäßig NICHT gesetzt: eine selbst gehostete
+// Installation soll beim Öffnen der Changelog-Ansicht keine ausgehende Verbindung
+// aufbauen. Wer die Notes aus einem eigenen Repository ziehen will, setzt
+// CHANGELOG_RELEASES_URL auf einen GitHub-Releases-Endpunkt.
+const RELEASES_URL = process.env.CHANGELOG_RELEASES_URL || '';
 const CACHE_TTL_MS = 30 * 60 * 1000;
 const REQUEST_HEADERS = {
   Accept: 'application/vnd.github+json',
-  'User-Agent': 'Yuvomi/1.0 (+https://github.com/ulsklyc/yuvomi)',
+  'User-Agent': 'Samla/1.0',
   'X-GitHub-Api-Version': '2022-11-28',
 };
 
@@ -127,6 +131,7 @@ export function buildRouter({
   fetchFn = globalThis.fetch,
   appVersion = APP_VERSION,
   now = () => Date.now(),
+  releasesUrl = RELEASES_URL,
 } = {}) {
   const router = express.Router();
   let cachedPayload = null;
@@ -138,8 +143,16 @@ export function buildRouter({
       return res.json({ data: cachedPayload });
     }
 
+    // Keine Quelle konfiguriert → leere, gültige Antwort statt 502. Die Ansicht
+    // zeigt dann nur die installierte Version, ohne Fehlermeldung.
+    if (!releasesUrl) {
+      cachedPayload = buildChangelogPayload([], appVersion);
+      cachedAt = now();
+      return res.json({ data: cachedPayload });
+    }
+
     try {
-      const response = await fetchFn(RELEASES_URL, {
+      const response = await fetchFn(releasesUrl, {
         headers: REQUEST_HEADERS,
         signal: AbortSignal.timeout(8000),
       });

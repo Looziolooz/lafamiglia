@@ -52,7 +52,7 @@ function safeStorageRemove(key) {
 }
 
 function currentTheme() {
-  return safeStorageGet('yuvomi-theme', 'system') || 'system';
+  return safeStorageGet('samla-theme', 'system') || 'system';
 }
 
 function formatOptions(selected) {
@@ -79,7 +79,7 @@ function localeLabel(locale) {
 }
 
 function localeOptions() {
-  const storedLocale = safeStorageGet('yuvomi-locale');
+  const storedLocale = safeStorageGet('samla-locale');
   return [
     `<option value="system"${storedLocale ? '' : ' selected'}>${t('settings.localeSystem')}</option>`,
     ...getSupportedLocales().map((locale) => (
@@ -211,10 +211,10 @@ function renderPage(container, preferences, isAdmin) {
 }
 
 function applyTheme(value) {
-  safeStorageSet('yuvomi-theme', value);
-  if (window.yuvomi?.applyTheme) {
+  safeStorageSet('samla-theme', value);
+  if (window.samla?.applyTheme) {
     try {
-      window.yuvomi.applyTheme(value);
+      window.samla.applyTheme(value);
       return;
     } catch {
       // Fall back to applying the theme directly when router storage fails.
@@ -234,9 +234,9 @@ function applyTheme(value) {
 function applyNumberLocale({ region, currency, date_format, time_format }) {
   const numberLocale = numberLocaleFor({ region, currency, date_format, time_format });
   if (numberLocale) {
-    safeStorageSet('yuvomi-number-locale', numberLocale);
+    safeStorageSet('samla-number-locale', numberLocale);
   } else {
-    safeStorageRemove('yuvomi-number-locale');
+    safeStorageRemove('samla-number-locale');
   }
 }
 
@@ -282,7 +282,7 @@ function bindEvents(container, user) {
     localeSelect.disabled = true;
     try {
       if (localeSelect.value === 'system') {
-        safeStorageRemove('yuvomi-locale');
+        safeStorageRemove('samla-locale');
         location.reload();
         return;
       }
@@ -323,8 +323,8 @@ function bindEvents(container, user) {
       if (dateSelect) dateSelect.value = preset.date_format;
       const timeSelect = container.querySelector('#time-format-select');
       if (timeSelect) timeSelect.value = preset.time_format;
-      safeStorageSet('yuvomi-date-format', preset.date_format);
-      safeStorageSet('yuvomi-time-format', preset.time_format);
+      safeStorageSet('samla-date-format', preset.date_format);
+      safeStorageSet('samla-time-format', preset.time_format);
       applyNumberLocale({
         region: regionSelect.value,
         currency: preset.currency,
@@ -338,7 +338,7 @@ function bindEvents(container, user) {
         detail: { timeFormat: preset.time_format },
       }));
       if (customBlock) customBlock.hidden = true;
-      window.yuvomi?.showToast(t('settings.regionSaved'), 'success');
+      window.samla?.showToast(t('settings.regionSaved'), 'success');
     } catch (error) {
       showError(errorElement, error.message);
     } finally {
@@ -361,7 +361,7 @@ function bindEvents(container, user) {
       persistedCurrency = currencySelect.value;
       syncRegionSelect(container);
       applyNumberLocale(readFormatState(container));
-      window.yuvomi?.showToast(t('settings.currencySaved'), 'success');
+      window.samla?.showToast(t('settings.currencySaved'), 'success');
     } catch (error) {
       showError(errorElement, error.message);
     }
@@ -374,13 +374,13 @@ function bindEvents(container, user) {
     dateFormatSelect.disabled = true;
     try {
       await savePreferences({ date_format: dateFormatSelect.value });
-      safeStorageSet('yuvomi-date-format', dateFormatSelect.value);
+      safeStorageSet('samla-date-format', dateFormatSelect.value);
       window.dispatchEvent(new CustomEvent('date-format-changed', {
         detail: { dateFormat: dateFormatSelect.value },
       }));
       syncRegionSelect(container);
       applyNumberLocale(readFormatState(container));
-      window.yuvomi?.showToast(t('settings.dateFormatSavedToast'), 'success');
+      window.samla?.showToast(t('settings.dateFormatSavedToast'), 'success');
     } catch (error) {
       showError(errorElement, error.message);
     } finally {
@@ -395,13 +395,13 @@ function bindEvents(container, user) {
     timeFormatSelect.disabled = true;
     try {
       await savePreferences({ time_format: timeFormatSelect.value });
-      safeStorageSet('yuvomi-time-format', timeFormatSelect.value);
+      safeStorageSet('samla-time-format', timeFormatSelect.value);
       window.dispatchEvent(new CustomEvent('time-format-changed', {
         detail: { timeFormat: timeFormatSelect.value },
       }));
       syncRegionSelect(container);
       applyNumberLocale(readFormatState(container));
-      window.yuvomi?.showToast(t('settings.timeFormatSavedToast'), 'success');
+      window.samla?.showToast(t('settings.timeFormatSavedToast'), 'success');
     } catch (error) {
       showError(errorElement, error.message);
     } finally {
@@ -420,8 +420,8 @@ export async function render(container, { user }) {
       region: loaded.region || null,
     };
 
-    safeStorageSet('yuvomi-date-format', preferences.date_format);
-    safeStorageSet('yuvomi-time-format', preferences.time_format);
+    safeStorageSet('samla-date-format', preferences.date_format);
+    safeStorageSet('samla-time-format', preferences.time_format);
     applyNumberLocale(preferences);
     const isAdmin = user?.role === 'admin';
     renderPage(container, preferences, isAdmin);

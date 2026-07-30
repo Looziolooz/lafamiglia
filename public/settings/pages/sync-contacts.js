@@ -36,7 +36,7 @@ function enabledAddressbookCount(addressbooks) {
 }
 
 function showToast(message, tone = 'default') {
-  window.yuvomi?.showToast(message, tone);
+  window.samla?.showToast(message, tone);
 }
 
 /**
@@ -500,7 +500,7 @@ async function loadAccounts(container, user) {
  * Auswahl bleibt in jedem Fall erhalten.
  *
  * Passwortfeld: autocomplete="off". Gefragt ist ein bestehendes Passwort für
- * einen FREMDEN Server - "current-password" bietet das Yuvomi-Passwort an,
+ * einen FREMDEN Server - "current-password" bietet das Samla-Passwort an,
  * "new-password" schlägt ein generiertes vor. Beides ist hier falsch.
  *
  * @param {Object|null} account - null = neues Konto

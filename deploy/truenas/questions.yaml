@@ -1,20 +1,20 @@
 groups:
-  - name: Yuvomi Configuration
-    description: Configure Yuvomi
+  - name: Samla Configuration
+    description: Configure Samla
   - name: User and Group Configuration
-    description: Configure User and Group for Yuvomi
+    description: Configure User and Group for Samla
   - name: Network Configuration
-    description: Configure Network for Yuvomi
+    description: Configure Network for Samla
   - name: Storage Configuration
-    description: Configure Storage for Yuvomi
+    description: Configure Storage for Samla
   - name: Labels Configuration
-    description: Configure Labels for Yuvomi
+    description: Configure Labels for Samla
   - name: Resources Configuration
-    description: Configure Resources for Yuvomi
+    description: Configure Resources for Samla
 
 questions:
   - variable: TZ
-    group: Yuvomi Configuration
+    group: Samla Configuration
     label: Timezone
     schema:
       type: string
@@ -25,7 +25,7 @@ questions:
 
   - variable: oikos
     label: ""
-    group: Yuvomi Configuration
+    group: Samla Configuration
     schema:
       type: dict
       attrs:
@@ -53,7 +53,7 @@ questions:
             private: true
         - variable: additional_envs
           label: Additional Environment Variables
-          description: See https://github.com/ulsklyc/yuvomi/blob/main/docs/installation.md#environment-variables for available environment variables.
+          description: See https://github.com/YOUR-ORG/samla/blob/main/docs/installation.md#environment-variables for available environment variables.
           schema:
             type: list
             default: []
@@ -81,7 +81,7 @@ questions:
       attrs:
         - variable: user
           label: User ID
-          description: The user id that Yuvomi files will be owned by.
+          description: The user id that Samla files will be owned by.
           schema:
             type: int
             min: 568
@@ -89,7 +89,7 @@ questions:
             required: true
         - variable: group
           label: Group ID
-          description: The group id that Yuvomi files will be owned by.
+          description: The group id that Samla files will be owned by.
           schema:
             type: int
             min: 568
@@ -609,14 +609,14 @@ questions:
             attrs:
               - variable: cpus
                 label: CPUs
-                description: CPUs limit for Yuvomi.
+                description: CPUs limit for Samla.
                 schema:
                   type: int
                   default: 2
                   required: true
               - variable: memory
                 label: Memory (in MB)
-                description: Memory limit for Yuvomi.
+                description: Memory limit for Samla.
                 schema:
                   type: int
                   default: 4096

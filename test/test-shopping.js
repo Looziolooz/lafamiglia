@@ -59,7 +59,7 @@ test('Shopping-Seite importiert den Category-Manager und öffnet ihn bei manage=
   const source = readFileSync(new URL('../public/pages/shopping.js', import.meta.url), 'utf8');
   // Seit Audit F-15 nutzt Einkauf die geteilte Komponente (wie Budget/Tasks/Kontakte).
   assert(/components\/category-manager\.js/.test(source), 'shopping.js muss den geteilten Category-Manager importieren');
-  assert(/yuvomi-category-manager/.test(source), 'shopping.js muss das geteilte Custom Element verwenden');
+  assert(/samla-category-manager/.test(source), 'shopping.js muss das geteilte Custom Element verwenden');
   assert(/basePath:\s*'\/shopping\/categories'/.test(source), 'shopping.js muss die Komponente auf /shopping/categories konfigurieren');
   assert(/manage.*===\s*'categories'|get\('manage'\)|manage=categories|'manage'/.test(source), 'shopping.js muss den manage-Query-Parameter auswerten');
   assert(/shopping\.manageCategories/.test(source), 'Eine übersetzte „Kategorien verwalten"-Aktion muss vorhanden sein');
@@ -79,7 +79,7 @@ test('Shopping-Seite bietet einen Essensplan-Import mit Datumsbereich an', () =>
 
 test('Geteilter Category-Manager erfüllt die Web-Component-Verträge (Einkauf, Audit F-15)', () => {
   const source = readFileSync(new URL('../public/components/category-manager.js', import.meta.url), 'utf8');
-  assert(/customElements\.define\(\s*'yuvomi-category-manager'/.test(source), 'Tag-Name muss yuvomi-category-manager sein');
+  assert(/customElements\.define\(\s*'samla-category-manager'/.test(source), 'Tag-Name muss samla-category-manager sein');
   assert(/disconnectedCallback/.test(source), 'Lifecycle-Cleanup muss vorhanden sein');
   // Numerische Shopping-IDs und String-Keys (Budget/Tasks/Kontakte) laufen über
   // denselben Schlüssel-Helper — die Route-Pfade bleiben basePath-relativ.

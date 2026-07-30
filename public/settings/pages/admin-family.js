@@ -193,7 +193,7 @@ function renderPage(container) {
           </div>
           <div class="form-group">
             <label class="form-label" for="new-member-birth-date">${t('settings.memberBirthDateLabel')}</label>
-            <yuvomi-datepicker type="date" id="new-member-birth-date"></yuvomi-datepicker>
+            <samla-datepicker type="date" id="new-member-birth-date"></samla-datepicker>
             <p class="form-hint">${t('settings.memberContactBirthdayHint')}</p>
           </div>
           ${toggleRowHtml({
@@ -246,9 +246,9 @@ function bindDeleteButtons(container) {
       try {
         await auth.deleteUser(id);
         btn.closest('.settings-member').remove();
-        window.yuvomi?.showToast(t('settings.memberDeletedToast', { name }), 'default');
+        window.samla?.showToast(t('settings.memberDeletedToast', { name }), 'default');
       } catch (err) {
-        window.yuvomi?.showToast(err.message, 'danger');
+        window.samla?.showToast(err.message, 'danger');
       }
     });
   });
@@ -311,7 +311,7 @@ function openEditMemberModal(member, currentUser, users, container) {
         </div>
         <div class="form-group">
           <label class="form-label" for="edit-member-birth-date">${t('settings.memberBirthDateLabel')}</label>
-          <yuvomi-datepicker type="date" id="edit-member-birth-date" value="${esc(member.birth_date || '')}"></yuvomi-datepicker>
+          <samla-datepicker type="date" id="edit-member-birth-date" value="${esc(member.birth_date || '')}"></samla-datepicker>
           <p class="form-hint">${t('settings.memberContactBirthdayHint')}</p>
         </div>
         <div class="form-group">
@@ -396,7 +396,7 @@ function openEditMemberModal(member, currentUser, users, container) {
           if (idx !== -1) users[idx] = res.user;
           if (currentUser?.id === member.id) Object.assign(currentUser, res.user);
           closeModal({ force: true });
-          window.yuvomi?.showToast(t('settings.memberUpdatedToast', { name: res.user.display_name }), 'success');
+          window.samla?.showToast(t('settings.memberUpdatedToast', { name: res.user.display_name }), 'success');
           renderMemberList(container, users, currentUser?.id);
           bindDeleteButtons(container);
           bindEditButtons(container, currentUser, users);
@@ -465,7 +465,7 @@ function bindEvents(container, currentUser, users) {
         container.querySelector('#new-avatar-color').value = randomAvatarColor();
         container.querySelector('#add-member-form-card').classList.add('settings-card--hidden');
         container.querySelector('#add-member-btn').hidden = false;
-        window.yuvomi?.showToast(t('settings.memberAddedToast', { name: res.user.display_name }), 'success');
+        window.samla?.showToast(t('settings.memberAddedToast', { name: res.user.display_name }), 'success');
         bindDeleteButtons(container);
         bindEditButtons(container, currentUser, users);
       } catch (err) {

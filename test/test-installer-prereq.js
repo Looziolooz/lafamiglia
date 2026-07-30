@@ -112,12 +112,12 @@ test('composeCommand baut den richtigen Befehl je Engine', async () => {
 
 test('inspectCommand nutzt das passende Binary (podman auch bei podman-compose)', async () => {
   const pc = await detectEngine(checkFor(['podman --version', 'podman-compose --version']));
-  assert.deepEqual(inspectCommand(pc, ['inspect', 'yuvomi']),
-    { cmd: 'podman', args: ['inspect', 'yuvomi'] });
+  assert.deepEqual(inspectCommand(pc, ['inspect', 'samla']),
+    { cmd: 'podman', args: ['inspect', 'samla'] });
 
   const docker = await detectEngine(checkFor(['docker --version', 'docker compose version']));
-  assert.deepEqual(inspectCommand(docker, ['inspect', 'yuvomi']),
-    { cmd: 'docker', args: ['inspect', 'yuvomi'] });
+  assert.deepEqual(inspectCommand(docker, ['inspect', 'samla']),
+    { cmd: 'docker', args: ['inspect', 'samla'] });
 });
 
 // ── checkPrereqs liefert den Engine-Deskriptor mit ─────────────────────────────
@@ -130,15 +130,15 @@ test('checkPrereqs gibt engine-Deskriptor zurück (podman-Fallback)', async () =
 
 // ── Statische Artefakte: podman-compose.yml, Quadlet, install.sh ────────────────
 
-test('podman-compose.yml trägt :Z-Labels, OIKOS_HTTP_BIND und SESSION_SECURE-Default', () => {
+test('podman-compose.yml trägt :Z-Labels, SAMLA_HTTP_BIND und SESSION_SECURE-Default', () => {
   const src = readFileSync(new URL('../podman-compose.yml', import.meta.url), 'utf8');
   assert.match(src, /\/data:Z/, 'kein :Z-Label auf dem /data-Mount');
-  assert.match(src, /\$\{OIKOS_HTTP_BIND:-0\.0\.0\.0\}/, 'kein konfigurierbares Host-Binding');
+  assert.match(src, /\$\{SAMLA_HTTP_BIND:-0\.0\.0\.0\}/, 'kein konfigurierbares Host-Binding');
   assert.match(src, /SESSION_SECURE=\$\{SESSION_SECURE:-false\}/, 'kein SESSION_SECURE-Default');
 });
 
 test('Quadlet-Unit existiert mit :Z-Volume und EnvironmentFile', () => {
-  const src = readFileSync(new URL('../tools/quadlet/oikos.container', import.meta.url), 'utf8');
+  const src = readFileSync(new URL('../tools/quadlet/samla.container', import.meta.url), 'utf8');
   assert.match(src, /\[Container\]/, 'keine [Container]-Sektion');
   assert.match(src, /EnvironmentFile=/, 'kein EnvironmentFile');
   assert.match(src, /:Z\b/, 'kein :Z-SELinux-Label');
@@ -154,8 +154,8 @@ test('install.sh enthält den Podman-Fallback', () => {
 // ── HTTP-Route /api/prereqs ────────────────────────────────────────────────────
 
 async function withServer(fn) {
-  const prev = process.env.OIKOS_INSTALLER_ROOT;
-  process.env.OIKOS_INSTALLER_ROOT = REPO_ROOT;
+  const prev = process.env.SAMLA_INSTALLER_ROOT;
+  process.env.SAMLA_INSTALLER_ROOT = REPO_ROOT;
   const server = createInstallerServer();
   await new Promise(r => server.listen(0, '127.0.0.1', r));
   const { port } = server.address();
@@ -163,8 +163,8 @@ async function withServer(fn) {
     await fn(`http://127.0.0.1:${port}`);
   } finally {
     await new Promise(r => server.close(r));
-    if (prev === undefined) delete process.env.OIKOS_INSTALLER_ROOT;
-    else process.env.OIKOS_INSTALLER_ROOT = prev;
+    if (prev === undefined) delete process.env.SAMLA_INSTALLER_ROOT;
+    else process.env.SAMLA_INSTALLER_ROOT = prev;
   }
 }
 

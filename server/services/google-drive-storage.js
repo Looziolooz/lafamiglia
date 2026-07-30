@@ -9,7 +9,7 @@ const CONFIG_PREFIX = 'document_storage_google_drive_';
 const SELECTED_BACKEND_KEY = 'document_storage_selected_backend';
 const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
 const FOLDER_MIME = 'application/vnd.google-apps.folder';
-const APP_FOLDER_NAME = 'Yuvomi';
+const APP_FOLDER_NAME = 'Samla';
 const DOCUMENTS_FOLDER_NAME = 'Documents';
 const DISPLAY_FOLDER_NAME = `${APP_FOLDER_NAME}/${DOCUMENTS_FOLDER_NAME}`;
 const MAX_READ_BYTES = 5 * 1024 * 1024;
@@ -429,7 +429,7 @@ export async function deleteFile(fileId) {
 }
 
 export async function testConnection() {
-  const expected = Buffer.from(`yuvomi-google-drive-test:${randomUUID()}`);
+  const expected = Buffer.from(`samla-google-drive-test:${randomUUID()}`);
   let fileId = null;
   try {
     fileId = await uploadFile({

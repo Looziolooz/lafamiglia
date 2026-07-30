@@ -145,14 +145,14 @@ function buildCliContent() {
   wrap.className = 'settings-backup-cli';
   wrap.insertAdjacentHTML('beforeend', `
     <p class="form-hint">${t('settings.backupCliHint')}</p>
-    <pre class="settings-code-block"><code>SERVICE=yuvomi
-BACKUP="$PWD/yuvomi-backup.db"
+    <pre class="settings-code-block"><code>SERVICE=samla
+BACKUP="$PWD/samla-backup.db"
 docker compose stop "$SERVICE"
-docker compose run --rm -v "$BACKUP:/tmp/yuvomi-restore.db:ro" --entrypoint sh "$SERVICE" -c 'set -eu; target="\${DB_PATH:-/data/yuvomi.db}"; case "$target" in */oikos.db) target="\${target%/oikos.db}/yuvomi.db";; esac; stamp=$(date -u +%Y%m%dT%H%M%SZ); if [ -f "$target" ]; then cp "$target" "$target.pre-restore-$stamp"; fi; rm -f "$target-wal" "$target-shm"; cp /tmp/yuvomi-restore.db "$target"; chown node:node "$target" 2&gt;/dev/null || true'
+docker compose run --rm -v "$BACKUP:/tmp/samla-restore.db:ro" --entrypoint sh "$SERVICE" -c 'set -eu; target="\${DB_PATH:-/data/samla.db}"; case "$target" in */oikos.db) target="\${target%/oikos.db}/samla.db";; esac; stamp=$(date -u +%Y%m%dT%H%M%SZ); if [ -f "$target" ]; then cp "$target" "$target.pre-restore-$stamp"; fi; rm -f "$target-wal" "$target-shm"; cp /tmp/samla-restore.db "$target"; chown node:node "$target" 2&gt;/dev/null || true'
 docker compose up -d "$SERVICE"</code></pre>
     <p class="form-hint">${t('settings.backupCliBackupHint')}</p>
-    <pre class="settings-code-block"><code>docker compose exec yuvomi node -e "import('./server/db.js').then(async db =&gt; { await db.backupToFile('/data/yuvomi-backup.db'); process.exit(0); })"
-docker cp yuvomi:/data/yuvomi-backup.db ./yuvomi-backup.db</code></pre>
+    <pre class="settings-code-block"><code>docker compose exec samla node -e "import('./server/db.js').then(async db =&gt; { await db.backupToFile('/data/samla-backup.db'); process.exit(0); })"
+docker cp samla:/data/samla-backup.db ./samla-backup.db</code></pre>
   `);
   return wrap;
 }
@@ -246,10 +246,10 @@ async function loadBackupSchedulerStatus(container) {
         triggerBtn.textContent = t('settings.backupSchedulerTriggering');
         try {
           await api.post('/backup/trigger');
-          window.yuvomi?.showToast(t('settings.backupSchedulerTriggeredToast'), 'success');
+          window.samla?.showToast(t('settings.backupSchedulerTriggeredToast'), 'success');
           loadBackupSchedulerStatus(container);
         } catch (err) {
-          window.yuvomi?.showToast(err.message ?? t('common.errorGeneric'), 'danger');
+          window.samla?.showToast(err.message ?? t('common.errorGeneric'), 'danger');
           triggerBtn.disabled = false;
           triggerBtn.textContent = t('settings.backupSchedulerTrigger');
         }
@@ -307,10 +307,10 @@ function renderWebdavStatus(grid, container, d) {
       triggerBtn.textContent = t('settings.backupWebdavTriggering');
       try {
         await api.post('/backup/webdav/trigger');
-        window.yuvomi?.showToast(t('settings.backupWebdavTriggeredToast'), 'success');
+        window.samla?.showToast(t('settings.backupWebdavTriggeredToast'), 'success');
         loadWebdavConfig(container);
       } catch (err) {
-        window.yuvomi?.showToast(err.message ?? t('common.errorGeneric'), 'danger');
+        window.samla?.showToast(err.message ?? t('common.errorGeneric'), 'danger');
         const icon = document.createElement('i');
         icon.dataset.lucide = 'upload-cloud';
         icon.setAttribute('aria-hidden', 'true');
@@ -359,7 +359,7 @@ async function loadWebdavConfig(container) {
     setVal('webdav-url', d.url ?? '');
     setVal('webdav-username', d.username ?? '');
     setVal('webdav-password', d.password ?? '');
-    setVal('webdav-path', d.remotePath ?? '/yuvomi/backups/');
+    setVal('webdav-path', d.remotePath ?? '/samla/backups/');
     setVal('webdav-keep', d.keep ?? 7);
 
     if (d.envControlled) {
@@ -448,17 +448,17 @@ function bindWebdavBackupEvents(container) {
       enabled: form.querySelector('#webdav-enabled')?.checked ?? false,
       url: form.querySelector('#webdav-url')?.value?.trim() || null,
       username: form.querySelector('#webdav-username')?.value?.trim() || null,
-      remotePath: form.querySelector('#webdav-path')?.value?.trim() || '/yuvomi/backups/',
+      remotePath: form.querySelector('#webdav-path')?.value?.trim() || '/samla/backups/',
       keep: Number(form.querySelector('#webdav-keep')?.value) || 7,
     };
     if (password && password !== '****') payload.password = password;
 
     try {
       await api.put('/backup/webdav/config', payload);
-      window.yuvomi?.showToast(t('settings.backupWebdavSaved'), 'success');
+      window.samla?.showToast(t('settings.backupWebdavSaved'), 'success');
       loadWebdavConfig(container);
     } catch (err) {
-      window.yuvomi?.showToast(err.message ?? t('common.errorGeneric'), 'danger');
+      window.samla?.showToast(err.message ?? t('common.errorGeneric'), 'danger');
     } finally {
       if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = t('settings.backupWebdavSaveBtn'); }
     }
@@ -530,7 +530,7 @@ function bindRestoreEvents(container) {
     restoreBtn.textContent = t('settings.backupRestoring');
     try {
       await api.rawPost('/backup/restore', file);
-      window.yuvomi?.showToast(t('settings.backupRestoredToast'), 'success');
+      window.samla?.showToast(t('settings.backupRestoredToast'), 'success');
       window.location.reload();
     } catch (err) {
       showError(errorEl, err.message ?? t('common.errorGeneric'));

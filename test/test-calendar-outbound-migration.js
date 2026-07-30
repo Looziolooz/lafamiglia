@@ -22,7 +22,7 @@ import Database from 'better-sqlite3-multiple-ciphers';
 // Geprüft werden hier nur die exportierten Migrations-SQLs gegen eine eigens
 // aufgebaute Vor-v103-DB.
 process.env.SESSION_SECRET = process.env.SESSION_SECRET || 'test-secret';
-process.env.DB_PATH = join(mkdtempSync(join(tmpdir(), 'yuvomi-calmig-')), 'unused.db');
+process.env.DB_PATH = join(mkdtempSync(join(tmpdir(), 'samla-calmig-')), 'unused.db');
 const { MIGRATIONS } = await import('../server/db.js');
 
 const OUTBOUND_VERSIONS = [103, 104, 105, 106];
@@ -35,7 +35,7 @@ function applyMigration(db, migration) {
 
 /** Echte Migrationskette bis v102 - der Stand, den ein Bestandsnutzer mitbringt. */
 function buildPreOutboundDatabase() {
-  const db = new Database(join(mkdtempSync(join(tmpdir(), 'yuvomi-calmig-')), 'db.sqlite'));
+  const db = new Database(join(mkdtempSync(join(tmpdir(), 'samla-calmig-')), 'db.sqlite'));
   for (const migration of MIGRATIONS.filter((m) => m.version <= 102)) {
     applyMigration(db, migration);
   }

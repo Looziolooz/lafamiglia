@@ -3,9 +3,9 @@ version: "3.7"
 services:
   app_proxy:
     environment:
-      APP_HOST: yuvomi_web_1
+      APP_HOST: samla_web_1
       APP_PORT: 3000
-      # Yuvomi ships its own session-based login, so Umbrel's proxy auth is
+      # Samla ships its own session-based login, so Umbrel's proxy auth is
       # disabled to avoid a double sign-in (same pattern as Immich).
       # Caveat: with proxy auth off, the first-run bootstrap endpoint
       # (POST /api/v1/auth/setup) is reachable by any LAN/Tor client until the
@@ -13,7 +13,7 @@ services:
       PROXY_AUTH_ADD: "false"
 
   web:
-    image: ghcr.io/ulsklyc/yuvomi:0.66.0@sha256:0de09531d39d16e13281100b8a55dd3307f1db9a2a07ef5fbfd928894e639cbf
+    image: ghcr.io/YOUR-ORG/samla:0.66.0@sha256:0de09531d39d16e13281100b8a55dd3307f1db9a2a07ef5fbfd928894e639cbf
     restart: on-failure
     stop_grace_period: 1m
     # No `user:` override: the image entrypoint starts as root only to chown the
@@ -25,7 +25,7 @@ services:
       - NODE_ENV=production
       - PORT=3000
       # Bewusst /data/oikos.db: der oben gepinnte Image-Digest (0.66.0) enthält die
-      # oikos.db→yuvomi.db-Boot-Migration noch NICHT. Würde hier yuvomi.db stehen,
+      # oikos.db→samla.db-Boot-Migration noch NICHT. Würde hier samla.db stehen,
       # bootete das alte Image gegen eine leere DB und ignorierte vorhandene Daten.
       # Beim nächsten Image-Bump (auf eine migrations-fähige Version) migriert der
       # Resolver oikos.db automatisch — dieser Pfad darf dann unverändert bleiben.

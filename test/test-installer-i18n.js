@@ -9,7 +9,7 @@ import { SUPPORTED_LOCALES } from '../tools/installer/i18n-mini.js';
 const REPO_ROOT = fileURLToPath(new URL('../', import.meta.url));
 const LOCALES_DIR = new URL('../tools/installer/locales/', import.meta.url);
 const HTML_PATH = new URL('../tools/installer/install.html', import.meta.url);
-const REFERENCE = 'de';
+const REFERENCE = 'en';
 
 function loadLocale(locale) {
   return JSON.parse(readFileSync(new URL(`${locale}.json`, LOCALES_DIR), 'utf8'));
@@ -79,8 +79,8 @@ test('jeder in install.html referenzierte Schlüssel existiert in jeder Locale',
 // ── Auslieferung über den Installer-Server ────────────────────────────────────
 
 async function withServer(fn) {
-  const prev = process.env.OIKOS_INSTALLER_ROOT;
-  process.env.OIKOS_INSTALLER_ROOT = REPO_ROOT;
+  const prev = process.env.SAMLA_INSTALLER_ROOT;
+  process.env.SAMLA_INSTALLER_ROOT = REPO_ROOT;
   const server = createInstallerServer();
   await new Promise(r => server.listen(0, '127.0.0.1', r));
   const { port } = server.address();
@@ -88,8 +88,8 @@ async function withServer(fn) {
     await fn(`http://127.0.0.1:${port}`);
   } finally {
     await new Promise(r => server.close(r));
-    if (prev === undefined) delete process.env.OIKOS_INSTALLER_ROOT;
-    else process.env.OIKOS_INSTALLER_ROOT = prev;
+    if (prev === undefined) delete process.env.SAMLA_INSTALLER_ROOT;
+    else process.env.SAMLA_INSTALLER_ROOT = prev;
   }
 }
 

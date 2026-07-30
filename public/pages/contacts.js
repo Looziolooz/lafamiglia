@@ -1,7 +1,7 @@
 /**
  * Modul: Kontakte (Contacts)
  * Zweck: Kontaktliste mit Kategorie-Filter, Suche, CRUD, tel:/mailto:/maps-Links
- * Abhängigkeiten: /api.js, /router.js (window.yuvomi)
+ * Abhängigkeiten: /api.js, /router.js (window.samla)
  */
 
 import { api } from '/api.js';
@@ -271,7 +271,7 @@ export async function render(container, { user }) {
     try {
       text = await file.text();
     } catch (err) {
-      window.yuvomi?.showToast(t('contacts.importError', { error: err.message }), 'danger');
+      window.samla?.showToast(t('contacts.importError', { error: err.message }), 'danger');
       return;
     }
     const parsed  = parseVCards(text, {
@@ -280,7 +280,7 @@ export async function render(container, { user }) {
     });
     const named   = parsed.filter((c) => c.name);
     const skipped = parsed.length - named.length;
-    if (named.length === 0) { window.yuvomi?.showToast(t('contacts.vcardNoName'), 'warning'); return; }
+    if (named.length === 0) { window.samla?.showToast(t('contacts.vcardNoName'), 'warning'); return; }
     openImportSelectionModal(named, skipped);
   });
 
@@ -339,10 +339,10 @@ function openContactCategoryManager() {
   };
   openSharedModal({
     title: t('contacts.manageCategories'),
-    content: '<yuvomi-category-manager></yuvomi-category-manager>',
+    content: '<samla-category-manager></samla-category-manager>',
     size: 'lg',
     onSave: (panel) => {
-      manager = panel.querySelector('yuvomi-category-manager');
+      manager = panel.querySelector('samla-category-manager');
       manager.addEventListener('category-manager-changed', onChanged);
       manager.configure({
         basePath: '/contacts/categories',
@@ -772,7 +772,7 @@ async function openContactModal({ mode, contact = null }) {
     </div>
     <div class="form-group">
       <label class="form-label" for="cm-birthday">${t('contacts.birthdayLabel')}</label>
-      <yuvomi-datepicker id="cm-birthday" type="date" value="${v('birthday')}"></yuvomi-datepicker>
+      <samla-datepicker id="cm-birthday" type="date" value="${v('birthday')}"></samla-datepicker>
       <p class="form-hint">${t('contacts.birthdayHint')}</p>
     </div>
     <div class="form-group">
@@ -895,7 +895,7 @@ async function openContactModal({ mode, contact = null }) {
         const notes    = panel.querySelector('#cm-notes').value.trim() || null;
 
         if (!name) {
-          window.yuvomi?.showToast(t('contacts.nameRequiredHint'), 'danger');
+          window.samla?.showToast(t('contacts.nameRequiredHint'), 'danger');
           panel.querySelector('#cm-first-name').focus();
           return;
         }
@@ -928,9 +928,9 @@ async function openContactModal({ mode, contact = null }) {
           }
           closeModal({ force: true });
           renderList();
-          window.yuvomi?.showToast(mode === 'create' ? t('contacts.savedToast') : t('contacts.updatedToast'), 'success');
+          window.samla?.showToast(mode === 'create' ? t('contacts.savedToast') : t('contacts.updatedToast'), 'success');
         } catch (err) {
-          window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+          window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
           saveBtn.disabled    = false;
           saveBtn.textContent = isEdit ? t('common.save') : t('common.create');
         }
@@ -995,7 +995,7 @@ async function deleteSelected() {
     restore: (err) => {
       state.contacts = [...state.contacts, ...removed].sort(byName);
       renderList();
-      if (err) window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+      if (err) window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
     },
   });
 }
@@ -1014,7 +1014,7 @@ async function deleteContact(id) {
         state.contacts = [...state.contacts, contact].sort(byName);
         renderList();
       }
-      if (err) window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+      if (err) window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
     },
   });
 }
@@ -1151,8 +1151,8 @@ function openImportSelectionModal(named, skipped) {
 
 /** Springt ins Geburtstagsmodul und öffnet dort direkt das Kandidaten-Modal. */
 function openBirthdayImport() {
-  try { sessionStorage.setItem('yuvomi:birthdays:autoImport', '1'); } catch { /* egal */ }
-  window.yuvomi?.navigate('/birthdays');
+  try { sessionStorage.setItem('samla:birthdays:autoImport', '1'); } catch { /* egal */ }
+  window.samla?.navigate('/birthdays');
 }
 
 /**
@@ -1202,7 +1202,7 @@ async function importParsedContacts(list) {
   let type;
   if (imported === 0) {
     // Alles fehlgeschlagen: konkrete Ursache nennen (Recovery), Retry via Aktion.
-    const reason = window.yuvomi?.friendlyError?.(lastError) || lastError?.message || '';
+    const reason = window.samla?.friendlyError?.(lastError) || lastError?.message || '';
     message = t('contacts.importError', { error: reason });
     type = 'danger';
   } else if (imported === 1 && details.length === 0) {
@@ -1216,5 +1216,5 @@ async function importParsedContacts(list) {
     message = [base, ...details].join(' · ');
     type = failed > 0 ? 'warning' : 'success';
   }
-  window.yuvomi?.showToast(message, type, action ? 6000 : 3000, action);
+  window.samla?.showToast(message, type, action ? 6000 : 3000, action);
 }

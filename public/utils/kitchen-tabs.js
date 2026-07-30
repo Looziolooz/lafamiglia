@@ -3,23 +3,23 @@ import { renderSubTabs } from '/utils/sub-tabs.js';
 
 // Reihenfolge = Küchen-Kreislauf: planen → kochen → einkaufen → lagern.
 export const KITCHEN_ROUTES = Object.freeze(['/meals', '/recipes', '/shopping', '/pantry']);
-export const KITCHEN_STORAGE_KEY = 'yuvomi-kitchen-tab';
+export const KITCHEN_STORAGE_KEY = 'samla-kitchen-tab';
 
 const TABS = () => [
   { route: '/meals',    labelKey: 'nav.meals',    icon: 'utensils'      },
   { route: '/recipes',  labelKey: 'nav.recipes',  icon: 'book-text'     },
   { route: '/shopping', labelKey: 'nav.shopping', icon: 'shopping-cart' },
   { route: '/pantry',   labelKey: 'nav.pantry',   icon: 'archive'       },
-].filter(({ route }) => !window.yuvomi?.isModuleDisabled(route.slice(1)));
+].filter(({ route }) => !window.samla?.isModuleDisabled(route.slice(1)));
 
 export function getLastKitchenRoute() {
   try {
     const stored = sessionStorage.getItem(KITCHEN_STORAGE_KEY);
-    if (KITCHEN_ROUTES.includes(stored) && !window.yuvomi?.isModuleDisabled(stored.slice(1))) {
+    if (KITCHEN_ROUTES.includes(stored) && !window.samla?.isModuleDisabled(stored.slice(1))) {
       return stored;
     }
   } catch { /* ignore */ }
-  const first = ['meals', 'recipes', 'shopping', 'pantry'].find((m) => !window.yuvomi?.isModuleDisabled(m));
+  const first = ['meals', 'recipes', 'shopping', 'pantry'].find((m) => !window.samla?.isModuleDisabled(m));
   return first ? `/${first}` : '/meals';
 }
 
@@ -38,6 +38,6 @@ export function renderKitchenTabsBar(container, activeRoute) {
     ariaLabel: t('nav.kitchen'),
     title: t('nav.kitchen'),
     insertPosition: 'afterbegin',
-    onChange: (route) => window.yuvomi?.navigate(route),
+    onChange: (route) => window.samla?.navigate(route),
   });
 }

@@ -91,9 +91,9 @@ function renderPage(container, preferences) {
 function bindEvents(container) {
   const link = container.querySelector('#budget-region-link');
   link?.addEventListener('click', (event) => {
-    if (!window.yuvomi?.navigate) return;
+    if (!window.samla?.navigate) return;
     event.preventDefault();
-    window.yuvomi.navigate(APPEARANCE_PATH);
+    window.samla.navigate(APPEARANCE_PATH);
   });
 
   for (const toggle of TOGGLES) {
@@ -102,10 +102,10 @@ function bindEvents(container) {
       input.disabled = true;
       try {
         await savePreferences(toggle.payload(input.checked));
-        window.yuvomi?.showToast(t(toggle.savedKey), 'success');
+        window.samla?.showToast(t(toggle.savedKey), 'success');
       } catch (error) {
         input.checked = !input.checked; // Rollback nur bei Save-Fehler
-        window.yuvomi?.showToast(error.message || t('common.errorGeneric'), 'danger');
+        window.samla?.showToast(error.message || t('common.errorGeneric'), 'danger');
       } finally {
         if (input.isConnected) input.disabled = false;
       }

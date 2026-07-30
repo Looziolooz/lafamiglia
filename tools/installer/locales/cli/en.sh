@@ -1,4 +1,4 @@
-# Yuvomi CLI-Installer — English (en)
+# Samla CLI-Installer — English (en)
 # Auto-generiert (Schlüssel identisch zu allen Locales). en = Fallback, de = Referenz.
 # Wird von install.sh gesourct; setzt die englische Basis pro Schlüssel außer Kraft.
 # Punkt-Schlüssel → Variablen mit Unterstrich (MSG_<bereich>_<name>).
@@ -52,7 +52,7 @@ MSG_document_webdav_enable="Store new documents on WebDAV? [y/N]:"
 MSG_document_webdav_url="  WebDAV URL:"
 MSG_document_webdav_username="  Username:"
 MSG_document_webdav_password="  Password:"
-MSG_document_webdav_path="  Base path [yuvomi-documents]:"
+MSG_document_webdav_path="  Base path [samla-documents]:"
 MSG_document_local_step="Optional: Local Document Storage"
 MSG_document_local_hint="Store uploaded documents on a mounted host folder."
 MSG_document_local_enable="Store new documents in a local folder? [y/N]:"
@@ -74,7 +74,7 @@ MSG_admin_password="Password (min 8 chars):"
 MSG_admin_confirm="Confirm password:"
 MSG_admin_mismatch="Passwords do not match, try again."
 MSG_admin_created="Admin account created!"
-MSG_admin_ready="  Yuvomi is ready!"
+MSG_admin_ready="  Samla is ready!"
 MSG_admin_open="  Open: %s"
 MSG_admin_exists="An admin account already exists."
 MSG_admin_failed="Failed to create admin (HTTP %s): %s"

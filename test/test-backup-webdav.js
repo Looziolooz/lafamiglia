@@ -233,17 +233,17 @@ describe('WebDAV Backup — service module', async () => {
       assert.ok(mockCtx.files.has(remotePath), 'file should exist on mock server');
     });
 
-    it('should upload and list new yuvomi-prefixed backups (post-rebrand naming)', async () => {
-      const fp = await createTempBackup('yuvomi-backup-2099-02-01T00-00-00-000Z.db');
+    it('should upload and list new samla-prefixed backups (post-rebrand naming)', async () => {
+      const fp = await createTempBackup('samla-backup-2099-02-01T00-00-00-000Z.db');
       await webdav.uploadBackup(fp);
       assert.ok(
         mockCtx.files.has(`/oikos/backups/${path.basename(fp)}`),
-        'yuvomi-prefixed file should be uploaded'
+        'samla-prefixed file should be uploaded'
       );
       const listed = await webdav.getRemoteFiles();
       assert.ok(
-        listed.some((f) => f.filename.startsWith('yuvomi-backup-')),
-        'yuvomi-prefixed file should be recognised by the file listing'
+        listed.some((f) => f.filename.startsWith('samla-backup-')),
+        'samla-prefixed file should be recognised by the file listing'
       );
     });
 

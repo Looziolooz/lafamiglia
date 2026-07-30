@@ -21,9 +21,9 @@ let _fabController = null;
 
 // ── Onboarding ──────────────────────────────────────────────────────────────
 
-const ONBOARDING_KEY = 'yuvomi-onboarded';
-const APP_NAME_STORAGE_KEY = 'yuvomi-app-name';
-const CUSTOMIZE_HINT_KEY = 'yuvomi-dash-customize-hint';
+const ONBOARDING_KEY = 'samla-onboarded';
+const APP_NAME_STORAGE_KEY = 'samla-app-name';
+const CUSTOMIZE_HINT_KEY = 'samla-dash-customize-hint';
 
 function eventOccurrenceDateKey(event) {
   const value = String(event?.start_datetime || '');
@@ -54,7 +54,7 @@ function calendarEventRoute(event) {
 }
 
 function getAppName() {
-  return localStorage.getItem(APP_NAME_STORAGE_KEY) || 'Yuvomi';
+  return localStorage.getItem(APP_NAME_STORAGE_KEY) || 'Samla';
 }
 
 function getOnboardingSteps() {
@@ -278,7 +278,7 @@ const MODULE_FOR_WIDGET = { tasks: 'tasks', calendar: 'calendar', shopping: 'sho
 
 function isWidgetModuleEnabled(id) {
   const mod = MODULE_FOR_WIDGET[id];
-  if (mod && window.yuvomi?.isModuleDisabled(mod)) return false;
+  if (mod && window.samla?.isModuleDisabled(mod)) return false;
   // Rollen-/Mitglied-Rechte (#467): serverseitig gesperrtes Widget (bzw. Widget
   // eines Moduls ohne Zugriff — die Modulsperre wird bereits serverseitig auf die
   // Widget-Map durchgereicht) hier nicht anbieten.
@@ -1164,7 +1164,7 @@ function renderTodayCockpit(data, cfg = []) {
     shopping: highlights.openShoppingCount > 0,
     meals:    Boolean(highlights.meal),
   };
-  const showCard = (module) => !window.yuvomi?.isModuleDisabled(module) && !widgetShown(module) && hasContent[module];
+  const showCard = (module) => !window.samla?.isModuleDisabled(module) && !widgetShown(module) && hasContent[module];
 
   const cards = [
     showCard('tasks')    ? renderTodayCard('check-square', t('dashboard.todayTask'),     taskTitle, '/tasks', 'task', highlights.taskCount) : '',
@@ -1616,7 +1616,7 @@ function initFab(container, signal) {
   fabActions.querySelectorAll('[data-route]').forEach((el) => {
     const go = async () => {
       toggleFab(false);
-      await window.yuvomi.navigate(el.dataset.route);
+      await window.samla.navigate(el.dataset.route);
       const btnSelector = FAB_NEW_BTN[el.dataset.route];
       if (btnSelector) document.querySelector(btnSelector)?.click();
     };
@@ -1654,15 +1654,15 @@ function openTaskQuickAction(taskId, taskTitle, rerender) {
         try {
           await api.patch(`/tasks/${taskId}/status`, { status: 'done' });
           closeModal({ force: true });
-          window.yuvomi?.showToast(t('tasks.swipedDoneToast'), 'success');
+          window.samla?.showToast(t('tasks.swipedDoneToast'), 'success');
           rerender();
         } catch (err) {
-          window.yuvomi?.showToast(err.message, 'danger');
+          window.samla?.showToast(err.message, 'danger');
         }
       });
       panel.querySelector('[data-action="edit"]').addEventListener('click', () => {
         closeModal({ force: true });
-        window.yuvomi.navigate(`/tasks?open=${taskId}`);
+        window.samla.navigate(`/tasks?open=${taskId}`);
       });
     },
   });
@@ -1676,7 +1676,7 @@ function wireLinks(container, rerender, { editing = false } = {}) {
   container.querySelectorAll('[data-route]').forEach((el) => {
     if (el.id === 'fab-main' || el.closest('#fab-actions')) return;
     if (editing && el.closest('.widget-wrapper--editing')) return;
-    const go = () => window.yuvomi.navigate(el.dataset.route);
+    const go = () => window.samla.navigate(el.dataset.route);
     if (el.tagName === 'A') {
       el.addEventListener('click', (e) => { e.preventDefault(); go(); });
     } else {
@@ -1825,7 +1825,7 @@ export async function render(container, { user }) {
   // Onboarding-Empty fallen, statt das Dashboard zu kippen.
   async function ensureCycleSlice() {
     if (data.cycle !== undefined) return;
-    if (window.yuvomi?.isModuleDisabled('health')) return;
+    if (window.samla?.isModuleDisabled('health')) return;
     try {
       const [periodsRes, settingsRes] = await Promise.all([
         api.get('/health/cycle/periods'),
@@ -1868,20 +1868,20 @@ export async function render(container, { user }) {
             await api.put('/preferences', { dashboard_widgets: widgetConfig });
             savedWidgetConfig = widgetConfig.map((w) => ({ ...w }));
           } catch {
-            window.yuvomi?.showToast(t('common.errorGeneric'), 'danger');
+            window.samla?.showToast(t('common.errorGeneric'), 'danger');
           }
           isCustomizing = false;
           rebuildDashboard(widgetConfig);
         }
       : null;
-    window.yuvomi?.showToast(t('dashboard.customizeSaved'), 'success', onUndo ? 6000 : 1500, onUndo);
+    window.samla?.showToast(t('dashboard.customizeSaved'), 'success', onUndo ? 6000 : 1500, onUndo);
   }
 
   async function saveDashboardConfig() {
     try {
       await persistWidgetConfig(widgetConfig);
     } catch {
-      window.yuvomi?.showToast(t('common.errorGeneric'), 'danger');
+      window.samla?.showToast(t('common.errorGeneric'), 'danger');
     }
   }
 
@@ -2154,7 +2154,7 @@ function wireWeatherRefresh(container, onUpdated = null) {
       // Manuelle Aktion: ein Fehlschlag darf nicht still als Erfolg quittiert
       // werden (sonst wirkt der Button tot). Kein Datensatz → Fehler-Toast.
       if (!res.data) {
-        window.yuvomi?.showToast(t('common.errorGeneric'), 'danger');
+        window.samla?.showToast(t('common.errorGeneric'), 'danger');
         return;
       }
       const wWidget = container.querySelector('#weather-widget');
@@ -2167,10 +2167,10 @@ function wireWeatherRefresh(container, onUpdated = null) {
         const newWidget = container.querySelector('#weather-widget');
         if (newWidget && window.lucide) window.lucide.createIcons({ el: newWidget });
         onUpdated?.(res.data);
-        window.yuvomi?.showToast(t('dashboard.weatherUpdated'), 'success', 1500);
+        window.samla?.showToast(t('dashboard.weatherUpdated'), 'success', 1500);
       }
     } catch {
-      window.yuvomi?.showToast(t('common.errorGeneric'), 'danger');
+      window.samla?.showToast(t('common.errorGeneric'), 'danger');
     } finally {
       // Immer aufräumen, damit der Button nach jedem Ausgang wieder bedienbar
       // ist (bei Erfolg wird das Widget ohnehin frisch gerendert).

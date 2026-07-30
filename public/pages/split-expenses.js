@@ -856,7 +856,7 @@ function openExpenseModal(expense = null) {
         </div>
         <div class="split-form-row">
           <label>${t('splitExpenses.currency')}<select class="input" name="currency">${state.meta.currencies.map((c) => `<option value="${c}" ${c === (isEdit ? expense.currency : group.default_currency) ? 'selected' : ''}>${c}</option>`).join('')}</select></label>
-          <label>${t('splitExpenses.date')}<yuvomi-datepicker name="expense_date" type="date" value="${esc(isEdit ? (expense.expense_date || today) : today)}"></yuvomi-datepicker></label>
+          <label>${t('splitExpenses.date')}<samla-datepicker name="expense_date" type="date" value="${esc(isEdit ? (expense.expense_date || today) : today)}"></samla-datepicker></label>
         </div>
         <label>${t('splitExpenses.splitMethod')}<select class="input" name="split_method">
           ${methodOption('equal', t('splitExpenses.splitEqual'))}

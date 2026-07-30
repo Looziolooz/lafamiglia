@@ -1,5 +1,5 @@
 /**
- * Modul: yuvomi-datepicker
+ * Modul: samla-datepicker
  * Zweck: Styling für das gemeinsame Datum-/Zeit-Auswahl-Component.
  *        Feld = bestehendes .form-input (Tippen bleibt der schnelle Pfad),
  *        Icon-Trigger öffnet auf Desktop ein Glass-Popover im Top-Layer,
@@ -10,7 +10,7 @@
  *         auf --color-accent — trägt die Modul-Identität ins Popover.
  */
 
-yuvomi-datepicker {
+samla-datepicker {
   display: block;
 }
 
@@ -90,12 +90,12 @@ yuvomi-datepicker {
   border-color: var(--color-danger);
 }
 
-yuvomi-datepicker[disabled] .ydp__input {
+samla-datepicker[disabled] .ydp__input {
   background: var(--color-surface-2);
   color: var(--color-text-disabled);
 }
 
-yuvomi-datepicker[disabled] .ydp__trigger {
+samla-datepicker[disabled] .ydp__trigger {
   color: var(--color-text-disabled);
   pointer-events: none;
 }

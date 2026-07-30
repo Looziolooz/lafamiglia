@@ -1,6 +1,6 @@
-# Yuvomi Web Installer
+# Samla Web Installer
 
-A browser-based setup wizard for Yuvomi. Run it once to configure your `.env`,
+A browser-based setup wizard for Samla. Run it once to configure your `.env`,
 start your container engine, and create your admin account — no hand-editing of
 config files. Works with both Docker and Podman (auto-detected).
 
@@ -31,14 +31,14 @@ dedicated `podman-compose.yml` (SELinux `:Z` labels).
 ## What it does
 
 1. Detects the container engine (Docker or Podman), checks its prerequisites, and
-   reports any existing `.env` file or running `yuvomi` container before you start
+   reports any existing `.env` file or running `samla` container before you start
 2. Lets you pick a setup path on the welcome screen:
    - **Simple setup** (recommended for non-technical users) — auto-generates the
      security keys, applies safe localhost/HTTP defaults, and goes straight to
      creating your admin account. Two or three clicks, no jargon.
    - **Advanced setup** — walks every option, step by step. Security keys are
      still pre-generated (regenerate any time), and each screen is optional:
-     - **Basics** — domain/IP, timezone (`TZ`), HTTP host port (`OIKOS_HTTP_PORT`)
+     - **Basics** — domain/IP, timezone (`TZ`), HTTP host port (`SAMLA_HTTP_PORT`)
      - **Security keys** — `SESSION_SECRET` and `DB_ENCRYPTION_KEY` (pre-filled
        on a fresh install; existing keys are kept, see below)
      - **Weather** — Open-Meteo coordinates (no API key)
@@ -100,17 +100,18 @@ success alone never changes the upload destination.
 
 ## Localization
 
-The wizard is fully localized into all 23 languages supported by the app and
-detects the browser language automatically (`de` is the reference locale, `en`
-the fallback). Translations live in `tools/installer/locales/*.json` and are
-loaded by `i18n-mini.js`, which mirrors the app's locale resolution.
+The wizard is localized into the three languages supported by the app — English,
+Italian and Swedish — and detects the browser language automatically (`en` is
+both the reference locale and the fallback). Translations live in
+`tools/installer/locales/*.json` and are loaded by `i18n-mini.js`, which mirrors
+the app's locale resolution.
 
 The **CLI installer** (`install.sh` at the repo root) is localized into the same
-23 languages. It detects the language from the shell environment
-(`OIKOS_INSTALLER_LANG` > `LC_ALL` > `LC_MESSAGES` > `LANG`) and accepts a
+three languages. It detects the language from the shell environment
+(`SAMLA_INSTALLER_LANG` > `LC_ALL` > `LC_MESSAGES` > `LANG`) and accepts a
 `--lang <code>` override. Its strings live in `tools/installer/locales/cli/<lang>.sh`
 — one sourced shell file per language that sets `MSG_*` variables; `en.sh` is the
-fallback base, the active language overlays it. Key parity across all 23 files is
+fallback base, the active language overlays it. Key parity across the files is
 enforced by `test-installer-cli-i18n.js`.
 
 ## Design

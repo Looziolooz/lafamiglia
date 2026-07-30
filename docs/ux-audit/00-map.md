@@ -10,10 +10,10 @@ Stand: 2026-07-19 · Version 1.38.0 · Branch `audit/ux-ui-full-2026-07`
 | Router | Eigener SPA-Router (History API, Auth-Guard, Lazy-Import pro Seite, per-Route-CSS) | `public/router.js:33-70,121-130` |
 | Styling | Plain CSS, Token-System via Custom Properties; 1 globales Basis-Set + 1 Page-CSS pro Modul (Router lädt/entlädt) | `public/index.html:44-58`, `public/router.js:121` |
 | Design-Tokens | `public/styles/tokens.css` (993 Z.): Neutral-Skala 50-950, Modul-Akzente, Semantik, Glass-Layer, Dark-Mode via private `--_*`-Tokens | `tokens.css:49-623` |
-| Component-Library | Keine externe. Eigene Web Components (`oikos-`/`yuvomi-`-Prefix) + CSS-Klassen-Patterns in `layout.css` | `public/components/*` |
+| Component-Library | Keine externe. Eigene Web Components (`oikos-`/`samla-`-Prefix) + CSS-Klassen-Patterns in `layout.css` | `public/components/*` |
 | Icons | Lucide, self-hosted (`public/lucide.min.js`, v0.469.0) | `index.html:61` |
 | Font | Plus Jakarta Sans, self-hosted Variable Font | `tokens.css:33-47` |
-| i18n | Eigenes `t('key')`-System, 23 Locales, de = Referenz; RTL-Support (ar/fa) | `public/i18n.js`, Guard `test/test-frontend-audit.js:221` |
+| i18n | Eigenes `t('key')`-System, 3 Locales (en/it/sv), en = Referenz und Fallback; RTL-Mechanik vorhanden, aber ungenutzt (`RTL_LOCALES` leer) | `public/i18n.js`, Guard `test/test-frontend-audit.js:221` |
 | Theming | Light/Dark: `@media (prefers-color-scheme)` + `[data-theme]`-Override; Flash-Prevention via `theme-init.js` | `tokens.css:637-932`, `index.html:38` |
 | Ziel-Designsprache | "Liquid Glass" ist bereits das etablierte System (Glass-Token-Layer §16/17, `glass.css` 1027 Z., lebender Backdrop) | `tokens.css:516-622`, `public/styles/glass.css` |
 
@@ -51,9 +51,9 @@ Stand: 2026-07-19 · Version 1.38.0 · Branch `audit/ux-ui-full-2026-07`
 | Komponente | Zweck | Anmerkung |
 |---|---|---|
 | `modal.js` | `openModal`/`confirmModal`, Dirty-Guard, Fokus-Trap, Required-Validierung (`form-field--error`, Pulse bei Wiederholung `modal.js:597-634`) | zentral, konsistent genutzt |
-| `datepicker.js` | `yuvomi-datepicker`, ISO-Kontrakt, Popover primär | eigener Test |
+| `datepicker.js` | `samla-datepicker`, ISO-Kontrakt, Popover primär | eigener Test |
 | `category-manager.js` | generisch (Budget, Tasks, Kontakte) | **Duplikat-Kandidat** zu `shopping-category-manager.js` (eigene Implementierung nur für Einkauf) |
-| `user-multi-select.js`, `yuvomi-install-prompt.js`, `yuvomi-locale-picker.js` | Mehrfach-Zuweisung, PWA-Prompt, Sprachwahl | - |
+| `user-multi-select.js`, `samla-install-prompt.js`, `samla-locale-picker.js` | Mehrfach-Zuweisung, PWA-Prompt, Sprachwahl | - |
 
 ### Utils mit UI-Anteil (`public/utils/`)
 `sub-tabs.js` (Routen-Cluster-Leiste), `tablist.js` (In-Page-Tabs, ARIA), `kitchen-tabs.js`, `health-tabs.js`, `fab.js`, `page-search.js`, `skeleton.js` (`renderSkeletonList`), `ux.js` (stagger, vibrate, debounce, Fokus-Trap), `ingredient-row.js`, `recurrence-scope.js`.
@@ -106,6 +106,6 @@ Stand: 2026-07-19 · Version 1.38.0 · Branch `audit/ux-ui-full-2026-07`
 
 ## 6. Methode & Grenzen der visuellen Erfassung
 
-- Dev-Server: `preview_start` (launch.json `yuvomi`, Port 3000, Temp-DB `${TMPDIR}/yuvomi-preview.db`).
+- Dev-Server: `preview_start` (launch.json `samla`, Port 3000, Temp-DB `${TMPDIR}/samla-preview.db`).
 - Daten: `scripts/seed-demo.js` (Familie Johnson, Login `alex`/`linda` + `demo1234`).
 - Erfasst werden: Kern-Screens aller Module in Light + Dark, Desktop (1280) + Mobile (375), zentrale Zustände (leer/gefüllt/Modal). Nicht erfasst: echte iOS-Safari-Renderings (PWA-Standalone, Safe-Areas), Push/E-Mail-Flows, CalDAV-Sync-UIs mit echten Konten - diese Punkte sind im Audit als "codebasiert geprüft" markiert.

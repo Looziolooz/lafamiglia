@@ -2,7 +2,7 @@
  * Modul: Budget-Tracker (Budget)
  * Zweck: Monatsübersicht, Kategorie-Balkendiagramm (Canvas), Transaktionsliste,
  *        CRUD, CSV-Export
- * Abhängigkeiten: /api.js, /router.js (window.yuvomi)
+ * Abhängigkeiten: /api.js, /router.js (window.samla)
  */
 
 import { api } from '/api.js';
@@ -28,7 +28,7 @@ import '/components/category-manager.js';
 // Anzeige-Präferenz „Nur Ausgaben" (#504): blendet die Einnahmen- und die Saldo-Karte
 // aus, damit reines Ausgaben-Tracking nicht als roter Minus-Saldo missverstanden wird.
 // Reine Client-Ansicht (kein Server-Pref), analog zu documents-view/Kalender-Layern.
-const EXPENSES_ONLY_KEY = 'yuvomi-budget-expenses-only';
+const EXPENSES_ONLY_KEY = 'samla-budget-expenses-only';
 
 const SUBCATEGORY_I18N = () => ({
   rent_mortgage:            t('budget.subcatRentMortgage'),
@@ -277,7 +277,7 @@ async function loadMonth(month) {
     state.summary     = { income: 0, expenses: 0, balance: 0, byCategory: [] };
     state.prevSummary = null;
     state.loans       = { loans: [], summary: { active_count: 0, remaining_amount: 0, remaining_installments: 0 } };
-    window.yuvomi?.showToast(t('budget.loadError'), 'danger');
+    window.samla?.showToast(t('budget.loadError'), 'danger');
   }
 }
 
@@ -306,7 +306,7 @@ async function loadBudgetMeta() {
   } catch (err) {
     console.error('[Budget] meta Fehler:', err);
     state.meta = { expenseCategories: [], incomeCategories: [], expenseSubcategories: {} };
-    window.yuvomi?.showToast(t('budget.metaLoadError'), 'danger');
+    window.samla?.showToast(t('budget.metaLoadError'), 'danger');
   }
 }
 
@@ -998,9 +998,9 @@ function openAccountModal(account = null) {
           closeModal({ force: true });
           await loadAccounts();
           renderBody();
-          window.yuvomi?.showToast(nextArchived ? t('budget.accountArchivedToast') : t('budget.accountRestoredToast'), 'success');
+          window.samla?.showToast(nextArchived ? t('budget.accountArchivedToast') : t('budget.accountRestoredToast'), 'success');
         } catch (err) {
-          window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+          window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
         }
       });
 
@@ -1015,9 +1015,9 @@ function openAccountModal(account = null) {
           closeModal({ force: true });
           await loadMonth(state.month);
           renderBody();
-          window.yuvomi?.showToast(t('budget.accountDeletedToast'), 'success');
+          window.samla?.showToast(t('budget.accountDeletedToast'), 'success');
         } catch (err) {
-          window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+          window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
         }
       });
 
@@ -1049,11 +1049,11 @@ function openAccountModal(account = null) {
           closeModal({ force: true });
           await loadAccounts();
           renderBody();
-          window.yuvomi?.showToast(isEdit ? t('budget.accountSavedToast') : t('budget.accountAddedToast'), 'success');
+          window.samla?.showToast(isEdit ? t('budget.accountSavedToast') : t('budget.accountAddedToast'), 'success');
         } catch (err) {
           saveBtn.disabled = false;
           saveBtn.textContent = isEdit ? t('common.save') : t('common.add');
-          window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+          window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
         }
       });
     },
@@ -1483,10 +1483,10 @@ function openCategoryManager() {
   };
   openSharedModal({
     title: t('budget.manageCategories'),
-    content: '<yuvomi-category-manager></yuvomi-category-manager>',
+    content: '<samla-category-manager></samla-category-manager>',
     size: 'lg',
     onSave: (panel) => {
-      manager = panel.querySelector('yuvomi-category-manager');
+      manager = panel.querySelector('samla-category-manager');
       manager.addEventListener('category-manager-changed', onChanged);
       manager.configure({
         basePath: '/budget/categories',
@@ -1576,8 +1576,8 @@ function openBudgetModal({ mode, entry = null, initialType = '' }) {
 
     <div class="form-group js-entry-field">
       <label class="form-label" for="bm-date">${t('budget.dateLabel')}</label>
-      <yuvomi-datepicker type="date" id="bm-date"
-             value="${isEdit ? entry.date : defaultDate}"></yuvomi-datepicker>
+      <samla-datepicker type="date" id="bm-date"
+             value="${isEdit ? entry.date : defaultDate}"></samla-datepicker>
     </div>
 
     ${state.budgetMode === 'personal' ? `
@@ -1741,9 +1741,9 @@ function openBudgetModal({ mode, entry = null, initialType = '' }) {
           const res = await api.post('/budget/categories', { name: name.trim(), type: currentType });
           await loadBudgetMeta();
           updateCategoryOptions(res.data.key);
-          window.yuvomi?.showToast(t('budget.categoryAddedToast'), 'success');
+          window.samla?.showToast(t('budget.categoryAddedToast'), 'success');
         } catch (err) {
-          window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+          window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
         }
       };
 
@@ -1761,9 +1761,9 @@ function openBudgetModal({ mode, entry = null, initialType = '' }) {
           const res = await api.post(`/budget/categories/${encodeURIComponent(category)}/subcategories`, { name: name.trim() });
           await loadBudgetMeta();
           updateSubcategoryOptions(res.data.key);
-          window.yuvomi?.showToast(t('budget.subcategoryAddedToast'), 'success');
+          window.samla?.showToast(t('budget.subcategoryAddedToast'), 'success');
         } catch (err) {
-          window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+          window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
         }
       };
 
@@ -1841,7 +1841,7 @@ function openBudgetModal({ mode, entry = null, initialType = '' }) {
             await loadMonth(state.month);
             closeModal({ force: true });
             renderBody();
-            window.yuvomi?.showToast(t('budget.addedToast'), 'success');
+            window.samla?.showToast(t('budget.addedToast'), 'success');
           } else if (entry.recurrence_parent_id) {
             // Kind-Instanz: Nutzer fragen, ob nur dieser oder alle zukünftigen
             saveBtn.disabled = false;
@@ -1855,12 +1855,12 @@ function openBudgetModal({ mode, entry = null, initialType = '' }) {
             if (scope === null) { openBudgetModal({ mode: 'edit', entry }); return; }
             if (scope === 'series') {
               await api.put(`/budget/${entry.id}/series`, body);
-              window.yuvomi?.showToast(t('budget.recurringSeriesSaved'), 'success');
+              window.samla?.showToast(t('budget.recurringSeriesSaved'), 'success');
             } else {
               const res = await api.put(`/budget/${entry.id}`, body);
               const idx = state.entries.findIndex((e) => e.id === entry.id);
               if (idx !== -1) state.entries[idx] = res.data;
-              window.yuvomi?.showToast(t('budget.savedToast'), 'success');
+              window.samla?.showToast(t('budget.savedToast'), 'success');
             }
             await loadMonth(state.month);
             renderBody();
@@ -1871,10 +1871,10 @@ function openBudgetModal({ mode, entry = null, initialType = '' }) {
             await loadMonth(state.month);
             closeModal({ force: true });
             renderBody();
-            window.yuvomi?.showToast(t('budget.savedToast'), 'success');
+            window.samla?.showToast(t('budget.savedToast'), 'success');
           }
         } catch (err) {
-          window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+          window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
           saveBtn.disabled    = false;
           saveBtn.textContent = isEdit ? t('common.save') : t('common.add');
         }
@@ -2213,9 +2213,9 @@ async function saveLoanFromPanel(panel, saveBtn, { loan = null, closeAfterSave =
     await loadMonth(state.month);
     if (closeAfterSave) closeModal({ force: true });
     renderBody();
-    window.yuvomi?.showToast(isEdit ? t('budget.loanSavedToast') : t('budget.loanAddedToast'), 'success');
+    window.samla?.showToast(isEdit ? t('budget.loanSavedToast') : t('budget.loanAddedToast'), 'success');
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+    window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
     saveBtn.disabled = false;
     saveBtn.textContent = isEdit ? t('common.save') : t('budget.createLoan');
   }
@@ -2301,20 +2301,20 @@ async function markLoanPayment(id) {
     // Undo wie bei Löschungen: die eine Geld-Aktion, die eine Verpflichtung
     // *erzeugt*, bekommt dasselbe 5-Sekunden-Netz — Rücknahme löscht die Rate.
     if (paymentId) {
-      window.yuvomi?.showToast(t('budget.loanPaymentAddedToast'), 'default', 5000, async () => {
+      window.samla?.showToast(t('budget.loanPaymentAddedToast'), 'default', 5000, async () => {
         try {
           await api.delete(`/budget/loans/${id}/payments/${paymentId}`);
           await loadMonth(state.month);
           renderBody();
         } catch (err) {
-          window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+          window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
         }
       });
     } else {
-      window.yuvomi?.showToast(t('budget.loanPaymentAddedToast'), 'success');
+      window.samla?.showToast(t('budget.loanPaymentAddedToast'), 'success');
     }
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+    window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
   }
 }
 
@@ -2336,7 +2336,7 @@ async function deleteLoan(id) {
     restore: (err) => {
       state.loans.loans = [...state.loans.loans, loan];
       renderBody();
-      if (err) window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+      if (err) window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
     },
   });
 }
@@ -2363,7 +2363,7 @@ async function deleteLoanPayment(loanId, paymentId) {
         loan.payments = [...(loan.payments || []), payment];
         renderBody();
       }
-      if (err) window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+      if (err) window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
     },
   });
 }
@@ -2403,7 +2403,7 @@ async function deleteEntry(id) {
         state.entries = [...state.entries, entry].sort((a, b) => new Date(b.date) - new Date(a.date));
         renderBody();
       }
-      if (err) window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+      if (err) window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
     },
   });
 }
@@ -2465,7 +2465,7 @@ async function deleteEntrySeries(id) {
     restore: async (err) => {
       await loadMonth(state.month);
       renderBody();
-      if (err) window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+      if (err) window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
     },
   });
 }

@@ -9,7 +9,7 @@ import { esc } from '/utils/html.js';
 
 function wireLinks(container) {
   container.querySelectorAll('a[data-link]').forEach((a) =>
-    a.addEventListener('click', (e) => { e.preventDefault(); window.yuvomi.navigate(a.getAttribute('href')); }));
+    a.addEventListener('click', (e) => { e.preventDefault(); window.samla.navigate(a.getAttribute('href')); }));
 }
 
 export async function render(container) {

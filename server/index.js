@@ -65,12 +65,12 @@ import { moduleForPath, requiredAccess, tokenAllows } from './scopes.js';
 
 const log     = createLogger('Server');
 const logSync = createLogger('Sync');
-const logYuvomi = createLogger('Yuvomi');
+const logSamla = createLogger('Samla');
 
 const { version: APP_VERSION } = JSON.parse(
   readFileSync(new URL('../package.json', import.meta.url), 'utf-8')
 );
-const DEFAULT_APP_NAME = 'Yuvomi';
+const DEFAULT_APP_NAME = 'Samla';
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -283,9 +283,9 @@ app.get('/manifest.webmanifest', apiLimiter, (req, res) => {
   res.type('application/manifest+json');
   res.setHeader('Cache-Control', 'no-cache, must-revalidate');
   res.json({
-    name: `${appName} Familienplaner`,
+    name: `${appName} Family Planner`,
     short_name: appName,
-    description: 'Selbstgehosteter Familienplaner',
+    description: 'Self-hosted family planner',
     id: '/',
     start_url: '/',
     scope: '/',
@@ -294,7 +294,7 @@ app.get('/manifest.webmanifest', apiLimiter, (req, res) => {
     orientation: 'portrait-primary',
     theme_color: '#007AFF',
     background_color: '#F5F5F7',
-    lang: 'de-DE',
+    lang: 'it',
     categories: ['productivity', 'lifestyle'],
     icons: [
       { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
@@ -334,7 +334,7 @@ app.get('/feed/calendar/:token.ics', feedLimiter, (req, res) => {
     if (!userId) return res.status(404).type('text/plain').send('Not found');
     const ics = icsExport.buildFeed(db.get(), userId);
     res.set('Cache-Control', 'private, no-store');
-    res.set('Content-Disposition', 'inline; filename="yuvomi.ics"');
+    res.set('Content-Disposition', 'inline; filename="samla.ics"');
     res.type('text/calendar; charset=utf-8').send(ics);
   } catch (err) {
     log.error('', err);
@@ -510,8 +510,8 @@ async function runSync() {
 // Server starten
 // --------------------------------------------------------
 app.listen(PORT, () => {
-  logYuvomi.info(`Server running on port ${PORT} | Version ${APP_VERSION}`);
-  logYuvomi.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  logSamla.info(`Server running on port ${PORT} | Version ${APP_VERSION}`);
+  logSamla.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
 
   // Erster Sync nach 10 Sekunden (warten bis DB vollständig initialisiert)
   setTimeout(() => {

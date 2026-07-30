@@ -47,7 +47,7 @@ async function refreshUser(user) {
 function redirectTo(target) {
   history.replaceState({ path: target }, '', target);
   setTimeout(() => {
-    window.yuvomi?.navigate(target, false);
+    window.samla?.navigate(target, false);
   }, 0);
 }
 
@@ -96,7 +96,7 @@ export async function render(container, { user } = {}) {
     // Direkter Aufruf eines Blatts: Rollen-Guard + Persistenz.
     const leaf = findSettingsLeaf(path, currentUser);
     if (!leaf) {
-      sessionStorage.setItem('yuvomi:settings:notice', 'accessRedirected');
+      sessionStorage.setItem('samla:settings:notice', 'accessRedirected');
       await redirectTo(ACCOUNT_LEAF);
       return;
     }

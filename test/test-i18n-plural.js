@@ -28,7 +28,7 @@ global.fetch = async (url) => {
   return { ok: true, json: async () => localeFile(locale) };
 };
 Object.defineProperty(global, 'navigator', {
-  value: { languages: ['de-DE'], language: 'de-DE' },
+  value: { languages: ['en-US'], language: 'en-US' },
   writable: true,
   configurable: true,
 });
@@ -36,11 +36,11 @@ Object.defineProperty(global, 'navigator', {
 const { initI18n, setLocale, t } = await import('../public/i18n.js');
 await initI18n();
 
-test('Deutsch: Singular und Plural je nach count', async () => {
-  await setLocale('de');
-  assert.equal(t('settings.enabledReminderListCount', { count: 1 }), '1 Erinnerungsliste aktiviert');
-  assert.equal(t('settings.enabledReminderListCount', { count: 2 }), '2 Erinnerungslisten aktiviert');
-  assert.equal(t('settings.enabledReminderListCount', { count: 0 }), '0 Erinnerungslisten aktiviert');
+test('Italienisch: Singular und Plural je nach count', async () => {
+  await setLocale('it');
+  assert.equal(t('settings.enabledReminderListCount', { count: 1 }), '1 elenco promemoria abilitato');
+  assert.equal(t('settings.enabledReminderListCount', { count: 2 }), '2 elenchi promemoria abilitati');
+  assert.equal(t('settings.enabledReminderListCount', { count: 0 }), '0 elenchi promemoria abilitati');
 });
 
 test('Englisch: Singular und Plural je nach count', async () => {
@@ -51,33 +51,32 @@ test('Englisch: Singular und Plural je nach count', async () => {
   assert.equal(t('settings.calendarImport.success', { count: 4 }), '4 events imported.');
 });
 
-test('Sprachen ohne Zahlflexion liefern für jede Anzahl denselben Satz', async () => {
-  await setLocale('ja');
-  const one = t('settings.enabledReminderListCount', { count: 1 });
-  const many = t('settings.enabledReminderListCount', { count: 5 });
-  assert.equal(one.replace('1', 'N'), many.replace('5', 'N'));
+test('Schwedisch: Singular und Plural je nach count', async () => {
+  await setLocale('sv');
+  assert.equal(t('settings.enabledReminderListCount', { count: 1 }), '1 påminnelselista aktiverad');
+  assert.equal(t('settings.enabledReminderListCount', { count: 2 }), '2 påminnelselistor aktiverade');
 });
 
-test('Polnisch: fehlende few/many-Variante fällt auf den Basisschlüssel zurück', async () => {
-  await setLocale('pl');
-  // pl kennt one/few/many/other; hinterlegt sind Basis + _one. Kein Absturz,
-  // und das zählunabhängige „Label: N"-Muster bleibt korrekt.
-  for (const count of [1, 2, 5, 22]) {
-    assert.match(t('settings.enabledReminderListCount', { count }), /Włączone listy przypomnień: \d+/);
-  }
+test('gleichlautende Formen bleiben für jede Anzahl identisch', async () => {
+  // sv: tasks.pointsSummary lautet im Singular wie im Plural („poäng").
+  // Die Variantenwahl darf daran nichts ändern.
+  await setLocale('sv');
+  const one = t('tasks.pointsSummary', { count: 1 });
+  const many = t('tasks.pointsSummary', { count: 5 });
+  assert.equal(one.replace('1', 'N'), many.replace('5', 'N'));
 });
 
 test('„N von M"-Zähler nutzt bei einem Eintrag die Singularform', async () => {
   // Die _one-Variante ging beim Umbenennen einer früheren Runde verloren:
   // „1 von 1 Adressbüchern aktiv". t() wählt über count (= Gesamtzahl).
-  await setLocale('de');
+  await setLocale('it');
   assert.equal(
     t('settings.addressbooksEnabledOfTotal', { enabled: 1, total: 1, count: 1 }),
-    '1 von 1 Adressbuch aktiv',
+    '1 di 1 rubrica attiva',
   );
   assert.equal(
     t('settings.addressbooksEnabledOfTotal', { enabled: 1, total: 3, count: 3 }),
-    '1 von 3 Adressbüchern aktiv',
+    '1 di 3 rubriche attive',
   );
   await setLocale('en');
   assert.equal(
@@ -93,12 +92,12 @@ test('„N von M"-Zähler nutzt bei einem Eintrag die Singularform', async () =>
 test('Standard-Punkte (#578): zählende Strings nutzen die Singularform', async () => {
   // Review-Fund: die vier count-Strings des Features waren hart im Plural
   // formuliert („1 Aufgaben aktualisiert").
-  await setLocale('de');
-  assert.equal(t('tasks.pointsSummary', { count: 1 }), '1 Punkt');
-  assert.equal(t('tasks.pointsSummary', { count: 10 }), '10 Punkte');
-  assert.equal(t('settings.rewardsDefaultPointsRebased', { count: 1 }), '1 Aufgabe aktualisiert.');
-  assert.equal(t('settings.rewardsDefaultPointsRebased', { count: 3 }), '3 Aufgaben aktualisiert.');
-  assert.match(t('settings.rewardsDefaultPointsRebaseTitle', { count: 1, from: 10, to: 15 }), /^1 Aufgabe von 10 auf 15 /);
+  await setLocale('it');
+  assert.equal(t('tasks.pointsSummary', { count: 1 }), '1 punto');
+  assert.equal(t('tasks.pointsSummary', { count: 10 }), '10 punti');
+  assert.equal(t('settings.rewardsDefaultPointsRebased', { count: 1 }), '1 attività aggiornata.');
+  assert.equal(t('settings.rewardsDefaultPointsRebased', { count: 3 }), '3 attività aggiornate.');
+  assert.match(t('settings.rewardsDefaultPointsRebaseTitle', { count: 1, from: 10, to: 15 }), /^Portare 1 attività da 10 a 15 /);
 
   await setLocale('en');
   assert.equal(t('tasks.pointsSummary', { count: 1 }), '1 point');
@@ -108,17 +107,17 @@ test('Standard-Punkte (#578): zählende Strings nutzen die Singularform', async 
 });
 
 test('Schlüssel ohne Pluralvarianten funktionieren unverändert', async () => {
-  await setLocale('de');
-  assert.equal(t('common.save'), localeFile('de').common.save);
+  await setLocale('it');
+  assert.equal(t('common.save'), localeFile('it').common.save);
   // count-Parameter ohne passende Variante (7 → „other"): Basisschlüssel plus Interpolation.
   assert.equal(
     t('settings.enabledReminderListCount', { count: 7 }),
-    '7 Erinnerungslisten aktiviert',
+    '7 elenchi promemoria abilitati',
   );
 });
 
 test('unbekannter Schlüssel liefert den Schlüssel selbst zurück - auch mit count', async () => {
-  await setLocale('de');
+  await setLocale('it');
   assert.equal(t('gibt.es.nicht'), 'gibt.es.nicht');
   assert.equal(t('gibt.es.nicht', { count: 2 }), 'gibt.es.nicht');
 });

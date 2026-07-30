@@ -1,5 +1,5 @@
-export const SETTINGS_STORAGE_KEY = 'yuvomi:settings:path';
-export const LEGACY_SETTINGS_STORAGE_KEY = 'yuvomi:settings:tab';
+export const SETTINGS_STORAGE_KEY = 'samla:settings:path';
+export const LEGACY_SETTINGS_STORAGE_KEY = 'samla:settings:tab';
 
 const freezeEntries = (entries) => Object.freeze(entries.map((entry) => Object.freeze(entry)));
 

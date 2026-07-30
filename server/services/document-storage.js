@@ -16,7 +16,7 @@ import { safeRequest } from '../utils/http.js';
 const CONFIG_PREFIX = 'document_storage_webdav_';
 const SELECTED_BACKEND_KEY = 'document_storage_selected_backend';
 const SELECTABLE_BACKENDS = new Set(['local', 'webdav', 'google_drive']);
-const DEFAULT_BASE_PATH = 'yuvomi-documents';
+const DEFAULT_BASE_PATH = 'samla-documents';
 const DEFAULT_TIMEOUT_MS = 8_000;
 const MAX_READ_BYTES = 5 * 1024 * 1024;
 
@@ -1044,7 +1044,7 @@ export async function testConnection(overrides = {}) {
     requireWebdavConfig(config);
     await ensureCollections(config);
     testKey = `.connection-test-${randomUUID()}.bin`;
-    const expected = Buffer.from(`yuvomi-document-storage:${randomUUID()}`);
+    const expected = Buffer.from(`samla-document-storage:${randomUUID()}`);
     const putResponse = await davFetch(config, 'PUT', [
       ...config.basePath.split('/'),
       testKey,

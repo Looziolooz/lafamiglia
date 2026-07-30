@@ -70,11 +70,11 @@ function bindEvents(container, preferences) {
       const res = await savePreferences({ disabled_modules: next });
       const saved = res?.data?.disabled_modules ?? next;
       preferences.disabled_modules = saved;
-      window.yuvomi?.setDisabledModules?.(saved);
-      window.yuvomi?.showToast(t('settings.rewardsSaved'), 'success');
+      window.samla?.setDisabledModules?.(saved);
+      window.samla?.showToast(t('settings.rewardsSaved'), 'success');
     } catch (error) {
       enableToggle.checked = !enableToggle.checked;
-      window.yuvomi?.showToast(error.message || t('common.errorGeneric'), 'danger');
+      window.samla?.showToast(error.message || t('common.errorGeneric'), 'danger');
     } finally {
       enableToggle.disabled = false;
     }
@@ -85,10 +85,10 @@ function bindEvents(container, preferences) {
     approvalToggle.disabled = true;
     try {
       await savePreferences({ rewards_require_approval: approvalToggle.checked });
-      window.yuvomi?.showToast(t('settings.rewardsSaved'), 'success');
+      window.samla?.showToast(t('settings.rewardsSaved'), 'success');
     } catch (error) {
       approvalToggle.checked = !approvalToggle.checked;
-      window.yuvomi?.showToast(error.message || t('common.errorGeneric'), 'danger');
+      window.samla?.showToast(error.message || t('common.errorGeneric'), 'danger');
     } finally {
       approvalToggle.disabled = false;
     }
@@ -133,7 +133,7 @@ function bindDefaultPoints(container, preferences) {
       persisted = next;
       input.value = String(next);
       preferences.tasks_default_points = next;
-      window.yuvomi?.showToast(t('settings.rewardsDefaultPointsSaved'), 'success');
+      window.samla?.showToast(t('settings.rewardsDefaultPointsSaved'), 'success');
     } catch (error) {
       input.value = String(previous); // Rollback
       errorEl.textContent = error.message || t('common.errorGeneric');
@@ -178,9 +178,9 @@ async function offerRebase(from, to) {
   try {
     const res = await api.post('/tasks/points/rebase', { from, to });
     const updated = Number(res?.data?.updated) || 0;
-    window.yuvomi?.showToast(t('settings.rewardsDefaultPointsRebased', { count: updated }), 'success');
+    window.samla?.showToast(t('settings.rewardsDefaultPointsRebased', { count: updated }), 'success');
   } catch (error) {
-    window.yuvomi?.showToast(error.message || t('common.errorGeneric'), 'danger');
+    window.samla?.showToast(error.message || t('common.errorGeneric'), 'danger');
   }
 }
 

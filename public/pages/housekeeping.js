@@ -202,14 +202,14 @@ async function toggleSession(container, workerId) {
   const worker = state.workers.find((item) => String(item.id) === String(workerId));
   const current = worker?.today_session;
   if (!state.workers.length) {
-    window.yuvomi?.showToast(t('housekeeping.checkInDisabled'), 'warning');
+    window.samla?.showToast(t('housekeeping.checkInDisabled'), 'warning');
     return;
   }
   if (!worker) return;
   try {
     if (current) {
       await api.post('/housekeeping/work-sessions/check-out', { worker_id: worker.id });
-      window.yuvomi?.showToast(t('housekeeping.checkedOutToast'), 'success');
+      window.samla?.showToast(t('housekeeping.checkedOutToast'), 'success');
     } else {
       await api.post('/housekeeping/work-sessions/check-in', {
         worker_id: worker.id,
@@ -219,12 +219,12 @@ async function toggleSession(container, workerId) {
         timezone_offset_minutes: new Date().getTimezoneOffset(),
         ...visitTextPayload(worker, localDate(), worker.rate_type === 'hourly' ? 0 : (worker.daily_rate || 0), 0),
       });
-      window.yuvomi?.showToast(t('housekeeping.checkedInToast'), 'success');
+      window.samla?.showToast(t('housekeeping.checkedInToast'), 'success');
     }
     await loadData();
     renderShell(container);
   } catch (err) {
-    window.yuvomi?.showToast(err.message, 'danger');
+    window.samla?.showToast(err.message, 'danger');
   }
 }
 
@@ -366,11 +366,11 @@ function renderDashboard(content) {
 async function createTask(payload, content) {
   try {
     await api.post('/housekeeping/decay-tasks', payload);
-    window.yuvomi?.showToast(t('housekeeping.taskCreatedToast'), 'success');
+    window.samla?.showToast(t('housekeeping.taskCreatedToast'), 'success');
     await loadData();
     renderTasks(content);
   } catch (err) {
-    window.yuvomi?.showToast(err.message, 'danger');
+    window.samla?.showToast(err.message, 'danger');
   }
 }
 
@@ -477,11 +477,11 @@ function renderTasks(content) {
     btn.addEventListener('click', async () => {
       try {
         await api.post(`/housekeeping/decay-tasks/${btn.dataset.completeTask}/complete`, {});
-        window.yuvomi?.showToast(t('housekeeping.taskDoneToast'), 'success');
+        window.samla?.showToast(t('housekeeping.taskDoneToast'), 'success');
         await loadData();
         renderTasks(content);
       } catch (err) {
-        window.yuvomi?.showToast(err.message, 'danger');
+        window.samla?.showToast(err.message, 'danger');
       }
     });
   });
@@ -490,11 +490,11 @@ function renderTasks(content) {
     btn.addEventListener('click', async () => {
       try {
         await api.patch(`/housekeeping/decay-tasks/${btn.dataset.undoTask}`, { last_completed: null });
-        window.yuvomi?.showToast(t('housekeeping.taskUndoneToast'), 'success');
+        window.samla?.showToast(t('housekeeping.taskUndoneToast'), 'success');
         await loadData();
         renderTasks(content);
       } catch (err) {
-        window.yuvomi?.showToast(err.message, 'danger');
+        window.samla?.showToast(err.message, 'danger');
       }
     });
   });
@@ -509,11 +509,11 @@ function renderTasks(content) {
       )) return;
       try {
         await api.delete(`/housekeeping/decay-tasks/${task.id}`);
-        window.yuvomi?.showToast(t('housekeeping.taskDeletedToast'), 'success');
+        window.samla?.showToast(t('housekeeping.taskDeletedToast'), 'success');
         await loadData();
         renderTasks(content);
       } catch (err) {
-        window.yuvomi?.showToast(err.message, 'danger');
+        window.samla?.showToast(err.message, 'danger');
       }
     });
   });
@@ -593,11 +593,11 @@ function renderReports(content) {
       if (!visit) return;
       try {
         await api.post(`/housekeeping/visits/${visit.id}/pay`, {});
-        window.yuvomi?.showToast(t('housekeeping.visitPaidToast'), 'success');
+        window.samla?.showToast(t('housekeeping.visitPaidToast'), 'success');
         await loadData();
         renderReports(content);
       } catch (err) {
-        window.yuvomi?.showToast(err.message, 'danger');
+        window.samla?.showToast(err.message, 'danger');
       }
     });
   });
@@ -641,12 +641,12 @@ function openVisitReportModal(visit, content = null) {
       panel.querySelector('#visit-report-pay')?.addEventListener('click', async () => {
         try {
           await api.post(`/housekeeping/visits/${visit.id}/pay`, {});
-          window.yuvomi?.showToast(t('housekeeping.visitPaidToast'), 'success');
+          window.samla?.showToast(t('housekeeping.visitPaidToast'), 'success');
           closeModal({ force: true });
           await loadData();
           if (content?.isConnected) renderReports(content);
         } catch (err) {
-          window.yuvomi?.showToast(err.message, 'danger');
+          window.samla?.showToast(err.message, 'danger');
         }
       });
     },
@@ -689,7 +689,7 @@ function renderStaff(content) {
         await loadStaffVisits();
         renderStaff(content);
       } catch (err) {
-        window.yuvomi?.showToast(err.message, 'danger');
+        window.samla?.showToast(err.message, 'danger');
       }
     };
     row.addEventListener('click', (event) => {
@@ -715,7 +715,7 @@ function renderStaff(content) {
       await loadStaffVisits();
       renderStaff(content);
     } catch (err) {
-      window.yuvomi?.showToast(err.message, 'danger');
+      window.samla?.showToast(err.message, 'danger');
     }
   });
   content.querySelectorAll('[data-edit-visit]').forEach((btn) => {
@@ -730,12 +730,12 @@ function renderStaff(content) {
       if (!visit) return;
       try {
         await api.post(`/housekeeping/visits/${visit.id}/pay`, {});
-        window.yuvomi?.showToast(t('housekeeping.visitPaidToast'), 'success');
+        window.samla?.showToast(t('housekeeping.visitPaidToast'), 'success');
         await loadData();
         await loadStaffVisits();
         renderStaff(content);
       } catch (err) {
-        window.yuvomi?.showToast(err.message, 'danger');
+        window.samla?.showToast(err.message, 'danger');
       }
     });
   });
@@ -746,12 +746,12 @@ function renderStaff(content) {
       if (!await confirmModal(t('housekeeping.deleteVisitConfirm'), { danger: true, confirmLabel: t('common.delete') })) return;
       try {
         await api.delete(`/housekeeping/visits/${visit.id}`);
-        window.yuvomi?.showToast(t('housekeeping.visitDeletedToast'), 'success');
+        window.samla?.showToast(t('housekeeping.visitDeletedToast'), 'success');
         await loadData();
         await loadStaffVisits();
         renderStaff(content);
       } catch (err) {
-        window.yuvomi?.showToast(err.message, 'danger');
+        window.samla?.showToast(err.message, 'danger');
       }
     });
   });
@@ -842,12 +842,12 @@ function openTaskEditModal(task, content) {
             area: fields.area.value.trim(),
             frequency_days: frequencyDays,
           });
-          window.yuvomi?.showToast(t('housekeeping.taskUpdatedToast'), 'success');
+          window.samla?.showToast(t('housekeeping.taskUpdatedToast'), 'success');
           await loadData();
           closeModal({ force: true });
           renderTasks(content);
         } catch (err) {
-          window.yuvomi?.showToast(err.message, 'danger');
+          window.samla?.showToast(err.message, 'danger');
         }
       });
     },
@@ -863,7 +863,7 @@ function openVisitEditModal(visit, content, { onDone } = {}) {
       <form id="housekeeping-visit-form" class="housekeeping-worker-form">
         <label class="housekeeping-field">
           <span>${esc(t('housekeeping.visitDate'))}</span>
-          <yuvomi-datepicker name="date" type="date" value="${esc(visit.check_in.slice(0, 10))}"></yuvomi-datepicker>
+          <samla-datepicker name="date" type="date" value="${esc(visit.check_in.slice(0, 10))}"></samla-datepicker>
         </label>
         <div class="housekeeping-form-grid">
           ${visit.rate_type === 'hourly' ? `
@@ -949,14 +949,14 @@ function openVisitEditModal(visit, content, { onDone } = {}) {
             receipt_document_id: receiptDocumentId,
             ...visitTextPayload(worker, dateValue, dailyRate ?? visit.daily_rate, extras),
           });
-          window.yuvomi?.showToast(t('housekeeping.visitSavedToast'), 'success');
+          window.samla?.showToast(t('housekeeping.visitSavedToast'), 'success');
           await loadData();
           state.staffLogMonth = dateValue.slice(0, 7);
           await loadStaffVisits();
           closeModal({ force: true });
           (onDone || renderStaff)(content);
         } catch (err) {
-          window.yuvomi?.showToast(err.message, 'danger');
+          window.samla?.showToast(err.message, 'danger');
         }
       });
     },
@@ -1026,7 +1026,7 @@ function openStaffModal(worker, content, options = {}) {
           </label>
           <label class="housekeeping-field">
             <span>${esc(t('housekeeping.workerBirthDate'))}</span>
-            <yuvomi-datepicker name="birth_date" type="date" value="${esc(item.birth_date || '')}"></yuvomi-datepicker>
+            <samla-datepicker name="birth_date" type="date" value="${esc(item.birth_date || '')}"></samla-datepicker>
           </label>
           <label class="housekeeping-field">
             <span>${esc(t('housekeeping.rateType'))}</span>
@@ -1092,13 +1092,13 @@ function openStaffModal(worker, content, options = {}) {
             avatar_data: state.workerAvatar,
             notes: fields.notes.value.trim() || null,
           });
-          window.yuvomi?.showToast(t('housekeeping.workerSavedToast'), 'success');
+          window.samla?.showToast(t('housekeeping.workerSavedToast'), 'success');
           await loadData();
           closeModal({ force: true });
           if (typeof options.afterSave === 'function') options.afterSave();
           else renderStaff(content);
         } catch (err) {
-          window.yuvomi?.showToast(err.message, 'danger');
+          window.samla?.showToast(err.message, 'danger');
         }
       });
     },

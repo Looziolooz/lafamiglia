@@ -35,7 +35,7 @@ function prefersReducedMotion() {
 
 /** Kurzer Status-Toast (nutzt das globale, per role="alert" angekündigte System). */
 function toast(message, type = 'success') {
-  window.yuvomi?.showToast?.(message, type);
+  window.samla?.showToast?.(message, type);
 }
 
 /** Zahl von→zu hochzählen; bei reduced-motion sofort setzen. */

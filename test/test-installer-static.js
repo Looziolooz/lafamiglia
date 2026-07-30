@@ -6,12 +6,12 @@ import { fileURLToPath } from 'node:url';
 import { createInstallerServer } from '../tools/installer/install-server.js';
 
 // Repo-Root = Verzeichnis dieser Testdatei. Die statischen Routen liefern aus
-// public/ relativ zu PROJECT_ROOT, daher zeigt OIKOS_INSTALLER_ROOT dorthin.
+// public/ relativ zu PROJECT_ROOT, daher zeigt SAMLA_INSTALLER_ROOT dorthin.
 const REPO_ROOT = fileURLToPath(new URL('../', import.meta.url));
 
 async function withServer(fn) {
-  const prev = process.env.OIKOS_INSTALLER_ROOT;
-  process.env.OIKOS_INSTALLER_ROOT = REPO_ROOT;
+  const prev = process.env.SAMLA_INSTALLER_ROOT;
+  process.env.SAMLA_INSTALLER_ROOT = REPO_ROOT;
   const server = createInstallerServer();
   await new Promise(r => server.listen(0, '127.0.0.1', r));
   const { port } = server.address();
@@ -19,8 +19,8 @@ async function withServer(fn) {
     await fn(`http://127.0.0.1:${port}`);
   } finally {
     await new Promise(r => server.close(r));
-    if (prev === undefined) delete process.env.OIKOS_INSTALLER_ROOT;
-    else process.env.OIKOS_INSTALLER_ROOT = prev;
+    if (prev === undefined) delete process.env.SAMLA_INSTALLER_ROOT;
+    else process.env.SAMLA_INSTALLER_ROOT = prev;
   }
 }
 

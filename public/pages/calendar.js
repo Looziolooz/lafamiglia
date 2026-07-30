@@ -1,7 +1,7 @@
 /**
  * Modul: Kalender (Calendar)
  * Zweck: Monats-/Wochen-/Tages-/Agenda-Ansicht mit vollem Termin-CRUD
- * Abhängigkeiten: /api.js, /router.js (window.yuvomi)
+ * Abhängigkeiten: /api.js, /router.js (window.samla)
  */
 
 import { api } from '/api.js';
@@ -220,11 +220,11 @@ const EVENT_ICONS = EVENT_ICON_CATEGORIES().flatMap((cat) => cat.icons);
 const CUSTOM_EVENT_ICONS = new Set(['tooth']);
 const MAX_ATTACHMENT_BYTES = 5 * 1024 * 1024;
 const ATTACHMENT_IMAGE_MIME = new Set(['image/png', 'image/jpeg', 'image/webp', 'image/gif']);
-const CALENDAR_VIEW_STORAGE_KEY = 'yuvomi:calendar:view';
-const LEGACY_CALENDAR_VIEW_STORAGE_KEY = 'yuvomi-calendar-view';
-const LAYER_HOLIDAYS_KEY = 'yuvomi:calendar:layer:holidays';
-const LAYER_SCHOOL_KEY    = 'yuvomi:calendar:layer:school';
-const ASSIGNED_TO_ME_KEY  = 'yuvomi:calendar:assignedToMe';
+const CALENDAR_VIEW_STORAGE_KEY = 'samla:calendar:view';
+const LEGACY_CALENDAR_VIEW_STORAGE_KEY = 'samla-calendar-view';
+const LAYER_HOLIDAYS_KEY = 'samla:calendar:layer:holidays';
+const LAYER_SCHOOL_KEY    = 'samla:calendar:layer:school';
+const ASSIGNED_TO_ME_KEY  = 'samla:calendar:assignedToMe';
 const DATE_KEY_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 const HOUR_HEIGHT = 56; // px pro Stunde in Wochen-/Tagesansicht
@@ -863,7 +863,7 @@ async function loadRange(from, to) {
     state.tasks    = [];
     state.holidays = [];
     state.offlineSince = null;
-    window.yuvomi?.showToast(t('calendar.loadError'), 'danger');
+    window.samla?.showToast(t('calendar.loadError'), 'danger');
   }
   state.rangeFrom = from;
   state.rangeTo   = to;
@@ -893,7 +893,7 @@ async function getCachedAt(path) {
   if (typeof caches === 'undefined') return null;
   try {
     const names    = await caches.keys();
-    const apiCache = names.find((n) => n.startsWith('yuvomi-api-'));
+    const apiCache = names.find((n) => n.startsWith('samla-api-'));
     if (!apiCache) return null;
     const cache = await caches.open(apiCache);
     const res   = await cache.match(`/api/v1${path}`);
@@ -1396,7 +1396,7 @@ function renderMonthView(container) {
       const taskChip = e.target.closest('.cal-task-chip');
       if (taskChip) {
         e.stopPropagation();
-        window.yuvomi.navigate(`/tasks?open=${taskChip.dataset.taskId}`);
+        window.samla.navigate(`/tasks?open=${taskChip.dataset.taskId}`);
         return;
       }
       const evEl = e.target.closest('.month-day__event');
@@ -1594,7 +1594,7 @@ function renderWeekView(container) {
   container.querySelector('.allday-row').addEventListener('click', (e) => {
     const taskChip = e.target.closest('.cal-task-chip');
     if (taskChip) {
-      window.yuvomi.navigate(`/tasks?open=${taskChip.dataset.taskId}`);
+      window.samla.navigate(`/tasks?open=${taskChip.dataset.taskId}`);
       return;
     }
     const evEl = e.target.closest('.allday-event');
@@ -1785,7 +1785,7 @@ function renderDayView(container) {
   container.querySelector('.allday-row')?.addEventListener('click', (e) => {
     const taskChip = e.target.closest('.cal-task-chip');
     if (taskChip) {
-      window.yuvomi.navigate(`/tasks?open=${taskChip.dataset.taskId}`);
+      window.samla.navigate(`/tasks?open=${taskChip.dataset.taskId}`);
       return;
     }
     const evEl = e.target.closest('.allday-event');
@@ -1862,7 +1862,7 @@ function renderAgendaView(container) {
     }
     const taskChip = e.target.closest('.cal-task-chip');
     if (taskChip) {
-      window.yuvomi.navigate(`/tasks?open=${taskChip.dataset.taskId}`);
+      window.samla.navigate(`/tasks?open=${taskChip.dataset.taskId}`);
       return;
     }
     const evEl = e.target.closest('.agenda-event');
@@ -2245,11 +2245,11 @@ function showEventPopup(ev, anchor) {
         await api.post(`/calendar/${ev.id}/reset`, {});
         dismiss();
         await reloadForView();
-        window.yuvomi?.showToast(t('calendar.ics.resetToast'), 'success');
+        window.samla?.showToast(t('calendar.ics.resetToast'), 'success');
       } catch (err) {
         // Server-Meldung bevorzugen (nutzerorientiert), sonst lokalisierter
         // Fallback — nie den rohen JS-/Netzwerk-Fehlertext zeigen.
-        window.yuvomi?.showToast(err.data?.error ?? t('calendar.saveError'), 'danger');
+        window.samla?.showToast(err.data?.error ?? t('calendar.saveError'), 'danger');
       }
     });
     popup.querySelector('.event-popup__actions').before(resetLink);
@@ -2597,7 +2597,7 @@ function wireVisibilityWarning(panel, selectSel, msName, warnSel) {
 
 function openEventModal({ mode, event = null, date = null, reminder = null, time = null }) {
   if (mode === 'edit' && event?.housekeeping_visit_id) {
-    window.yuvomi.navigate(`/housekeeping?editVisit=${event.housekeeping_visit_id}`);
+    window.samla.navigate(`/housekeeping?editVisit=${event.housekeeping_visit_id}`);
     return;
   }
   const isEdit = mode === 'edit';
@@ -3018,21 +3018,21 @@ function buildEventModalContent({ mode, event, date, reminder = null, time = nul
       <div class="modal-grid modal-grid--2">
         <div class="form-group">
           <label class="form-label" for="modal-start-date">${t('calendar.startDateLabel')}</label>
-          <yuvomi-datepicker type="date" id="modal-start-date" value="${esc(formatDateInput(startDate))}" label="${esc(t('calendar.startDateLabel'))}"></yuvomi-datepicker>
+          <samla-datepicker type="date" id="modal-start-date" value="${esc(formatDateInput(startDate))}" label="${esc(t('calendar.startDateLabel'))}"></samla-datepicker>
         </div>
         <div class="form-group">
           <label class="form-label" for="modal-start-time">${t('calendar.startTimeLabel')}</label>
-          <yuvomi-datepicker type="time" id="modal-start-time" value="${esc(formatTimeInput(startTime))}" label="${esc(t('calendar.startTimeLabel'))}"></yuvomi-datepicker>
+          <samla-datepicker type="time" id="modal-start-time" value="${esc(formatTimeInput(startTime))}" label="${esc(t('calendar.startTimeLabel'))}"></samla-datepicker>
         </div>
       </div>
       <div class="modal-grid modal-grid--2">
         <div class="form-group">
           <label class="form-label" for="modal-end-date">${t('calendar.endDateLabel')}</label>
-          <yuvomi-datepicker type="date" id="modal-end-date" value="${esc(formatDateInput(endDate))}" label="${esc(t('calendar.endDateLabel'))}"></yuvomi-datepicker>
+          <samla-datepicker type="date" id="modal-end-date" value="${esc(formatDateInput(endDate))}" label="${esc(t('calendar.endDateLabel'))}"></samla-datepicker>
         </div>
         <div class="form-group">
           <label class="form-label" for="modal-end-time">${t('calendar.endTimeLabel')}</label>
-          <yuvomi-datepicker type="time" id="modal-end-time" value="${esc(formatTimeInput(endTime))}" label="${esc(t('calendar.endTimeLabel'))}"></yuvomi-datepicker>
+          <samla-datepicker type="time" id="modal-end-time" value="${esc(formatTimeInput(endTime))}" label="${esc(t('calendar.endTimeLabel'))}"></samla-datepicker>
         </div>
       </div>
     </div>
@@ -3041,11 +3041,11 @@ function buildEventModalContent({ mode, event, date, reminder = null, time = nul
       <div class="modal-grid modal-grid--2">
         <div class="form-group">
           <label class="form-label" for="modal-allday-start">${t('calendar.fromLabel')}</label>
-          <yuvomi-datepicker type="date" id="modal-allday-start" value="${esc(formatDateInput(startDate))}" label="${esc(t('calendar.fromLabel'))}"></yuvomi-datepicker>
+          <samla-datepicker type="date" id="modal-allday-start" value="${esc(formatDateInput(startDate))}" label="${esc(t('calendar.fromLabel'))}"></samla-datepicker>
         </div>
         <div class="form-group">
           <label class="form-label" for="modal-allday-end">${t('calendar.toLabel')}</label>
-          <yuvomi-datepicker type="date" id="modal-allday-end" value="${esc(formatDateInput(endDate))}" label="${esc(t('calendar.toLabel'))}"></yuvomi-datepicker>
+          <samla-datepicker type="date" id="modal-allday-end" value="${esc(formatDateInput(endDate))}" label="${esc(t('calendar.toLabel'))}"></samla-datepicker>
         </div>
       </div>
     </div>
@@ -3315,12 +3315,12 @@ async function saveEvent(overlay, mode, event, existingReminder = null, attachme
 
     closeModal({ force: true });
     renderView();
-    window.yuvomi?.showToast(mode === 'create' ? t('calendar.createdToast') : t('calendar.savedToast'), 'success');
+    window.samla?.showToast(mode === 'create' ? t('calendar.createdToast') : t('calendar.savedToast'), 'success');
   } catch (err) {
     // Server-Validierungsmeldung bevorzugen, sonst lokalisierter Fallback; der
     // rohe err.message-Text (Netzwerk/JS) wird nie gezeigt. Das Modal bleibt offen
     // und der Button reaktiviert — die Eingaben des Nutzers bleiben erhalten.
-    window.yuvomi?.showToast(err.data?.error ?? t('calendar.saveError'), 'danger');
+    window.samla?.showToast(err.data?.error ?? t('calendar.saveError'), 'danger');
     saveBtn.disabled    = false;
     saveBtn.textContent = mode === 'edit' ? t('common.save') : t('common.create');
   }
@@ -3344,7 +3344,7 @@ async function deleteEvent(id) {
         state.events = [...state.events, event];
         renderView();
       }
-      if (err) window.yuvomi?.showToast(err.data?.error ?? t('calendar.deleteError'), 'danger');
+      if (err) window.samla?.showToast(err.data?.error ?? t('calendar.deleteError'), 'danger');
     },
   });
 }
@@ -3485,7 +3485,7 @@ async function deleteThisAndFollowing(event) {
     restore: (err) => {
       state.events = [...state.events, ...removed];
       renderView();
-      if (err) window.yuvomi?.showToast(err.data?.error ?? t('calendar.deleteError'), 'danger');
+      if (err) window.samla?.showToast(err.data?.error ?? t('calendar.deleteError'), 'danger');
     },
   });
 }
@@ -3507,7 +3507,7 @@ async function deleteSingleOccurrence(event) {
     restore: (err) => {
       state.events = [...state.events, ...removed];
       renderView();
-      if (err) window.yuvomi?.showToast(err.data?.error ?? t('calendar.deleteError'), 'danger');
+      if (err) window.samla?.showToast(err.data?.error ?? t('calendar.deleteError'), 'danger');
     },
   });
 }

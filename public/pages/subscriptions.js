@@ -299,7 +299,7 @@ async function reload(options) {
     renderFilters();
     renderContent();
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error || t('subscriptions.loadError'), 'danger');
+    window.samla?.showToast(err.data?.error || t('subscriptions.loadError'), 'danger');
   }
 }
 
@@ -879,8 +879,8 @@ export function openSubscriptionModal(subscription = null) {
         <div class="form-grid-2">
           <div class="form-group">
             <label class="form-label" for="subscription-next-date">${t('subscriptions.nextPaymentLabel')}</label>
-            <yuvomi-datepicker id="subscription-next-date" type="date"
-                   value="${esc(subscription?.next_payment_date || toLocalDateKey(new Date()))}"></yuvomi-datepicker>
+            <samla-datepicker id="subscription-next-date" type="date"
+                   value="${esc(subscription?.next_payment_date || toLocalDateKey(new Date()))}"></samla-datepicker>
           </div>
           <div class="form-group">
             <label class="form-label" for="subscription-reminder">${t('subscriptions.reminderDaysLabel')}</label>
@@ -898,8 +898,8 @@ export function openSubscriptionModal(subscription = null) {
         <div class="form-grid-2">
           <div class="form-group" id="subscription-end-date-field" ${(subscription?.end_type === 'on_date') ? '' : 'hidden'}>
             <label class="form-label" for="subscription-end-date">${t('subscriptions.endDateLabel')}</label>
-            <yuvomi-datepicker id="subscription-end-date" type="date"
-                   value="${esc(subscription?.end_date || '')}"></yuvomi-datepicker>
+            <samla-datepicker id="subscription-end-date" type="date"
+                   value="${esc(subscription?.end_date || '')}"></samla-datepicker>
           </div>
           <div class="form-group" id="subscription-end-count-field" ${(subscription?.end_type === 'after_count') ? '' : 'hidden'}>
             <label class="form-label" for="subscription-end-count">${t('subscriptions.endCountLabel')}</label>
@@ -952,7 +952,7 @@ export function openSubscriptionModal(subscription = null) {
           showLogo(searchedLogoData);
         } catch (err) {
           event.target.value = '';
-          window.yuvomi?.showToast(err.message, 'danger');
+          window.samla?.showToast(err.message, 'danger');
         }
       });
       panel.querySelector('#subscription-name').addEventListener('input', () => {
@@ -962,7 +962,7 @@ export function openSubscriptionModal(subscription = null) {
         openLogoPickerModal(panel, subscription?.website_url || panel.querySelector('#subscription-name').value.trim(), (logoData) => {
           searchedLogoData = logoData;
           showLogo(searchedLogoData);
-          window.yuvomi?.showToast(t('subscriptions.logoFound'), 'success');
+          window.samla?.showToast(t('subscriptions.logoFound'), 'success');
         });
       });
       panel.querySelector('#subscription-form').addEventListener('submit', async (event) => {
@@ -1047,9 +1047,9 @@ async function saveSubscription(panel, existing, searchedLogoData = null) {
     else await api.post('/budget/subscriptions', payload);
     await closeModal({ force: true });
     await reload();
-    window.yuvomi?.showToast(t(existing ? 'subscriptions.savedToast' : 'subscriptions.addedToast'), 'success');
+    window.samla?.showToast(t(existing ? 'subscriptions.savedToast' : 'subscriptions.addedToast'), 'success');
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error || err.message || t('common.unknownError'), 'danger');
+    window.samla?.showToast(err.data?.error || err.message || t('common.unknownError'), 'danger');
   } finally {
     submit.disabled = false;
   }
@@ -1110,7 +1110,7 @@ function openLogoPickerModal(panel, initialQuery, onSelect) {
       const message = err.data?.error || t('subscriptions.logoSearchError');
       options = [];
       setHtml(results, `<p class="subscriptions-logo-empty">${esc(message)}</p>`);
-      window.yuvomi?.showToast(message, 'danger');
+      window.samla?.showToast(message, 'danger');
     } finally {
       button.disabled = false;
       if (window.lucide) window.lucide.createIcons({ el: overlay });
@@ -1141,9 +1141,9 @@ async function toggleSubscription(subscription) {
   try {
     await api.put(`/budget/subscriptions/${subscription.id}`, { enabled: !subscription.enabled });
     await reload();
-    window.yuvomi?.showToast(t(subscription.enabled ? 'subscriptions.disabledToast' : 'subscriptions.enabledToast'), 'success');
+    window.samla?.showToast(t(subscription.enabled ? 'subscriptions.disabledToast' : 'subscriptions.enabledToast'), 'success');
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error || t('common.unknownError'), 'danger');
+    window.samla?.showToast(err.data?.error || t('common.unknownError'), 'danger');
   }
 }
 
@@ -1152,9 +1152,9 @@ async function renewSubscription(subscription) {
     const response = await api.post(`/budget/subscriptions/${subscription.id}/renew`, {});
     await reload();
     const completed = response.data?.status === 'completed';
-    window.yuvomi?.showToast(t(completed ? 'subscriptions.completedToast' : 'subscriptions.renewedToast'), 'success');
+    window.samla?.showToast(t(completed ? 'subscriptions.completedToast' : 'subscriptions.renewedToast'), 'success');
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error || t('common.unknownError'), 'danger');
+    window.samla?.showToast(err.data?.error || t('common.unknownError'), 'danger');
   }
 }
 
@@ -1164,9 +1164,9 @@ async function deleteSubscription(subscription) {
   try {
     await api.delete(`/budget/subscriptions/${subscription.id}`);
     await reload();
-    window.yuvomi?.showToast(t('subscriptions.deletedToast'), 'success');
+    window.samla?.showToast(t('subscriptions.deletedToast'), 'success');
   } catch (err) {
-    window.yuvomi?.showToast(err.data?.error || t('common.unknownError'), 'danger');
+    window.samla?.showToast(err.data?.error || t('common.unknownError'), 'danger');
   }
 }
 
@@ -1214,9 +1214,9 @@ async function openSettingsModal() {
           });
           await closeModal({ force: true });
           await reload({ refreshRates: true });
-          window.yuvomi?.showToast(t('subscriptions.settingsSaved'), 'success');
+          window.samla?.showToast(t('subscriptions.settingsSaved'), 'success');
         } catch (err) {
-          window.yuvomi?.showToast(err.data?.error || t('common.unknownError'), 'danger');
+          window.samla?.showToast(err.data?.error || t('common.unknownError'), 'danger');
         }
       });
     },
@@ -1392,9 +1392,9 @@ function openMetadataModal() {
             await closeModal({ force: true });
             await reload();
             openMetadataModal();
-            window.yuvomi?.showToast(t('subscriptions.metaSavedToast'), 'success');
+            window.samla?.showToast(t('subscriptions.metaSavedToast'), 'success');
           } catch (err) {
-            window.yuvomi?.showToast(err.data?.error || err.message || t('common.unknownError'), 'danger');
+            window.samla?.showToast(err.data?.error || err.message || t('common.unknownError'), 'danger');
           }
         });
       });
@@ -1415,9 +1415,9 @@ function openMetadataModal() {
             try {
               await api.delete(`/budget/subscriptions/${isCat ? 'categories' : 'payment-methods'}/${id}`);
               await reload();
-              window.yuvomi?.showToast(t('subscriptions.metaDeletedToast'), 'success');
+              window.samla?.showToast(t('subscriptions.metaDeletedToast'), 'success');
             } catch (err) {
-              window.yuvomi?.showToast(err.data?.error || err.message || t('common.unknownError'), 'danger');
+              window.samla?.showToast(err.data?.error || err.message || t('common.unknownError'), 'danger');
             }
           }
           openMetadataModal();

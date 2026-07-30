@@ -329,7 +329,7 @@ function configureFakeDriveStorage() {
     refresh_token: 'refresh',
     account_id: 'account',
     folder_id: 'drive-folder',
-    folder_name: 'Yuvomi/Documents',
+    folder_name: 'Samla/Documents',
   })) statement.run(`document_storage_google_drive_${key}`, value);
 
   const mediaReads = [];
@@ -761,7 +761,7 @@ test('local folder remains the effective override when Google Drive is selected'
   configureFakeDriveStorage();
   storage.setSelectedUploadBackend('google_drive');
   process.env.DOCUMENT_STORAGE_LOCAL_ENABLED = 'true';
-  process.env.DOCUMENT_STORAGE_LOCAL_PATH = '/tmp/yuvomi-drive-override';
+  process.env.DOCUMENT_STORAGE_LOCAL_PATH = '/tmp/samla-drive-override';
   assert.equal(storage.getSelectedUploadBackend(), 'google_drive');
   assert.equal(storage.getActiveUploadBackend(), 'local_folder');
 });
@@ -814,7 +814,7 @@ test('getConfig defaults and normalizes safe paths while rejecting invalid confi
     username: 'user',
     password: 'pass',
   });
-  assert.equal(storage.getConfig().basePath, 'yuvomi-documents');
+  assert.equal(storage.getConfig().basePath, 'samla-documents');
   await assert.rejects(
     storage.stageDocumentUpload({
       buffer: Buffer.from('x'),
@@ -2192,7 +2192,7 @@ test('document storage config status masks passwords and reports effective env c
       connected: false,
       account_email: null,
       account_name: null,
-      folder_name: 'Yuvomi/Documents',
+      folder_name: 'Samla/Documents',
       document_count: 0,
       last_test: null,
       last_error: null,
@@ -2636,7 +2636,7 @@ const LOCAL_ENV_KEYS = [
 ];
 
 function withLocalStorage(fn) {
-  const dir = mkdtempSync(nodePath.join(tmpdir(), 'yuvomi-docs-'));
+  const dir = mkdtempSync(nodePath.join(tmpdir(), 'samla-docs-'));
   const previous = Object.fromEntries(LOCAL_ENV_KEYS.map((k) => [k, process.env[k]]));
   process.env.DOCUMENT_STORAGE_LOCAL_ENABLED = 'true';
   process.env.DOCUMENT_STORAGE_LOCAL_PATH = dir;
@@ -2791,7 +2791,7 @@ test('legacy local rows without a storage_key still read from the DB BLOB', asyn
 });
 
 test('document routes: local folder upload lands on disk and status reports local_folder', async (t) => {
-  const dir = mkdtempSync(nodePath.join(tmpdir(), 'yuvomi-docs-route-'));
+  const dir = mkdtempSync(nodePath.join(tmpdir(), 'samla-docs-route-'));
   const previous = Object.fromEntries(LOCAL_ENV_KEYS.map((k) => [k, process.env[k]]));
   process.env.DOCUMENT_STORAGE_LOCAL_ENABLED = 'true';
   process.env.DOCUMENT_STORAGE_LOCAL_PATH = dir;

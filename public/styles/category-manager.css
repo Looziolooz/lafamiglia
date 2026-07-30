@@ -1,5 +1,5 @@
 /* --------------------------------------------------------
-   Generischer Category-Manager (<yuvomi-category-manager>)
+   Generischer Category-Manager (<samla-category-manager>)
    Wiederverwendbare Web-Component, eingesetzt in Budget, Contacts
    und Tasks. Die Styles liegen bewusst global (in index.html
    verlinkt), nicht page-scoped: der Router laedt pro Seite nur EIN

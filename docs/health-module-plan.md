@@ -1,6 +1,6 @@
 # Gesundheits-Modul — Implementierungsplan
 
-> Quelle der Anforderung: [Discussion #149 „Health/meds/workouts"](https://github.com/ulsklyc/yuvomi/discussions/149)
+> Quelle der Anforderung: [Discussion #149 „Health/meds/workouts"](https://github.com/YOUR-ORG/samla/discussions/149)
 > Angefragt: Blutdruck, Blutzucker, Medikamente (mit Erinnerung + „genommen"-Markierung), Sport.
 > Erweitert um: Laborwerte/Blutwerte, Gesundheitsstatistiken (aus der Aufgabenstellung).
 
@@ -151,7 +151,7 @@ Jede Phase ist eigenständig testbar (`npm run test:health-*`), endet grün und 
 **DoD:** `npm run test:health-nav` grün; Modul in Nav sichtbar; Tabs wechseln ohne Full-Reload; i18n-Audit sauber (`i18n-auditor`).
 
 > **▶️ Continuation-Prompt (Phase 1):**
-> „Yuvomi-Gesundheitsmodul, Phase 1 (Datenmodell + Server-Routen). Phase 0 (Modul-Gerüst `/health` mit 5 leeren Tabs, `health-tabs.js`, `health.js`, Nav/Router-Registrierung, i18n) ist grün gemergt. Lege jetzt die append-only Migration `version: 65` in `server/db.js` an mit den Tabellen `health_vitals`, `medications`, `medication_schedules`, `medication_logs`, `health_lab_reports`, `health_lab_results`, `health_activities` (Schema siehe `docs/health-module-plan.md` §2) inkl. `updated_at`-Trigger und Indizes. Erstelle `server/routes/health.js` mit CRUD für alle Entitäten (jeder Handler in try/catch, `{data:…}`-JSON, `user_id`-Scoping, `visibility`-Filter), mounte es in `server/index.js` unter `/api/v1/health`, und ergänze `server/openapi.js`. Schreibe `test/test-health-api.js` (CRUD, Scoping, Visibility) + `test:health-api`-Script. Halte die Hard Constraints ein (import/export, try/catch, Migration append-only). Führe zuerst `graphify query` zur Orientierung aus."
+> „Samla-Gesundheitsmodul, Phase 1 (Datenmodell + Server-Routen). Phase 0 (Modul-Gerüst `/health` mit 5 leeren Tabs, `health-tabs.js`, `health.js`, Nav/Router-Registrierung, i18n) ist grün gemergt. Lege jetzt die append-only Migration `version: 65` in `server/db.js` an mit den Tabellen `health_vitals`, `medications`, `medication_schedules`, `medication_logs`, `health_lab_reports`, `health_lab_results`, `health_activities` (Schema siehe `docs/health-module-plan.md` §2) inkl. `updated_at`-Trigger und Indizes. Erstelle `server/routes/health.js` mit CRUD für alle Entitäten (jeder Handler in try/catch, `{data:…}`-JSON, `user_id`-Scoping, `visibility`-Filter), mounte es in `server/index.js` unter `/api/v1/health`, und ergänze `server/openapi.js`. Schreibe `test/test-health-api.js` (CRUD, Scoping, Visibility) + `test:health-api`-Script. Halte die Hard Constraints ein (import/export, try/catch, Migration append-only). Führe zuerst `graphify query` zur Orientierung aus."
 
 ---
 
@@ -173,7 +173,7 @@ Jede Phase ist eigenständig testbar (`npm run test:health-*`), endet grün und 
 **DoD:** `npm run test:health-api` grün; `npm test` gesamt grün.
 
 > **▶️ Continuation-Prompt (Phase 2):**
-> „Yuvomi-Gesundheitsmodul, Phase 2 (Tab „Vitalwerte"). Phasen 0–1 sind grün: Modul-Gerüst steht, Migration 65 + `server/routes/health.js` + Tests existieren. Baue jetzt den **Vitalwerte-Tab** in `public/pages/health.js`: Erfassungs-Modal (Blutdruck sys/dia/Puls, Blutzucker, Gewicht, optional SpO₂/Temp) via `openModal`, Listen-/Karten-Ansicht je Metrik, und **native SVG-Trend-Charts** (kein Chart-Lib, Muster wie `public/pages/budget-stats.js`). Datum-Helfer aus `public/utils/date.js` (`toLocalDateKey`), Anzeige via `formatDate`/`formatTime`, Zahlen/Einheiten lokalisiert. Personen-Umschalter oben. `esc()` für alle Nutzerdaten, kein `innerHTML`. Neue i18n-Keys in allen Locales. Test `test/test-health-vitals.js` (+ Script) für Chart-Datenaufbereitung/Aggregation. `graphify query` zur Orientierung zuerst."
+> „Samla-Gesundheitsmodul, Phase 2 (Tab „Vitalwerte"). Phasen 0–1 sind grün: Modul-Gerüst steht, Migration 65 + `server/routes/health.js` + Tests existieren. Baue jetzt den **Vitalwerte-Tab** in `public/pages/health.js`: Erfassungs-Modal (Blutdruck sys/dia/Puls, Blutzucker, Gewicht, optional SpO₂/Temp) via `openModal`, Listen-/Karten-Ansicht je Metrik, und **native SVG-Trend-Charts** (kein Chart-Lib, Muster wie `public/pages/budget-stats.js`). Datum-Helfer aus `public/utils/date.js` (`toLocalDateKey`), Anzeige via `formatDate`/`formatTime`, Zahlen/Einheiten lokalisiert. Personen-Umschalter oben. `esc()` für alle Nutzerdaten, kein `innerHTML`. Neue i18n-Keys in allen Locales. Test `test/test-health-vitals.js` (+ Script) für Chart-Datenaufbereitung/Aggregation. `graphify query` zur Orientierung zuerst."
 
 ---
 
@@ -186,7 +186,7 @@ Jede Phase ist eigenständig testbar (`npm run test:health-*`), endet grün und 
 **DoD:** `npm run test:health-vitals` grün; Preview-Verifikation (Erfassen → Chart aktualisiert); Vitalwerte je Person getrennt.
 
 > **▶️ Continuation-Prompt (Phase 3):**
-> „Yuvomi-Gesundheitsmodul, Phase 3 (Tab „Medikamente" inkl. Erinnerungen). Phasen 0–2 grün: Modul-Gerüst, API (Migration 65), Vitalwerte-Tab fertig. Baue den **Medikamente-Tab**: Med-Liste (Name, Dosis, Form, aktiv/PRN), Einnahmeplan-Editor (Zeitfenster + Wochentags-Maske + Dosis), Tages-/Wochenansicht der fälligen Dosen mit **„genommen/übersprungen"-Markierung** (`POST /logs/:id/take|skip`), **Adherence-Quote**, sowie **Bestand/Refill-Warnung**. Für Erinnerungen: implementiere `server/services/medication-scheduler.js` analog `server/services/push-scheduler.js`, das fällige Dosen als `pending`-Logs erzeugt und über den bestehenden Push-/Notification-Channel-Layer (`notification-channels.js`) zustellt — reuse, keine Duplikate. Tests `test/test-health-meds.js` + `test/test-medication-scheduler.js` (+ Scripts): Fälligkeits-Berechnung, Adherence, Refill-Schwelle, Reminder-Fan-out (gemockt). i18n alle Locales, Hard Constraints, `graphify query` zuerst."
+> „Samla-Gesundheitsmodul, Phase 3 (Tab „Medikamente" inkl. Erinnerungen). Phasen 0–2 grün: Modul-Gerüst, API (Migration 65), Vitalwerte-Tab fertig. Baue den **Medikamente-Tab**: Med-Liste (Name, Dosis, Form, aktiv/PRN), Einnahmeplan-Editor (Zeitfenster + Wochentags-Maske + Dosis), Tages-/Wochenansicht der fälligen Dosen mit **„genommen/übersprungen"-Markierung** (`POST /logs/:id/take|skip`), **Adherence-Quote**, sowie **Bestand/Refill-Warnung**. Für Erinnerungen: implementiere `server/services/medication-scheduler.js` analog `server/services/push-scheduler.js`, das fällige Dosen als `pending`-Logs erzeugt und über den bestehenden Push-/Notification-Channel-Layer (`notification-channels.js`) zustellt — reuse, keine Duplikate. Tests `test/test-health-meds.js` + `test/test-medication-scheduler.js` (+ Scripts): Fälligkeits-Berechnung, Adherence, Refill-Schwelle, Reminder-Fan-out (gemockt). i18n alle Locales, Hard Constraints, `graphify query` zuerst."
 
 ---
 
@@ -199,7 +199,7 @@ Jede Phase ist eigenständig testbar (`npm run test:health-*`), endet grün und 
 **DoD:** `npm run test:health-meds` + `test:medication-scheduler` grün; Take/Skip aktualisiert Adherence & Bestand; Reminder feuert (gemockt verifiziert).
 
 > **▶️ Continuation-Prompt (Phase 4):**
-> „Yuvomi-Gesundheitsmodul, Phase 4 (Tab „Aktivität"). Phasen 0–3 grün: Gerüst, API, Vitalwerte, Medikamente inkl. Scheduler fertig. Baue den **Aktivität-Tab**: Trainings-Log (Typ aus Preset + Custom, Dauer, Datum, optional Distanz/Intensität/Kalorien, Notiz), Wochenübersicht mit Summen, einfacher Wochen-Balken-Chart (native SVG). Personen-Umschalter, Empty-States, i18n alle Locales. Test `test/test-health-activity.js` (+ Script) für Wochen-Aggregation. Hard Constraints, `graphify query` zuerst."
+> „Samla-Gesundheitsmodul, Phase 4 (Tab „Aktivität"). Phasen 0–3 grün: Gerüst, API, Vitalwerte, Medikamente inkl. Scheduler fertig. Baue den **Aktivität-Tab**: Trainings-Log (Typ aus Preset + Custom, Dauer, Datum, optional Distanz/Intensität/Kalorien, Notiz), Wochenübersicht mit Summen, einfacher Wochen-Balken-Chart (native SVG). Personen-Umschalter, Empty-States, i18n alle Locales. Test `test/test-health-activity.js` (+ Script) für Wochen-Aggregation. Hard Constraints, `graphify query` zuerst."
 
 ---
 
@@ -212,7 +212,7 @@ Jede Phase ist eigenständig testbar (`npm run test:health-*`), endet grün und 
 **DoD:** `npm run test:health-activity` grün; Preview-Verifikation.
 
 > **▶️ Continuation-Prompt (Phase 5):**
-> „Yuvomi-Gesundheitsmodul, Phase 5 (Tab „Laborwerte"). Phasen 0–4 grün. Baue den **Laborwerte-Tab**: Befund anlegen (Datum, Labor, Notiz) mit n Analyten (Name, Wert, Einheit, Referenz low/high); automatische `flag`-Ableitung (low/normal/high) mit farbcodierter Darstellung (Tokens, nicht hardcoden); Trend je Analyt über mehrere Befunde (native SVG-Chart) mit eingezeichnetem Referenzband; neutraler medizinischer Disclaimer (kein Diagnose-Anspruch). Personen-Umschalter, i18n alle Locales. Test `test/test-health-labs.js` (+ Script) für flag-Ableitung + Analyt-Trend. Hard Constraints, `graphify query` zuerst."
+> „Samla-Gesundheitsmodul, Phase 5 (Tab „Laborwerte"). Phasen 0–4 grün. Baue den **Laborwerte-Tab**: Befund anlegen (Datum, Labor, Notiz) mit n Analyten (Name, Wert, Einheit, Referenz low/high); automatische `flag`-Ableitung (low/normal/high) mit farbcodierter Darstellung (Tokens, nicht hardcoden); Trend je Analyt über mehrere Befunde (native SVG-Chart) mit eingezeichnetem Referenzband; neutraler medizinischer Disclaimer (kein Diagnose-Anspruch). Personen-Umschalter, i18n alle Locales. Test `test/test-health-labs.js` (+ Script) für flag-Ableitung + Analyt-Trend. Hard Constraints, `graphify query` zuerst."
 
 ---
 
@@ -225,7 +225,7 @@ Jede Phase ist eigenständig testbar (`npm run test:health-*`), endet grün und 
 **DoD:** `npm run test:health-labs` grün; Preview-Verifikation.
 
 > **▶️ Continuation-Prompt (Phase 6):**
-> „Yuvomi-Gesundheitsmodul, Phase 6 (Übersicht + Statistik + Export). Phasen 0–5 grün: alle vier Detail-Tabs fertig. Baue den **Übersichts-Tab** (`/health`): heute fällige Meds mit Inline-Take, Karten der letzten Vitalwerte, Adherence-Streak, Schnell-Erfassungs-Buttons, nächste Erinnerungen. Ergänze **Export** (CSV je Bereich + Zeitraum, Muster wie Budget-Stats-Export). Optional Gesundheits-Karte in `public/pages/dashboard.js`. Test `test/test-health-overview.js` (+ Script). i18n alle Locales, Hard Constraints, `graphify query` zuerst."
+> „Samla-Gesundheitsmodul, Phase 6 (Übersicht + Statistik + Export). Phasen 0–5 grün: alle vier Detail-Tabs fertig. Baue den **Übersichts-Tab** (`/health`): heute fällige Meds mit Inline-Take, Karten der letzten Vitalwerte, Adherence-Streak, Schnell-Erfassungs-Buttons, nächste Erinnerungen. Ergänze **Export** (CSV je Bereich + Zeitraum, Muster wie Budget-Stats-Export). Optional Gesundheits-Karte in `public/pages/dashboard.js`. Test `test/test-health-overview.js` (+ Script). i18n alle Locales, Hard Constraints, `graphify query` zuerst."
 
 ---
 
@@ -238,7 +238,7 @@ Jede Phase ist eigenständig testbar (`npm run test:health-*`), endet grün und 
 **DoD:** `npm run test:health-overview` grün; `npm test` gesamt grün; Dashboard zeigt Gesundheits-Karte (falls Modul aktiv).
 
 > **▶️ Continuation-Prompt (Phase 7):**
-> „Yuvomi-Gesundheitsmodul, Phase 7 (Doku-Sync + Suche + a11y-Pass). Phasen 0–6 grün: Modul funktional vollständig. Führe `/docs-sync` aus (README, `docs/SPEC.md`, `docs/installation.md`, `.env.example`, GitHub-Pages, Installer/Deploy-Targets — nur was das Gesundheitsmodul betrifft). Indexiere Medikamente/Aktivitäten in `server/services/search.js`. Mache einen a11y-/Tastatur-Pass (Fokus, ARIA der Tabs/Modals, Screenreader-Announce). Ergänze Hilfe-Zeilen (`public/utils/help.js`) und ggf. Shortcut-Doku. i18n-Audit final. Danach bereit für Phase 8 (`/impeccable critique`)."
+> „Samla-Gesundheitsmodul, Phase 7 (Doku-Sync + Suche + a11y-Pass). Phasen 0–6 grün: Modul funktional vollständig. Führe `/docs-sync` aus (README, `docs/SPEC.md`, `docs/installation.md`, `.env.example`, GitHub-Pages, Installer/Deploy-Targets — nur was das Gesundheitsmodul betrifft). Indexiere Medikamente/Aktivitäten in `server/services/search.js`. Mache einen a11y-/Tastatur-Pass (Fokus, ARIA der Tabs/Modals, Screenreader-Announce). Ergänze Hilfe-Zeilen (`public/utils/help.js`) und ggf. Shortcut-Doku. i18n-Audit final. Danach bereit für Phase 8 (`/impeccable critique`)."
 
 ---
 
@@ -251,7 +251,7 @@ Jede Phase ist eigenständig testbar (`npm run test:health-*`), endet grün und 
 **DoD:** Doku vollständig; `i18n-auditor` ohne fehlende Keys; Tab-Navigation/Modals a11y-konform.
 
 > **▶️ Continuation-Prompt (Phase 8):**
-> „Yuvomi-Gesundheitsmodul, Phase 8 (Finaler Design-/UX-Feinschliff + Release). Phasen 0–7 grün: Modul funktional & dokumentiert. Führe **`/impeccable critique`** auf das gesamte Gesundheitsmodul aus (alle 5 Tabs, Modals, Charts, Empty-/Error-States, responsive/mobil, Dark Mode, Motion). Fixiere die finale `--module-health`-Akzentfarbe in `tokens.css` (WCAG-AA, Hue-Abstand ≥ 20° zu Nachbarn). Arbeite die Critique-Findings ab (Visual Hierarchy, Spacing, Micro-Interactions, Konsistenz mit Küche/Budget). Danach `/release-prep` (Default `minor` — neues Modul): CHANGELOG, Version-Bump inkl. `public/sw.js APP_RELEASE == package.json`, Commit/Tag/Push/Release. `graphify update .` am Ende."
+> „Samla-Gesundheitsmodul, Phase 8 (Finaler Design-/UX-Feinschliff + Release). Phasen 0–7 grün: Modul funktional & dokumentiert. Führe **`/impeccable critique`** auf das gesamte Gesundheitsmodul aus (alle 5 Tabs, Modals, Charts, Empty-/Error-States, responsive/mobil, Dark Mode, Motion). Fixiere die finale `--module-health`-Akzentfarbe in `tokens.css` (WCAG-AA, Hue-Abstand ≥ 20° zu Nachbarn). Arbeite die Critique-Findings ab (Visual Hierarchy, Spacing, Micro-Interactions, Konsistenz mit Küche/Budget). Danach `/release-prep` (Default `minor` — neues Modul): CHANGELOG, Version-Bump inkl. `public/sw.js APP_RELEASE == package.json`, Commit/Tag/Push/Release. `graphify update .` am Ende."
 
 ---
 

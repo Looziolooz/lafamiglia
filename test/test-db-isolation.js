@@ -2,7 +2,7 @@
  * Modul: Test-Isolation gegen streunende Datenbankdateien
  * Zweck: server/db.js ruft init() beim Import auf. Eine Suite, die das Modul
  *        (auch nur mittelbar) lädt, ohne DB_PATH zu setzen, öffnet damit die
- *        echte Datei im Repo-Wurzelverzeichnis: sie legt yuvomi.db an und
+ *        echte Datei im Repo-Wurzelverzeichnis: sie legt samla.db an und
  *        nimmt in den nächsten Lauf mit, was der vorige hinterlassen hat.
  *        Dieser Test verfolgt die relativen Importe jeder Test-Suite und
  *        verlangt DB_PATH genau dort, wo db.js wirklich erreicht wird.
@@ -115,12 +115,12 @@ test('jede Suite, die server/db.js lädt, setzt DB_PATH', () => {
   assert.deepStrictEqual(
     offenders, [],
     'Diese Suiten laden server/db.js ohne DB_PATH und legen dadurch eine echte '
-    + `yuvomi.db im Repo an. Setze DB_PATH=:memory: davor:\n  ${offenders.join('\n  ')}`
+    + `samla.db im Repo an. Setze DB_PATH=:memory: davor:\n  ${offenders.join('\n  ')}`
   );
 });
 
 test('die Reihenfolgeprüfung erkennt wirkungslose Zuweisungen', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'yuvomi-dbguard-'));
+  const dir = mkdtempSync(join(tmpdir(), 'samla-dbguard-'));
   const dbPath = relative(dir, DB_MODULE).replaceAll('\\', '/');
   const write = (name, body) => {
     const file = join(dir, name);

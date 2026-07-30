@@ -1,5 +1,5 @@
 /**
- * Screenshot Script - Yuvomi
+ * Screenshot Script - Samla
  * Fully automated: seeds demo data, creates Linda user, starts server,
  * captures all modules in light + dark mode for two device profiles:
  *   - web:    iPad Pro 13"         → 2752 × 2064 px  (viewport 1376×1032, DSF 2.0)
@@ -7,7 +7,7 @@
  *
  * Usage:  node scripts/take-screenshots.mjs
  *
- * Side effects: writes a temporary database to /tmp/yuvomi-screenshot.db
+ * Side effects: writes a temporary database to /tmp/samla-screenshot.db
  *               and starts a server on port 3099. Both are cleaned up on exit.
  */
 
@@ -28,7 +28,7 @@ const LOCALE      = (process.env.SHOT_LOCALE || 'en').toLowerCase();
 const OUT_DIR     = LOCALE === 'en' ? SCREENSHOT_DIR : resolve(SCREENSHOT_DIR, LOCALE);
 // BCP-47 tag for the browser context (drives Intl date/number/currency formatting).
 const CONTEXT_LOCALE = { en: 'en-US', de: 'de-DE' }[LOCALE] || 'en-US';
-const DEMO_DB     = '/tmp/yuvomi-screenshot.db';
+const DEMO_DB     = '/tmp/samla-screenshot.db';
 const PORT        = 3099;
 const BASE_URL    = `http://localhost:${PORT}`;
 const SESSION_SECRET = 'screenshots_secret_123';
@@ -114,17 +114,17 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 // variables do NOT survive. arg = { theme, locale }.
 function initFlags(arg) {
   try {
-    localStorage.setItem('yuvomi-locale', arg.locale);
-    localStorage.setItem('yuvomi-onboarded', '1');
-    localStorage.setItem('yuvomi-install-dismissed', String(Date.now()));
-    localStorage.setItem('yuvomi-theme', arg.theme);
+    localStorage.setItem('samla-locale', arg.locale);
+    localStorage.setItem('samla-onboarded', '1');
+    localStorage.setItem('samla-install-dismissed', String(Date.now()));
+    localStorage.setItem('samla-theme', arg.theme);
   } catch {}
   window.addEventListener('beforeinstallprompt', (e) => e.preventDefault());
 }
 
 async function dismissOverlays(page) {
   await page.evaluate(() => {
-    document.querySelectorAll('.onboarding-overlay, yuvomi-install-prompt').forEach((el) => el.remove());
+    document.querySelectorAll('.onboarding-overlay, samla-install-prompt').forEach((el) => el.remove());
   });
   const closeBtn = page.locator('.modal-close').first();
   if (await closeBtn.count() > 0) {
@@ -134,10 +134,10 @@ async function dismissOverlays(page) {
 
 async function applyAppState(page, theme, locale) {
   await page.evaluate((a) => {
-    localStorage.setItem('yuvomi-locale', a.locale);
-    localStorage.setItem('yuvomi-onboarded', '1');
-    localStorage.setItem('yuvomi-install-dismissed', String(Date.now()));
-    localStorage.setItem('yuvomi-theme', a.theme);
+    localStorage.setItem('samla-locale', a.locale);
+    localStorage.setItem('samla-onboarded', '1');
+    localStorage.setItem('samla-install-dismissed', String(Date.now()));
+    localStorage.setItem('samla-theme', a.theme);
     document.documentElement.setAttribute('data-theme', a.theme);
   }, { theme, locale });
 }

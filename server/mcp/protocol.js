@@ -16,7 +16,7 @@ const pkg = JSON.parse(readFileSync(new URL('../../package.json', import.meta.ur
 const SUPPORTED_PROTOCOL_VERSIONS = ['2025-06-18', '2025-03-26', '2024-11-05'];
 const LATEST_PROTOCOL_VERSION = SUPPORTED_PROTOCOL_VERSIONS[0];
 
-const SERVER_INFO = { name: 'yuvomi', version: pkg.version };
+const SERVER_INFO = { name: 'samla', version: pkg.version };
 
 // JSON-RPC-Fehlercodes
 const PARSE_ERROR      = -32700;

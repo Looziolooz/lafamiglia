@@ -45,7 +45,7 @@ async function bootDb(dbPath, encryptionKey) {
 }
 
 function tmpDir() {
-  return mkdtempSync(join(tmpdir(), 'yuvomi-encryption-'));
+  return mkdtempSync(join(tmpdir(), 'samla-encryption-'));
 }
 
 /** true, wenn die Datei mit dem unverschlüsselten SQLite-Header beginnt. */
@@ -74,7 +74,7 @@ test('das Binding bringt Cipher-Support mit', () => {
 });
 
 test('ohne DB_ENCRYPTION_KEY bleibt die Datenbank unverschlüsselt (Entwicklung)', async () => {
-  const dbPath = join(tmpDir(), 'yuvomi.db');
+  const dbPath = join(tmpDir(), 'samla.db');
   await bootDb(dbPath, null);
 
   assert.ok(existsSync(dbPath), 'Datenbank muss angelegt werden');
@@ -82,7 +82,7 @@ test('ohne DB_ENCRYPTION_KEY bleibt die Datenbank unverschlüsselt (Entwicklung)
 });
 
 test('mit DB_ENCRYPTION_KEY ist eine frisch angelegte Datenbank wirklich verschlüsselt', async () => {
-  const dbPath = join(tmpDir(), 'yuvomi.db');
+  const dbPath = join(tmpDir(), 'samla.db');
   await bootDb(dbPath, KEY);
 
   assert.ok(existsSync(dbPath), 'Datenbank muss angelegt werden');
@@ -100,7 +100,7 @@ test('mit DB_ENCRYPTION_KEY ist eine frisch angelegte Datenbank wirklich verschl
 });
 
 test('eine unverschlüsselte Bestands-Datenbank wird beim Start migriert', async () => {
-  const dbPath = join(tmpDir(), 'yuvomi.db');
+  const dbPath = join(tmpDir(), 'samla.db');
   seedPlaintextDb(dbPath, 150);
   assert.ok(isPlaintext(dbPath), 'Vorbedingung: Bestands-DB ist unverschlüsselt');
 
@@ -117,7 +117,7 @@ test('eine unverschlüsselte Bestands-Datenbank wird beim Start migriert', async
 });
 
 test('die Migration hinterlässt ein unverschlüsseltes Backup der Originaldatei', async () => {
-  const dbPath = join(tmpDir(), 'yuvomi.db');
+  const dbPath = join(tmpDir(), 'samla.db');
   const backupPath = `${dbPath}.plaintext-backup`;
   seedPlaintextDb(dbPath, 10);
 
@@ -142,12 +142,12 @@ test('eine unverschlüsselte Legacy-oikos.db wird im selben Start umbenannt und 
   // SECURITY.md und docs/installation.md zum Löschen nennen.
   const dir = tmpDir();
   const legacyPath = join(dir, 'oikos.db');
-  const dbPath = join(dir, 'yuvomi.db');
+  const dbPath = join(dir, 'samla.db');
   seedPlaintextDb(legacyPath, 20);
 
   const mod = await bootDb(legacyPath, KEY);
 
-  assert.ok(existsSync(dbPath), 'die Datenbank muss im selben Start nach yuvomi.db umgezogen sein');
+  assert.ok(existsSync(dbPath), 'die Datenbank muss im selben Start nach samla.db umgezogen sein');
   assert.ok(!existsSync(legacyPath), 'die Legacy-Datei darf nicht liegenbleiben');
   assert.ok(!isPlaintext(dbPath), 'nach dem Umzug muss verschlüsselt sein');
 
@@ -165,7 +165,7 @@ test('eine unverschlüsselte Legacy-oikos.db wird im selben Start umbenannt und 
 });
 
 test('eine bereits verschlüsselte Datenbank wird beim nächsten Start nicht erneut migriert', async () => {
-  const dbPath = join(tmpDir(), 'yuvomi.db');
+  const dbPath = join(tmpDir(), 'samla.db');
   const backupPath = `${dbPath}.plaintext-backup`;
   await bootDb(dbPath, KEY);
   assert.ok(!existsSync(backupPath), 'Neuinstallation braucht kein Migrations-Backup');
@@ -182,7 +182,7 @@ test('eine bereits verschlüsselte Datenbank wird beim nächsten Start nicht ern
 });
 
 test('ein falscher Key führt zu einem klaren Startfehler statt zu stillem Datenverlust', async () => {
-  const dbPath = join(tmpDir(), 'yuvomi.db');
+  const dbPath = join(tmpDir(), 'samla.db');
   await bootDb(dbPath, KEY);
 
   await assert.rejects(
@@ -199,7 +199,7 @@ test('ein blockierter WAL-Checkpoint bricht die Migration ab, statt Teildaten zu
   // wal_checkpoint(TRUNCATE) wirft nicht, wenn eine andere Verbindung liest —
   // es meldet busy != 0. Würde die Migration das ignorieren, verschlüsselte sie
   // eine unvollständige Kopie und löschte anschließend die WAL-Sidecars.
-  const dbPath = join(tmpDir(), 'yuvomi.db');
+  const dbPath = join(tmpDir(), 'samla.db');
   seedPlaintextDb(dbPath, 50);
 
   // Zweite Instanz auf demselben Volume: ein offener Writer hält das WAL
@@ -234,7 +234,7 @@ test('ein blockierter WAL-Checkpoint bricht die Migration ab, statt Teildaten zu
 
 test('ein Backup der verschlüsselten Datenbank ist selbst verschlüsselt und wiederherstellbar', async () => {
   const dir = tmpDir();
-  const dbPath = join(dir, 'yuvomi.db');
+  const dbPath = join(dir, 'samla.db');
   const backupPath = join(dir, 'backup.db');
   const mod = await bootDb(dbPath, KEY);
   mod.get().exec('CREATE TABLE backup_marker (note TEXT)');
@@ -265,7 +265,7 @@ test('ein vor der Umstellung erzeugtes Klartext-Backup bleibt einspielbar', asyn
   // Bestandsnutzer haben Backups aus der Zeit, in der DB_ENCRYPTION_KEY
   // wirkungslos war. Würde die Validierung ihnen den Key aufsetzen, wären diese
   // Backups nach dem Update wertlos.
-  const legacyPath = join(tmpDir(), 'yuvomi.db');
+  const legacyPath = join(tmpDir(), 'samla.db');
   const legacy = await bootDb(legacyPath, null);
   legacy.get().exec('CREATE TABLE backup_marker (note TEXT)');
   legacy.get().prepare('INSERT INTO backup_marker VALUES (?)').run('altbestand');
@@ -276,7 +276,7 @@ test('ein vor der Umstellung erzeugtes Klartext-Backup bleibt einspielbar', asyn
   copyFileSync(legacyPath, oldBackup);
   assert.ok(isPlaintext(oldBackup), 'Vorbedingung: das alte Backup ist unverschlüsselt');
 
-  const dbPath = join(dir, 'yuvomi.db');
+  const dbPath = join(dir, 'samla.db');
   const mod = await bootDb(dbPath, KEY);
 
   const restored = await mod.restoreFromFile(oldBackup);
@@ -294,7 +294,7 @@ test('ein Restore hinterlässt keine unverschlüsselte Kopie im Datenverzeichnis
   // dafür ist die Backup-Datei selbst plus `.pre-restore-*` — eine zusätzliche
   // Klartext-Vollkopie bliebe dauerhaft liegen und käme bei jedem weiteren
   // Restore erneut dazu, ohne dass die Backup-UI davon berichtet.
-  const legacyPath = join(tmpDir(), 'yuvomi.db');
+  const legacyPath = join(tmpDir(), 'samla.db');
   const legacy = await bootDb(legacyPath, null);
   legacy.get().exec('CREATE TABLE restore_marker (note TEXT)');
   legacy.get().prepare('INSERT INTO restore_marker VALUES (?)').run('aus-dem-altbackup');
@@ -305,7 +305,7 @@ test('ein Restore hinterlässt keine unverschlüsselte Kopie im Datenverzeichnis
   copyFileSync(legacyPath, oldBackup);
   assert.ok(isPlaintext(oldBackup), 'Vorbedingung: das alte Backup ist unverschlüsselt');
 
-  const dbPath = join(dir, 'yuvomi.db');
+  const dbPath = join(dir, 'samla.db');
   const mod = await bootDb(dbPath, KEY);
 
   await mod.restoreFromFile(oldBackup);
@@ -329,7 +329,7 @@ test('ein Restore hinterlässt keine unverschlüsselte Kopie im Datenverzeichnis
 });
 
 test('der SQLCipher-Cipher (AES-256) ist aktiv, nicht der Default ChaCha20', async () => {
-  const dbPath = join(tmpDir(), 'yuvomi.db');
+  const dbPath = join(tmpDir(), 'samla.db');
   await bootDb(dbPath, KEY);
 
   const handle = new Database(dbPath);

@@ -63,7 +63,7 @@ describe('Backup Scheduler', () => {
     const newFiles = afterFiles.filter(f => !beforeFiles.includes(f));
 
     assert.strictEqual(newFiles.length, 1, 'Should create exactly one new backup file');
-    assert.ok(newFiles[0].startsWith('yuvomi-backup-'), 'Backup file should have correct prefix');
+    assert.ok(newFiles[0].startsWith('samla-backup-'), 'Backup file should have correct prefix');
     assert.ok(newFiles[0].endsWith('.db'), 'Backup file should have .db extension');
   });
 
@@ -76,7 +76,7 @@ describe('Backup Scheduler', () => {
     }
 
     const files = await fs.readdir(TEST_BACKUP_DIR);
-    const backupFiles = files.filter(f => f.startsWith('yuvomi-backup-') && f.endsWith('.db'));
+    const backupFiles = files.filter(f => f.startsWith('samla-backup-') && f.endsWith('.db'));
 
     assert.strictEqual(backupFiles.length, 3, 'Should keep only last 3 backups');
   });

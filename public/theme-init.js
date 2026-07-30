@@ -1,8 +1,8 @@
-// Einmalige, idempotente Migration aller Legacy-„oikos"-Storage-Keys → „yuvomi".
+// Einmalige, idempotente Migration aller Legacy-„oikos"-Storage-Keys → „samla".
 // Läuft als ALLERERSTES (im <head>, vor jeder Seite/Komponente), damit
 // migrierte Werte (Theme, Locale, Ansichten …) ohne Flackern verfügbar sind.
 // Benennt jeden Key, der mit `oikos-`, `oikos:` oder `oikos.` beginnt, auf das
-// gleiche Suffix mit `yuvomi`-Präfix um (z. B. `oikos-theme` → `yuvomi-theme`).
+// gleiche Suffix mit `samla`-Präfix um (z. B. `oikos-theme` → `samla-theme`).
 (function migrateLegacyStorage() {
   // Kein gemeinsames Flag: sessionStorage ist pro Tab. Würde ein localStorage-Flag
   // die Migration kurzschließen, verlöre ein zweiter, vor dem Update geöffneter Tab
@@ -19,7 +19,7 @@
       }
       for (var j = 0; j < keys.length; j++) {
         var oldKey = keys[j];
-        var newKey = 'yuvomi' + oldKey.slice('oikos'.length);
+        var newKey = 'samla' + oldKey.slice('oikos'.length);
         if (store.getItem(newKey) === null) {
           store.setItem(newKey, store.getItem(oldKey));
         }
@@ -30,7 +30,7 @@
 })();
 
 (function() {
-  var stored = localStorage.getItem('yuvomi-theme');
+  var stored = localStorage.getItem('samla-theme');
   if (stored === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
   } else if (stored === 'light') {

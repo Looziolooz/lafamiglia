@@ -1,16 +1,16 @@
 services:
-  yuvomi:
-    image: ghcr.io/ulsklyc/yuvomi:latest
+  samla:
+    image: ghcr.io/YOUR-ORG/samla:latest
     build: .                          # optional: use --build to build locally instead
-    container_name: yuvomi
+    container_name: samla
     restart: unless-stopped
     ports:
-      # Host-Port aus .env (OIKOS_HTTP_PORT); App im Container bleibt auf 3000.
-      - "0.0.0.0:${OIKOS_HTTP_PORT:-3000}:3000"
+      # Host-Port aus .env (SAMLA_HTTP_PORT); App im Container bleibt auf 3000.
+      - "0.0.0.0:${SAMLA_HTTP_PORT:-3000}:3000"
     volumes:
       - ${DATA_DIR:-./data}:/data
       - ${BACKUP_DIR:-./backups}:/backups
-      # Drop Yuvomi modules into ./modules, or set MODULES_DIR=/path/to/modules.
+      # Drop Samla modules into ./modules, or set MODULES_DIR=/path/to/modules.
       - ${MODULES_DIR:-./modules}:/app/modules
       # Optional local documents folder: mount a host directory to /documents inside the container
       - ${DOCUMENT_STORAGE_LOCAL_DIR:-./documents}:/documents
@@ -18,7 +18,7 @@ services:
       - .env
     environment:
       - NODE_ENV=production
-      - DB_PATH=${DB_PATH:-/data/yuvomi.db}
+      - DB_PATH=${DB_PATH:-/data/samla.db}
       - BACKUP_DIR=/backups
       # Local document storage (optional): set to true to store uploaded documents on the mounted /documents folder.
       - DOCUMENT_STORAGE_LOCAL_ENABLED=${DOCUMENT_STORAGE_LOCAL_ENABLED:-false}

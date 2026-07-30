@@ -181,7 +181,7 @@ test('Settings-Blätter wiederholen ihren eigenen Titel nicht als Unterüberschr
   // h2 wiederholt - fünf taten es, eines sogar mit demselben i18n-Key. Die Suite
   // war grün und der Defekt drei Critique-Läufe lang vorhanden (2026-07-27).
   const { SETTINGS_LEAVES } = await import('../public/settings/registry.js');
-  const de = JSON.parse(readFileSync(new URL('../public/locales/de.json', import.meta.url), 'utf8'));
+  const de = JSON.parse(readFileSync(new URL('../public/locales/en.json', import.meta.url), 'utf8'));
   const translate = (key) => key.split('.').reduce((value, segment) => value?.[segment], de);
   const normalize = (value) => String(value ?? '').trim().toLowerCase().replace(/\s+/g, ' ');
 

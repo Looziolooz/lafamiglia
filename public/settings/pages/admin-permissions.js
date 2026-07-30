@@ -415,7 +415,7 @@ async function selectSubject(container, mode, id) {
         state.inherited = { modules: { ...roleRes.data.modules }, widgets: { ...roleRes.data.widgets } };
       }
     } catch (err) {
-      window.yuvomi?.showToast(err.message || t('common.errorGeneric'), 'danger');
+      window.samla?.showToast(err.message || t('common.errorGeneric'), 'danger');
     }
   }
 
@@ -439,9 +439,9 @@ async function save(container) {
     state.draft = { modules: { ...res.data.modules }, widgets: { ...res.data.widgets } };
     state.dirty = false;
     renderMatrix(container);
-    window.yuvomi?.showToast(t('settings.permSaved', { name: subjectTitle() }), 'success');
+    window.samla?.showToast(t('settings.permSaved', { name: subjectTitle() }), 'success');
   } catch (err) {
-    window.yuvomi?.showToast(err.message || t('common.errorGeneric'), 'danger');
+    window.samla?.showToast(err.message || t('common.errorGeneric'), 'danger');
     if (saveBtn) saveBtn.disabled = false;
   }
 }

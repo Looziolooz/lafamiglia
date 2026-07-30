@@ -55,9 +55,9 @@ const WIZARD_EXTRA_KEYS = ['BASE_URL', 'VAPID_SUBJECT'];
 const TOTAL_KEYS = ORIGINAL_KEYS.length + GOOGLE_DRIVE_KEYS.length + 2 + P5_KEYS.length
   + DOCUMENT_STORAGE_KEYS.length + DOCUMENT_STORAGE_LOCAL_KEYS.length
   + SUBSCRIPTION_KEYS.length + EMAIL_KEYS.length + WEBDAV_BACKUP_KEYS.length
-  + WIZARD_EXTRA_KEYS.length; // + TZ + OIKOS_HTTP_PORT
+  + WIZARD_EXTRA_KEYS.length; // + TZ + SAMLA_HTTP_PORT
 
-test('ENV_SCHEMA enthält alle Original-Keys, TZ, OIKOS_HTTP_PORT, P5, Subscriptions und Dokument-WebDAV', () => {
+test('ENV_SCHEMA enthält alle Original-Keys, TZ, SAMLA_HTTP_PORT, P5, Subscriptions und Dokument-WebDAV', () => {
   assert.equal(ENV_SCHEMA.length, TOTAL_KEYS);
   const keys = ENV_SCHEMA.map(e => e.key);
   for (const k of ORIGINAL_KEYS) {
@@ -67,7 +67,7 @@ test('ENV_SCHEMA enthält alle Original-Keys, TZ, OIKOS_HTTP_PORT, P5, Subscript
     assert.ok(keys.includes(k), `Google-Drive-Key fehlt: ${k}`);
   }
   assert.ok(keys.includes('TZ'), 'Key fehlt: TZ');
-  assert.ok(keys.includes('OIKOS_HTTP_PORT'), 'Key fehlt: OIKOS_HTTP_PORT');
+  assert.ok(keys.includes('SAMLA_HTTP_PORT'), 'Key fehlt: SAMLA_HTTP_PORT');
   for (const k of P5_KEYS) {
     assert.ok(keys.includes(k), `P5-Key fehlt: ${k}`);
   }
@@ -160,7 +160,7 @@ test('.env.example dokumentiert die lokalen Dokumentspeicher-Werte', () => {
 });
 
 test('Unraid deklariert die lokalen Dokumentspeicher-Werte advanced und optional', () => {
-  const src = readFileSync(new URL('../templates/yuvomi.xml', import.meta.url), 'utf8');
+  const src = readFileSync(new URL('../templates/samla.xml', import.meta.url), 'utf8');
   for (const key of DOCUMENT_STORAGE_LOCAL_KEYS) {
     const config = src.match(new RegExp(`<Config[^>]+Target="${key}"[^>]*>`));
     assert.ok(config, `Unraid fehlt ${key}`);
@@ -223,18 +223,18 @@ test('Jedes Container-Deployment schreibt Backups nach /backups (issue #579)', (
   );
   assert.match(truenas, /add_env\("BACKUP_DIR", "\/backups"\)/, 'TrueNAS setzt BACKUP_DIR nicht');
 
-  const quadlet = readFileSync(new URL('../tools/quadlet/oikos.container', import.meta.url), 'utf8');
+  const quadlet = readFileSync(new URL('../tools/quadlet/samla.container', import.meta.url), 'utf8');
   assert.match(quadlet, /^Environment=BACKUP_DIR=\/backups$/m, 'Quadlet setzt BACKUP_DIR nicht');
 
-  const unraid = readFileSync(new URL('../templates/yuvomi.xml', import.meta.url), 'utf8');
+  const unraid = readFileSync(new URL('../templates/samla.xml', import.meta.url), 'utf8');
   const backupVar = unraid.match(/<Config[^>]+Target="BACKUP_DIR"[^>]*>[^<]*/);
   assert.ok(backupVar, 'Unraid deklariert BACKUP_DIR nicht');
   assert.match(backupVar[0], /Default="\/backups"/, 'Unraid BACKUP_DIR muss /backups defaulten');
   assert.match(unraid, /Target="\/backups"[^>]+Type="Path"/, 'Unraid mountet kein /backups');
 });
 
-test('TZ und OIKOS_HTTP_PORT haben writeToEnv: true', () => {
-  for (const key of ['TZ', 'OIKOS_HTTP_PORT']) {
+test('TZ und SAMLA_HTTP_PORT haben writeToEnv: true', () => {
+  for (const key of ['TZ', 'SAMLA_HTTP_PORT']) {
     const entry = ENV_SCHEMA.find(e => e.key === key);
     assert.ok(entry, `${key} nicht in ENV_SCHEMA`);
     assert.equal(entry.writeToEnv, true, `${key}.writeToEnv ist nicht true`);
@@ -293,7 +293,7 @@ test('Google Drive OAuth installer wiring is optional, masked, validated and dep
 
   const envExample = readFileSync(new URL('../.env.example', import.meta.url), 'utf8');
   const portainer = readFileSync(new URL('../docs/docker-compose.portainer.yml', import.meta.url), 'utf8');
-  const unraid = readFileSync(new URL('../templates/yuvomi.xml', import.meta.url), 'utf8');
+  const unraid = readFileSync(new URL('../templates/samla.xml', import.meta.url), 'utf8');
   for (const key of GOOGLE_DRIVE_KEYS) {
     assert.match(envExample, new RegExp(`^${key}=`, 'm'));
     assert.match(portainer, new RegExp(`- ${key}=\\$\\{${key}:-`));
@@ -346,10 +346,10 @@ test('/api/defaults-Route in install-server.js liefert ENV_SCHEMA (Snapshot)', (
 
 // ── Phase 1: Zeitzone und Port wirken ───────────────────────────────────────
 
-test('install.html nimmt TZ und OIKOS_HTTP_PORT ins gesendete env-Objekt auf', () => {
+test('install.html nimmt TZ und SAMLA_HTTP_PORT ins gesendete env-Objekt auf', () => {
   const src = readFileSync(new URL('../tools/installer/install.html', import.meta.url), 'utf8');
   assert.match(src, /TZ:\s*S\.tz/, 'install.html sendet TZ nicht im env-Objekt');
-  assert.match(src, /OIKOS_HTTP_PORT:\s*S\.port/, 'install.html sendet OIKOS_HTTP_PORT nicht im env-Objekt');
+  assert.match(src, /SAMLA_HTTP_PORT:\s*S\.port/, 'install.html sendet SAMLA_HTTP_PORT nicht im env-Objekt');
 });
 
 test('Web-Installer zeigt, sammelt und sendet alle Dokument-WebDAV-Werte', () => {
@@ -387,12 +387,12 @@ test('CLI-Installer sammelt und schreibt alle Dokument-WebDAV-Werte', () => {
   );
 });
 
-test('docker-compose.yml mappt den Host-Port über OIKOS_HTTP_PORT mit Default 3000', () => {
+test('docker-compose.yml mappt den Host-Port über SAMLA_HTTP_PORT mit Default 3000', () => {
   const src = readFileSync(new URL('../docker-compose.yml', import.meta.url), 'utf8');
   assert.match(
     src,
-    /\$\{OIKOS_HTTP_PORT:-3000\}:3000/,
-    'Port-Mapping nutzt OIKOS_HTTP_PORT nicht mit Default :-3000 (Container-Port muss 3000 bleiben)'
+    /\$\{SAMLA_HTTP_PORT:-3000\}:3000/,
+    'Port-Mapping nutzt SAMLA_HTTP_PORT nicht mit Default :-3000 (Container-Port muss 3000 bleiben)'
   );
   assert.doesNotMatch(
     src,
@@ -401,15 +401,15 @@ test('docker-compose.yml mappt den Host-Port über OIKOS_HTTP_PORT mit Default 3
   );
 });
 
-test('install.sh schreibt TZ und OIKOS_HTTP_PORT in die generierte .env', () => {
+test('install.sh schreibt TZ und SAMLA_HTTP_PORT in die generierte .env', () => {
   const src = readFileSync(new URL('../install.sh', import.meta.url), 'utf8');
-  assert.match(src, /^TZ=\$\{YUVOMI_TZ\}/m, 'install.sh schreibt TZ=${YUVOMI_TZ} nicht in den .env-Block');
-  assert.match(src, /^OIKOS_HTTP_PORT=\$\{YUVOMI_PORT\}/m, 'install.sh schreibt OIKOS_HTTP_PORT=${YUVOMI_PORT} nicht in den .env-Block');
+  assert.match(src, /^TZ=\$\{SAMLA_TZ\}/m, 'install.sh schreibt TZ=${SAMLA_TZ} nicht in den .env-Block');
+  assert.match(src, /^SAMLA_HTTP_PORT=\$\{SAMLA_PORT\}/m, 'install.sh schreibt SAMLA_HTTP_PORT=${SAMLA_PORT} nicht in den .env-Block');
 });
 
-test('.env.example dokumentiert OIKOS_HTTP_PORT', () => {
+test('.env.example dokumentiert SAMLA_HTTP_PORT', () => {
   const src = readFileSync(new URL('../.env.example', import.meta.url), 'utf8');
-  assert.match(src, /OIKOS_HTTP_PORT/, '.env.example dokumentiert OIKOS_HTTP_PORT nicht');
+  assert.match(src, /SAMLA_HTTP_PORT/, '.env.example dokumentiert SAMLA_HTTP_PORT nicht');
 });
 
 test('.env.example dokumentiert alle optionalen Dokument-WebDAV-Werte', () => {
@@ -420,7 +420,7 @@ test('.env.example dokumentiert alle optionalen Dokument-WebDAV-Werte', () => {
 });
 
 test('Unraid deklariert alle Dokument-WebDAV-Werte advanced und maskiert das Passwort', () => {
-  const src = readFileSync(new URL('../templates/yuvomi.xml', import.meta.url), 'utf8');
+  const src = readFileSync(new URL('../templates/samla.xml', import.meta.url), 'utf8');
   for (const key of DOCUMENT_STORAGE_KEYS) {
     const config = src.match(new RegExp(`<Config[^>]+Target="${key}"[^>]*>`));
     assert.ok(config, `Unraid fehlt ${key}`);

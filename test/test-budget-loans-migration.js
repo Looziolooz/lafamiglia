@@ -20,7 +20,7 @@ import Database from 'better-sqlite3-multiple-ciphers';
 // Modul-Load (und migriert dabei). Geprüft wird hier nur die exportierte v101-SQL
 // gegen eine eigens aufgebaute Vor-v101-DB.
 process.env.SESSION_SECRET = process.env.SESSION_SECRET || 'test-secret';
-process.env.DB_PATH = join(mkdtempSync(join(tmpdir(), 'yuvomi-loanmig-')), 'unused.db');
+process.env.DB_PATH = join(mkdtempSync(join(tmpdir(), 'samla-loanmig-')), 'unused.db');
 const { MIGRATIONS } = await import('../server/db.js');
 
 const V101 = MIGRATIONS.find((m) => m.version === 101);
@@ -29,7 +29,7 @@ const V102 = MIGRATIONS.find((m) => m.version === 102);
 // Stand von budget_loans direkt vor v101 (v28 + v88 + v100) mit einem Darlehen
 // und einer gekoppelten Ratenzahlung.
 function seedPreV101() {
-  const db = new Database(join(mkdtempSync(join(tmpdir(), 'yuvomi-loanmig-')), 'db.sqlite'));
+  const db = new Database(join(mkdtempSync(join(tmpdir(), 'samla-loanmig-')), 'db.sqlite'));
   db.exec(`
     CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL);
 

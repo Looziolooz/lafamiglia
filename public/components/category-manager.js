@@ -88,7 +88,7 @@ class CategoryManagerElement extends HTMLElement {
       await this._fetch();
       this._render();
     } catch (err) {
-      window.yuvomi?.showToast(this._errMsg(err), 'danger');
+      window.samla?.showToast(this._errMsg(err), 'danger');
     }
   }
 
@@ -287,7 +287,7 @@ class CategoryManagerElement extends HTMLElement {
   _warnDragUnavailable(err) {
     if (this._dragWarned) return;
     this._dragWarned = true;
-    console.warn('[yuvomi-category-manager] Drag-and-Drop nicht verfügbar (SortableJS-Import fehlgeschlagen); Auf/Ab-Buttons bleiben nutzbar.', err);
+    console.warn('[samla-category-manager] Drag-and-Drop nicht verfügbar (SortableJS-Import fehlgeschlagen); Auf/Ab-Buttons bleiben nutzbar.', err);
   }
 
   _announce(message) {
@@ -428,10 +428,10 @@ class CategoryManagerElement extends HTMLElement {
       const res = await api.post(this._basePath, body);
       this._cats.push(res.data);
       this._renderGroup(group ?? '');
-      window.yuvomi?.showToast(t('category.added'), 'success');
+      window.samla?.showToast(t('category.added'), 'success');
       this._notifyChanged();
     } catch (err) {
-      window.yuvomi?.showToast(this._errMsg(err), 'danger');
+      window.samla?.showToast(this._errMsg(err), 'danger');
     }
   }
 
@@ -471,10 +471,10 @@ class CategoryManagerElement extends HTMLElement {
       const idx = this._cats.findIndex((c) => this._keyOf(c) === key);
       if (idx >= 0) this._cats[idx] = res.data;
       this._renderGroup(cat.type ?? cat.group ?? '');
-      window.yuvomi?.showToast(t('category.renamed'), 'success');
+      window.samla?.showToast(t('category.renamed'), 'success');
       this._notifyChanged();
     } catch (err) {
-      window.yuvomi?.showToast(this._errMsg(err), 'danger');
+      window.samla?.showToast(this._errMsg(err), 'danger');
     }
   }
 
@@ -523,7 +523,7 @@ class CategoryManagerElement extends HTMLElement {
       if (movedKey) this._announceMove(movedKey, { groupKey });
       this._notifyChanged();
     } catch (err) {
-      window.yuvomi?.showToast(this._errMsg(err), 'danger');
+      window.samla?.showToast(this._errMsg(err), 'danger');
       if (rollbackRender) {
         const inputs = this._snapshotAddInputs();
         this._renderGroup(groupKey);
@@ -570,10 +570,10 @@ class CategoryManagerElement extends HTMLElement {
       await api.delete(`${this._basePath}/${encodeURIComponent(key)}`);
       this._cats = this._cats.filter((c) => this._keyOf(c) !== key);
       this._renderGroup(cat.type ?? cat.group ?? '');
-      window.yuvomi?.showToast(t('category.deleted'), 'default');
+      window.samla?.showToast(t('category.deleted'), 'default');
       this._notifyChanged();
     } catch (err) {
-      window.yuvomi?.showToast(this._errMsg(err), 'danger');
+      window.samla?.showToast(this._errMsg(err), 'danger');
     }
   }
 
@@ -592,11 +592,11 @@ class CategoryManagerElement extends HTMLElement {
       );
       await this._fetch();
       this._renderSublist(parent);
-      window.yuvomi?.showToast(t('category.added'), 'success');
+      window.samla?.showToast(t('category.added'), 'success');
       this._notifyChanged();
       return res;
     } catch (err) {
-      window.yuvomi?.showToast(this._errMsg(err), 'danger');
+      window.samla?.showToast(this._errMsg(err), 'danger');
     }
   }
 
@@ -614,10 +614,10 @@ class CategoryManagerElement extends HTMLElement {
       );
       await this._fetch();
       this._renderSublist(parent);
-      window.yuvomi?.showToast(t('category.renamed'), 'success');
+      window.samla?.showToast(t('category.renamed'), 'success');
       this._notifyChanged();
     } catch (err) {
-      window.yuvomi?.showToast(this._errMsg(err), 'danger');
+      window.samla?.showToast(this._errMsg(err), 'danger');
     }
   }
 
@@ -651,7 +651,7 @@ class CategoryManagerElement extends HTMLElement {
       if (movedSubKey) this._announceMove(movedSubKey, { parentKey: parent });
       this._notifyChanged();
     } catch (err) {
-      window.yuvomi?.showToast(this._errMsg(err), 'danger');
+      window.samla?.showToast(this._errMsg(err), 'danger');
       if (rollbackRender) {
         const inputs = this._snapshotAddInputs();
         this._renderSublist(parent);
@@ -675,13 +675,13 @@ class CategoryManagerElement extends HTMLElement {
       );
       await this._fetch();
       this._renderSublist(parent);
-      window.yuvomi?.showToast(t('category.deleted'), 'default');
+      window.samla?.showToast(t('category.deleted'), 'default');
       this._notifyChanged();
     } catch (err) {
-      window.yuvomi?.showToast(this._errMsg(err), 'danger');
+      window.samla?.showToast(this._errMsg(err), 'danger');
     }
   }
 }
 
-customElements.define('yuvomi-category-manager', CategoryManagerElement);
+customElements.define('samla-category-manager', CategoryManagerElement);
 export { CategoryManagerElement };

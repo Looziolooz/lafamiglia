@@ -1,5 +1,5 @@
 /**
- * Modul: yuvomi-datepicker-Test
+ * Modul: samla-datepicker-Test
  * Zweck: Sichert Struktur, Invarianten und ISO-Wertkontrakt des gemeinsamen
  *        Datum-/Zeit-Components sowie die i18n-Vollständigkeit über alle Locales.
  * Ausführen: node test/test-datepicker.js
@@ -16,17 +16,17 @@ function test(name, fn) {
 }
 function assert(cond, msg) { if (!cond) throw new Error(msg || 'Assertion fehlgeschlagen'); }
 
-console.log('\n[yuvomi-datepicker-Test]\n');
+console.log('\n[samla-datepicker-Test]\n');
 
 const comp = readFileSync(new URL('../public/components/datepicker.js', import.meta.url), 'utf8');
 const css = readFileSync(new URL('../public/styles/datepicker.css', import.meta.url), 'utf8');
 
 // ── Struktur & Registrierung ────────────────────────────────────────────
-test('Definiert das Custom Element yuvomi-datepicker', () => {
-  assert(/customElements\.define\(\s*'yuvomi-datepicker'/.test(comp), 'Tag-Name muss yuvomi-datepicker sein');
+test('Definiert das Custom Element samla-datepicker', () => {
+  assert(/customElements\.define\(\s*'samla-datepicker'/.test(comp), 'Tag-Name muss samla-datepicker sein');
 });
 test('Registrierung ist idempotent (guard gegen Doppel-Define)', () => {
-  assert(/if\s*\(\s*!customElements\.get\(\s*'yuvomi-datepicker'\s*\)\s*\)/.test(comp), 'Define muss geguardet sein');
+  assert(/if\s*\(\s*!customElements\.get\(\s*'samla-datepicker'\s*\)\s*\)/.test(comp), 'Define muss geguardet sein');
 });
 test('Ist form-associated (ElementInternals)', () => {
   assert(/static\s+formAssociated\s*=\s*true/.test(comp), 'formAssociated muss true sein');
@@ -122,7 +122,7 @@ const localeFiles = readdirSync(localesDir).filter((f) => f.endsWith('.json'));
 const REQUIRED_KEYS = ['openCalendar', 'openTimePicker', 'previousMonth', 'nextMonth', 'today', 'clear'];
 
 test(`Alle ${localeFiles.length} Locales haben den datepicker-Namespace`, () => {
-  assert(localeFiles.length === 23, `Erwartet 23 Locale-Dateien, gefunden ${localeFiles.length}`);
+  assert(localeFiles.length === 3, `Erwartet 3 Locale-Dateien, gefunden ${localeFiles.length}`);
   for (const file of localeFiles) {
     const json = JSON.parse(readFileSync(new URL(file, localesDir), 'utf8'));
     assert(json.datepicker, `${file}: datepicker-Namespace fehlt`);

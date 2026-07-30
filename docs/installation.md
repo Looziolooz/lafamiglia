@@ -1,11 +1,11 @@
 ## Quick Install
 
-Three ways to get Yuvomi running from scratch:
+Three ways to get Samla running from scratch:
 
 ### Option A — Web Installer (recommended, all platforms)
 
 ```bash
-git clone https://github.com/ulsklyc/yuvomi.git && cd yuvomi
+git clone https://github.com/YOUR-ORG/samla.git && cd samla
 node tools/installer/install-server.js
 # Open http://localhost:8090
 ```
@@ -15,7 +15,7 @@ Requires Node.js 18+ on the host. The browser-based wizard is fully localized (2
 ### Option B — CLI Installer (Linux / macOS)
 
 ```bash
-git clone https://github.com/ulsklyc/yuvomi.git && cd yuvomi
+git clone https://github.com/YOUR-ORG/samla.git && cd samla
 bash install.sh
 ```
 
@@ -38,8 +38,8 @@ bash install.sh --env-file /path/to/.env
 ### Option C — Manual (Docker or Podman, no clone required)
 
 ```bash
-curl -O https://raw.githubusercontent.com/ulsklyc/yuvomi/main/docker-compose.yml
-curl -O https://raw.githubusercontent.com/ulsklyc/yuvomi/main/.env.example
+curl -O https://raw.githubusercontent.com/YOUR-ORG/samla/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/YOUR-ORG/samla/main/.env.example
 cp .env.example .env  # set SESSION_SECRET and DB_ENCRYPTION_KEY
 docker compose up -d
 ```
@@ -48,21 +48,21 @@ docker compose up -d
 adds the SELinux `:Z` relabel so the rootless container can write to its volumes:
 
 ```bash
-curl -O https://raw.githubusercontent.com/ulsklyc/yuvomi/main/podman-compose.yml
-curl -O https://raw.githubusercontent.com/ulsklyc/yuvomi/main/.env.example
+curl -O https://raw.githubusercontent.com/YOUR-ORG/samla/main/podman-compose.yml
+curl -O https://raw.githubusercontent.com/YOUR-ORG/samla/main/.env.example
 cp .env.example .env  # set SESSION_SECRET and DB_ENCRYPTION_KEY
 podman compose -f podman-compose.yml up -d   # or: podman-compose -f podman-compose.yml up -d
 ```
 
 Then open the WebUI — the first visit guides you through creating your admin account in
 the browser. Headless deployments can instead create it from the container console with
-`docker compose exec yuvomi node setup.js` (or the matching `podman compose … exec`).
+`docker compose exec samla node setup.js` (or the matching `podman compose … exec`).
 
 ---
 
 # Installation Guide
 
-Complete setup instructions for Yuvomi - from Docker installation to your first login.
+Complete setup instructions for Samla - from Docker installation to your first login.
 
 ## Table of Contents
 
@@ -80,16 +80,16 @@ Complete setup instructions for Yuvomi - from Docker installation to your first 
 
 ## Architecture Overview
 
-Yuvomi is a self-hosted family planner that runs as a single Docker container. The Express.js backend serves both the API and the static frontend files. Application data is stored in a SQLCipher-encrypted SQLite database inside a host-mounted data folder, and automated database backups are written to a separate host-mounted backup folder. Optionally, newly uploaded document files can be stored on a mounted host folder or on a WebDAV server instead of inside SQLite.
+Samla is a self-hosted family planner that runs as a single Docker container. The Express.js backend serves both the API and the static frontend files. Application data is stored in a SQLCipher-encrypted SQLite database inside a host-mounted data folder, and automated database backups are written to a separate host-mounted backup folder. Optionally, newly uploaded document files can be stored on a mounted host folder or on a WebDAV server instead of inside SQLite.
 
 ```
-Browser ──HTTP──▶ Docker Container (Express.js :3000) ──▶ SQLite/SQLCipher (/data/yuvomi.db)
+Browser ──HTTP──▶ Docker Container (Express.js :3000) ──▶ SQLite/SQLCipher (/data/samla.db)
 
 With HTTPS (recommended for network access):
 Browser ──HTTPS──▶ Nginx (Reverse Proxy) ──HTTP──▶ Docker Container (Express.js :3000) ──▶ SQLite/SQLCipher
 ```
 
-For local-only access, the Docker container is all you need. If you want to access Yuvomi from other devices on your network or the internet, add Nginx as a reverse proxy with SSL.
+For local-only access, the Docker container is all you need. If you want to access Samla from other devices on your network or the internet, add Nginx as a reverse proxy with SSL.
 
 ---
 
@@ -115,7 +115,7 @@ docker compose version     # Docker Compose version v2.x.x
 ### Podman (alternative to Docker, RHEL / Fedora / CentOS Stream)
 
 RHEL-based distributions ship **Podman** (often rootless) and **SELinux** instead of
-Docker. Yuvomi supports Podman out of the box: both installers auto-detect it, and a
+Docker. Samla supports Podman out of the box: both installers auto-detect it, and a
 dedicated `podman-compose.yml` adds the SELinux `:Z` volume relabel. Install Podman and
 either the `podman compose` subcommand (Podman 4.1+) or the `podman-compose` package:
 
@@ -147,7 +147,7 @@ git --version              # git version 2.x.x
 
 ## Step-by-Step Installation
 
-There are six ways to get Yuvomi running. **Option A** (web installer) is recommended for most users — it walks you through every step in your browser. **Option B** (pre-built image) is a quick manual alternative. **Option C** (build from source) is for contributors or custom builds. **Options D–F** install directly from a NAS/home-server app store with no terminal required: **Option D** (TrueNAS SCALE), **Option E** (Umbrel), and **Option F** (Unraid).
+There are six ways to get Samla running. **Option A** (web installer) is recommended for most users — it walks you through every step in your browser. **Option B** (pre-built image) is a quick manual alternative. **Option C** (build from source) is for contributors or custom builds. **Options D–F** install directly from a NAS/home-server app store with no terminal required: **Option D** (TrueNAS SCALE), **Option E** (Umbrel), and **Option F** (Unraid).
 
 ---
 
@@ -158,8 +158,8 @@ Requires Node.js 18+ and Docker on the host.
 #### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/ulsklyc/yuvomi.git
-cd yuvomi
+git clone https://github.com/YOUR-ORG/samla.git
+cd samla
 ```
 
 #### 2. Start the Installer
@@ -172,7 +172,7 @@ node tools/installer/install-server.js
 
 Open your browser and navigate to **http://localhost:8090**. The wizard detects your browser language (23 languages supported), verifies that a container engine is available (Docker with Compose v2, or Podman with `podman compose` / `podman-compose`), and reports any existing `.env` file or running container before you start. It then guides you through:
 
-- Basics — timezone (`TZ`) and HTTP host port (`OIKOS_HTTP_PORT`)
+- Basics — timezone (`TZ`) and HTTP host port (`SAMLA_HTTP_PORT`)
 - Security key generation (`SESSION_SECRET`, `DB_ENCRYPTION_KEY`) — on a re-run, keys already present in your `.env` are kept rather than regenerated, so running the wizard again on a live installation cannot lock you out of your encrypted database
 - Optional integrations (weather, Google Calendar, Apple CalDAV, local folder, WebDAV, or Google Drive document storage)
 - Advanced settings — reverse-proxy/HTTPS (`SESSION_SECURE`, `TRUST_PROXY`), Single Sign-On (OIDC), and automatic backups
@@ -193,8 +193,8 @@ A ready-to-use Docker image is published to the GitHub Container Registry on eve
 #### 1. Download the Compose File and Example Config
 
 ```bash
-curl -O https://raw.githubusercontent.com/ulsklyc/yuvomi/main/docker-compose.yml
-curl -O https://raw.githubusercontent.com/ulsklyc/yuvomi/main/.env.example
+curl -O https://raw.githubusercontent.com/YOUR-ORG/samla/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/YOUR-ORG/samla/main/.env.example
 ```
 
 #### 2. Configure Environment Variables
@@ -224,7 +224,7 @@ Run this command **twice** and paste each result. See [Environment Variables](#e
 docker compose up -d
 ```
 
-Docker pulls `ghcr.io/ulsklyc/yuvomi:latest` automatically. No build step, no Node.js installation needed.
+Docker pulls `ghcr.io/YOUR-ORG/samla:latest` automatically. No build step, no Node.js installation needed.
 
 Continue with [Step 4 — Verify](#4-verify-the-container-is-running).
 
@@ -235,8 +235,8 @@ Continue with [Step 4 — Verify](#4-verify-the-container-is-running).
 #### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/ulsklyc/yuvomi.git
-cd yuvomi
+git clone https://github.com/YOUR-ORG/samla.git
+cd samla
 ```
 
 #### 2. Configure Environment Variables
@@ -269,32 +269,32 @@ docker compose logs -f
 You should see output like:
 
 ```
-yuvomi  | [Yuvomi] Server läuft auf Port 3000
-yuvomi  | [Yuvomi] Umgebung: production
-yuvomi  | [Sync] Auto-Sync alle 15 Minuten aktiv.
+samla  | [Samla] Server läuft auf Port 3000
+samla  | [Samla] Umgebung: production
+samla  | [Sync] Auto-Sync alle 15 Minuten aktiv.
 ```
 
 Press `Ctrl+C` to stop following the logs (the container keeps running).
 
 ### 5. Create the First Admin Account
 
-On the first visit, Yuvomi detects that no account exists yet and guides you through
+On the first visit, Samla detects that no account exists yet and guides you through
 creating your admin account directly in the browser (see step 6). The form asks for:
 - **Username** (3–64 characters; letters, numbers, dots, hyphens, underscores)
 - **Display name** (e.g. "Jane Doe")
 - **Password** (minimum 8 characters, with a confirmation field)
 
-After you submit, Yuvomi creates the admin, signs you in automatically, and the setup
+After you submit, Samla creates the admin, signs you in automatically, and the setup
 form is no longer reachable.
 
 **Headless alternative (CLI):** if you prefer not to use the browser — or are scripting
 a provisioning step — create the admin from the container console instead:
 
 ```bash
-docker compose exec yuvomi node setup.js
+docker compose exec samla node setup.js
 ```
 
-### 6. Open Yuvomi
+### 6. Open Samla
 
 Open your browser and navigate to:
 
@@ -308,11 +308,11 @@ Log in with the admin credentials you just created. You can add family members f
 
 ### Option D — TrueNAS SCALE (Community Apps Catalog)
 
-No terminal required. Yuvomi is available directly in the TrueNAS SCALE Community Apps Catalog.
+No terminal required. Samla is available directly in the TrueNAS SCALE Community Apps Catalog.
 
 #### 1. Open the Apps Catalog
 
-In your TrueNAS SCALE web UI, go to **Apps → Discover Apps** and search for **Yuvomi**.
+In your TrueNAS SCALE web UI, go to **Apps → Discover Apps** and search for **Samla**.
 
 #### 2. Configure and Install
 
@@ -332,19 +332,19 @@ Once the app status shows **Running**, click **WebUI** in the Apps overview. The
 
 ### Option E — Umbrel (App Store)
 
-No terminal required. Yuvomi is available in the Umbrel App Store — everything runs on, and stays on, your Umbrel.
+No terminal required. Samla is available in the Umbrel App Store — everything runs on, and stays on, your Umbrel.
 
 #### 1. Open the App Store
 
-In your Umbrel dashboard, open the **App Store** and search for **Yuvomi**.
+In your Umbrel dashboard, open the **App Store** and search for **Samla**.
 
 #### 2. Install with One Click
 
 Click **Install**. Umbrel pulls the image and starts the container for you — there are no configuration files to edit.
 
-#### 3. Open Yuvomi
+#### 3. Open Samla
 
-Launch Yuvomi from your Umbrel home screen. The first visit guides you through creating your admin account in the browser.
+Launch Samla from your Umbrel home screen. The first visit guides you through creating your admin account in the browser.
 
 > **Finish setup right away.** When Umbrel's reverse-proxy authentication is disabled, the unauthenticated first-run setup endpoint is reachable on your LAN until you create the admin account. Complete the first-run setup immediately after installing.
 
@@ -352,11 +352,11 @@ Launch Yuvomi from your Umbrel home screen. The first visit guides you through c
 
 ### Option F — Unraid (Community Apps)
 
-No terminal required. Yuvomi ships as an Unraid Community Applications template.
+No terminal required. Samla ships as an Unraid Community Applications template.
 
 #### 1. Open Community Applications
 
-In Unraid, open the **Apps** tab (the Community Applications plugin) and search for **Yuvomi**.
+In Unraid, open the **Apps** tab (the Community Applications plugin) and search for **Samla**.
 
 #### 2. Configure the Template
 
@@ -368,7 +368,7 @@ Click **Install**. In the template, set:
 
 #### 3. Apply and Open
 
-Click **Apply**. Once the container is running, click the Yuvomi icon → **WebUI**. The first visit guides you through creating your admin account in the browser.
+Click **Apply**. Once the container is running, click the Samla icon → **WebUI**. The first visit guides you through creating your admin account in the browser.
 
 ---
 
@@ -383,8 +383,8 @@ All configuration happens in the `.env` file. The container reads these values o
 | Variable | Description | Default | Required |
 |----------|-------------|---------|----------|
 | `PORT` | Port the Express server listens on **inside the container** (rarely changed) | `3000` | No |
-| `OIKOS_HTTP_PORT` | Host port that the compose file maps to the container's port 3000. Change this to expose Yuvomi on a different host port; the app inside the container always listens on 3000. | `3000` | No |
-| `OIKOS_HTTP_BIND` | Host bind address for the published port (`podman-compose.yml` only). Set to `127.0.0.1` for rootless Podman behind a reverse proxy on the same host. | `0.0.0.0` | No |
+| `SAMLA_HTTP_PORT` | Host port that the compose file maps to the container's port 3000. Change this to expose Samla on a different host port; the app inside the container always listens on 3000. | `3000` | No |
+| `SAMLA_HTTP_BIND` | Host bind address for the published port (`podman-compose.yml` only). Set to `127.0.0.1` for rootless Podman behind a reverse proxy on the same host. | `0.0.0.0` | No |
 | `TZ` | Container timezone (e.g. `Europe/Berlin`). Affects timestamps, the automated-backup schedule, and serves as the fallback zone for events pushed to Google Calendar when the target calendar reports none. | `UTC` | No |
 | `NODE_ENV` | Runtime environment | `production` | No |
 | `LOG_LEVEL` | Lowest severity written to the container log (`debug`, `info`, `warn`, `error`). Set to `debug` to see the per-run detail of the calendar, contact and holiday sync, which stays quiet at `info` when a run has nothing to do. | `info` | No |
@@ -416,7 +416,7 @@ see [HTTPS / Reverse Proxy](#https--reverse-proxy-nginx)). Each device opts in u
 Settings → Personal → Notifications.
 
 Admins can also add household Gotify or ntfy channels on the same settings page. These channels
-are configured in the UI and do not require environment variables. The Yuvomi backend container or
+are configured in the UI and do not require environment variables. The Samla backend container or
 host must be able to reach the configured Gotify/ntfy base URL. HTTPS is recommended; HTTP is
 accepted for trusted internal networks such as a private LAN or container network.
 
@@ -438,14 +438,14 @@ Apple applies extra restrictions that do not exist on Android or desktop browser
 
 - **iOS/iPadOS 16.4 or newer** is required.
 - **The app must be installed to the Home Screen.** iOS delivers Web Push only to installed
-  home-screen web apps, never to a Safari tab. Open Yuvomi in Safari, then Share ->
+  home-screen web apps, never to a Safari tab. Open Samla in Safari, then Share ->
   "Add to Home Screen".
 - **Enable the toggle from inside the home-screen app.** The push subscription belongs to that
   installation, so a toggle enabled in a Safari tab does not carry over.
 - **The certificate must be one iOS trusts.** A self-signed certificate or a private CA without an
   installed profile stops the service worker from registering, which silently disables push. A
   plain `http://` LAN address does not work either.
-- **Check iOS Settings -> Notifications -> Yuvomi**: "Allow Notifications" must be on, and a Focus
+- **Check iOS Settings -> Notifications -> Samla**: "Allow Notifications" must be on, and a Focus
   mode must not be filtering the app.
 - **The server needs outbound access to `web.push.apple.com`.** In LAN-only or egress-filtered
   deployments the send fails server-side.
@@ -473,10 +473,10 @@ in Settings → Administration → Email (non-empty env values here override the
 | `EMAIL_SMTP_USER` | SMTP auth username. | - | No |
 | `EMAIL_SMTP_PASS` | SMTP auth password. | - | No |
 | `EMAIL_FROM_ADDRESS` | Sender email address. | - | No |
-| `EMAIL_FROM_NAME` | Sender display name. | `Yuvomi` | No |
-| `BASE_URL` | Absolute origin used to build password-reset links and calendar export-feed URLs, e.g. `https://yuvomi.example.com`. **Required for reset emails to be sent** — the request `Host` header is never trusted as a fallback, to prevent reset-link poisoning. The export feed falls back to the request's protocol/host when unset. | - | No* |
+| `EMAIL_FROM_NAME` | Sender display name. | `Samla` | No |
+| `BASE_URL` | Absolute origin used to build password-reset links and calendar export-feed URLs, e.g. `https://samla.example.com`. **Required for reset emails to be sent** — the request `Host` header is never trusted as a fallback, to prevent reset-link poisoning. The export feed falls back to the request's protocol/host when unset. | - | No* |
 
-\* Not required to start Yuvomi. Without it (or without SMTP configured) the self-service reset
+\* Not required to start Samla. Without it (or without SMTP configured) the self-service reset
 cannot deliver a mail, so the login page hides the "Forgot password" link entirely rather than
 offering a dead end — an admin can still reset a member's password directly under
 Settings → Administration → Family.
@@ -491,7 +491,7 @@ optional `DB_ENCRYPTION_KEY`.
 
 | Variable | Description | Default | Required |
 |----------|-------------|---------|----------|
-| `DB_PATH` | Path to the SQLite database file inside the container | `/data/yuvomi.db` | No |
+| `DB_PATH` | Path to the SQLite database file inside the container | `/data/samla.db` | No |
 | `DB_ENCRYPTION_KEY` | Encryption key for SQLCipher AES-256. **Change this!** | - | **Yes** |
 | `DATA_DIR` | Host directory mounted at `/data` inside the container (set in `.env` or `docker-compose.yml`). | `./data` | No |
 | `BACKUP_DIR` | In `.env`/`docker-compose.yml`: the **host** directory mounted at `/backups`. Inside the container the app reads the same name as the **container** path it writes to — the compose files pin it to `/backups`, and the image defaults to `/backups` as well. Only override it inside the container if you mount your backup volume somewhere else. | `./backups` (host) / `/backups` (container) | No |
@@ -538,7 +538,7 @@ environment:
 
 Admins can configure **Settings → Sync → Document storage** as the global destination for all
 new document files, including calendar attachments. Existing local documents are not migrated.
-Uploads fail closed: if WebDAV cannot accept the file, Yuvomi rejects the upload instead of silently
+Uploads fail closed: if WebDAV cannot accept the file, Samla rejects the upload instead of silently
 storing it in SQLite. Disabling WebDAV changes only future uploads; existing WebDAV documents remain
 readable and deletable.
 
@@ -576,7 +576,7 @@ PUT/GET/DELETE roundtrip in the target folder.
 Google Drive is a separate Documents OAuth connection, even when it reuses the same Cloud Console
 client ID and secret as Google Calendar. Enable the **Google Drive API**, add the exact redirect URI
 `https://<YOUR-DOMAIN>/api/v1/documents/storage/google-drive/callback`, and configure the variables
-below. Yuvomi requests only `https://www.googleapis.com/auth/drive.file`; it cannot browse arbitrary
+below. Samla requests only `https://www.googleapis.com/auth/drive.file`; it cannot browse arbitrary
 Drive files and never creates public permissions.
 
 | Variable | Description | Default | Required |
@@ -587,7 +587,7 @@ Drive files and never creates public permissions.
 
 After deployment, open **Settings → Sync → Document storage**, connect Google Drive, test the
 connection, then explicitly select Google Drive as the upload destination. Connecting does not
-activate it. New files are placed in the visible private `Yuvomi/Documents` folder; the opaque Drive
+activate it. New files are placed in the visible private `Samla/Documents` folder; the opaque Drive
 file ID is stored in SQLite. The environment-managed local-folder backend still takes precedence.
 
 Drive access and refresh tokens use Drive-specific database records and never the Calendar token
@@ -597,7 +597,7 @@ the candidate account and an existing Drive-backed file before replacing working
 Disconnect is blocked while Drive is selected or Drive-backed rows exist, and it removes only local
 Drive token state without revoking shared Google credentials.
 
-> **Access and backup boundary:** Yuvomi visibility settings only control access through Yuvomi.
+> **Access and backup boundary:** Samla visibility settings only control access through Samla.
 > Anyone with access to the connected Google Drive folder can view all files stored there. SQLite backups contain
 > metadata and Drive file IDs, not binaries. Back up or export the Drive folder separately and restore
 > it with the matching database.
@@ -643,11 +643,11 @@ it in controlled environments.
 | `GOOGLE_REDIRECT_URI` | OAuth callback URL | `https://<YOUR-DOMAIN>/api/v1/calendar/google/callback` | No |
 
 After connecting, enable the calendars to sync under **Settings → Sync**. The sync runs both ways:
-events created, edited, deleted, or moved to another calendar in Yuvomi are applied in Google as
+events created, edited, deleted, or moved to another calendar in Samla are applied in Google as
 well, and changes made in Google flow back. Outbound changes are attempted immediately and retried
 by the next sync run (`SYNC_INTERVAL_MINUTES`) if Google is unreachable. A calendar is only written
 to when the connected account has write access to it, and the **read-only mode** checkbox stops
-Yuvomi from changing anything in Google while still importing normally.
+Samla from changing anything in Google while still importing normally.
 
 Recurring appointments are imported as one series with its repeat rule, and cancelled or moved
 occurrences are carried over individually. Upgrading to v1.56.0 makes the first sync run read every
@@ -673,9 +673,9 @@ colour is kept as a separate entry instead.
 | `SYNC_INTERVAL_MINUTES` | Sync interval in minutes for calendars and contacts | `15` | No |
 
 CalDAV and iCloud sync both ways: events created, edited, deleted, or moved to another calendar in
-Yuvomi are applied on the server as well, and changes made there flow back. An outbound change is
+Samla are applied on the server as well, and changes made there flow back. An outbound change is
 attempted right when you save and retried by the next sync run if the server cannot be reached.
-Editing preserves everything the server holds that Yuvomi does not — attendees, alarms, categories
+Editing preserves everything the server holds that Samla does not — attendees, alarms, categories
 and exceptions of a recurring series stay untouched. Events that were already synced before the
 upgrade to v1.52.0 need one sync run before edits and deletions can reach them.
 
@@ -685,10 +685,10 @@ Enable single sign-on via any OpenID Connect provider (Authentik, Keycloak, Goog
 
 | Variable | Description | Default | Required |
 |----------|-------------|---------|----------|
-| `OIDC_ISSUER` | OIDC provider issuer URL (e.g. `https://authentik.example.com/application/o/yuvomi/`) | - | No |
+| `OIDC_ISSUER` | OIDC provider issuer URL (e.g. `https://authentik.example.com/application/o/samla/`) | - | No |
 | `OIDC_CLIENT_ID` | Client ID registered with your OIDC provider | - | No |
 | `OIDC_CLIENT_SECRET` | Client secret for the registered application | - | No |
-| `OIDC_REDIRECT_URI` | OAuth callback URL — must be registered with the provider (e.g. `https://yuvomi.example.com/api/v1/auth/oidc/callback`) | - | No |
+| `OIDC_REDIRECT_URI` | OAuth callback URL — must be registered with the provider (e.g. `https://samla.example.com/api/v1/auth/oidc/callback`) | - | No |
 | `OIDC_TRUST_EMAIL_WITHOUT_VERIFIED_CLAIM` | Set to `true` to allow account linking when the IdP omits the `email_verified` claim entirely. Only enable for IdPs fully under your control that never issue unverified addresses (e.g. older Authentik without an explicit `email_verified` property mapping). | - | No |
 
 When all four OIDC variables are set, a **"Sign in with SSO"** button appears on the login page. The flow uses Authorization Code + PKCE (S256) with a nonce. On first login, the user is matched by their OIDC `sub`. If no match exists, an existing local account is linked automatically **only when the provider reports a verified email (`email_verified: true`) and exactly one local account holds that email address**; otherwise a new account is provisioned. Unverified or ambiguous emails never take over an existing account. If your provider omits the `email_verified` claim, set `OIDC_TRUST_EMAIL_WITHOUT_VERIFIED_CLAIM=true` to enable linking.
@@ -717,7 +717,7 @@ Built-in cron-based database backup (default: 2 AM daily, keep last 7 copies). S
 | `BACKUP_DIR` | Directory (inside container) where backup files are written. Must be a writable, mounted path, otherwise backups fail with `EACCES`. | `/backups` (container), `./backups` (bare metal) | No |
 | `BACKUP_KEEP` | Number of most-recent backup files to retain | `7` | No |
 
-**WebDAV backup target (optional):** After each local backup, Yuvomi can automatically upload the file to any WebDAV-compatible server (Nextcloud, ownCloud, Hetzner Storage Box, Infomaniak kDrive, etc.). Configure in **Settings → Administration → Backup and restore → WebDAV Backup Target**, or via environment variables (env vars take precedence over the UI):
+**WebDAV backup target (optional):** After each local backup, Samla can automatically upload the file to any WebDAV-compatible server (Nextcloud, ownCloud, Hetzner Storage Box, Infomaniak kDrive, etc.). Configure in **Settings → Administration → Backup and restore → WebDAV Backup Target**, or via environment variables (env vars take precedence over the UI):
 
 | Variable | Description | Default | Required |
 |----------|-------------|---------|----------|
@@ -732,9 +732,9 @@ Built-in cron-based database backup (default: 2 AM daily, keep last 7 copies). S
 
 ## HTTPS / Reverse Proxy (Nginx)
 
-> **Optional for local access, required for network/internet access.** If you only access Yuvomi on the same machine (localhost), you can skip this section.
+> **Optional for local access, required for network/internet access.** If you only access Samla on the same machine (localhost), you can skip this section.
 
-When exposing Yuvomi to your local network or the internet, you need HTTPS for security. Nginx acts as a reverse proxy that handles SSL termination and forwards requests to the Docker container.
+When exposing Samla to your local network or the internet, you need HTTPS for security. Nginx acts as a reverse proxy that handles SSL termination and forwards requests to the Docker container.
 
 ### Install Nginx
 
@@ -746,17 +746,17 @@ sudo apt install nginx
 
 ### Configure Nginx
 
-Yuvomi ships with an example configuration. Copy it to Nginx:
+Samla ships with an example configuration. Copy it to Nginx:
 
 ```bash
-sudo cp nginx.conf.example /etc/nginx/sites-available/yuvomi
-sudo ln -s /etc/nginx/sites-available/yuvomi /etc/nginx/sites-enabled/
+sudo cp nginx.conf.example /etc/nginx/sites-available/samla
+sudo ln -s /etc/nginx/sites-available/samla /etc/nginx/sites-enabled/
 ```
 
 Edit the file and replace `deine-domain.de` with your actual domain:
 
 ```bash
-sudo nano /etc/nginx/sites-available/yuvomi
+sudo nano /etc/nginx/sites-available/samla
 ```
 
 The configuration includes:
@@ -783,7 +783,7 @@ Verify auto-renewal is active:
 sudo certbot renew --dry-run
 ```
 
-### Update Yuvomi for HTTPS
+### Update Samla for HTTPS
 
 `docker-compose.yml` reads `SESSION_SECURE` from your `.env` (`${SESSION_SECURE:-false}`), so you no longer need to edit the Compose file. When running behind an HTTPS reverse proxy, set these in `.env`:
 
@@ -804,8 +804,8 @@ docker compose up -d
 
 ## Podman & systemd Autostart (rootless)
 
-On RHEL-based systems you can run Yuvomi as a rootless systemd service via Podman
-[Quadlet](https://docs.podman.io/en/latest/markdown/podman-systemd.unit.5.html). Yuvomi
+On RHEL-based systems you can run Samla as a rootless systemd service via Podman
+[Quadlet](https://docs.podman.io/en/latest/markdown/podman-systemd.unit.5.html). Samla
 ships a ready-made unit at `tools/quadlet/oikos.container`.
 
 ```bash
@@ -834,11 +834,11 @@ in `/etc/containers/systemd/` and use `systemctl` without `--user`.
 
 ## Updates
 
-> **One-time step when upgrading past the container rename (Oikos → Yuvomi):** the Docker/Podman
-> service and container were renamed from `oikos` to `yuvomi`. Your data is safe - the database
-> volume is unchanged and the app migrates an existing `oikos.db` to `yuvomi.db` automatically on
+> **One-time step when upgrading past the container rename (Oikos → Samla):** the Docker/Podman
+> service and container were renamed from `oikos` to `samla`. Your data is safe - the database
+> volume is unchanged and the app migrates an existing `oikos.db` to `samla.db` automatically on
 > first start. But the old `oikos` container lingers as an orphan and keeps holding host port 3000,
-> which prevents the new `yuvomi` container from starting. Run the update once with
+> which prevents the new `samla` container from starting. Run the update once with
 > `--remove-orphans`:
 >
 > ```bash
@@ -862,7 +862,7 @@ No rebuild needed. The database volume persists across updates.
 ### Option C — Build from Source
 
 ```bash
-cd yuvomi
+cd samla
 git pull
 docker compose up -d --build
 ```
@@ -891,7 +891,7 @@ docker compose up -d --build
 
 ### Where is the Data?
 
-The SQLite database lives in the host folder configured through `DATA_DIR` and is mounted at `/data` inside the container. The database file is `/data/yuvomi.db`.
+The SQLite database lives in the host folder configured through `DATA_DIR` and is mounted at `/data` inside the container. The database file is `/data/samla.db`.
 
 Scheduled backups are written to the host folder configured through `BACKUP_DIR` and mounted at `/backups` inside the container.
 
@@ -904,8 +904,8 @@ Scheduled backups are written to the host folder configured through `BACKUP_DIR`
 Use the built-in backup helper to create a consistent SQLite backup from the running container, then copy it to your host:
 
 ```bash
-docker compose exec yuvomi node -e "import('./server/db.js').then(async db => { await db.backupToFile('/data/yuvomi-backup.db'); process.exit(0); })"
-docker cp yuvomi:/data/yuvomi-backup.db ./yuvomi-backup-$(date +%Y%m%d).db
+docker compose exec samla node -e "import('./server/db.js').then(async db => { await db.backupToFile('/data/samla-backup.db'); process.exit(0); })"
+docker cp samla:/data/samla-backup.db ./samla-backup-$(date +%Y%m%d).db
 ```
 
 Admins can also download a backup from **Settings → Administration → Backup and restore**.
@@ -922,10 +922,10 @@ BACKUP_DIR=./backups
 Admins can restore a backup from **Settings → Administration → Backup and restore**. For operational restores via Docker Compose, stop the running app, mount the backup into a temporary container that uses the same Docker volume, and replace the database file:
 
 ```bash
-SERVICE=yuvomi
-BACKUP="$PWD/yuvomi-backup-20260401.db"
+SERVICE=samla
+BACKUP="$PWD/samla-backup-20260401.db"
 docker compose stop "$SERVICE"
-docker compose run --rm -v "$BACKUP:/tmp/yuvomi-restore.db:ro" --entrypoint sh "$SERVICE" -c 'set -eu; target="${DB_PATH:-/data/yuvomi.db}"; case "$target" in */oikos.db) target="${target%/oikos.db}/yuvomi.db";; esac; stamp=$(date -u +%Y%m%dT%H%M%SZ); if [ -f "$target" ]; then cp "$target" "$target.pre-restore-$stamp"; fi; rm -f "$target-wal" "$target-shm"; cp /tmp/yuvomi-restore.db "$target"; chown node:node "$target" 2>/dev/null || true'
+docker compose run --rm -v "$BACKUP:/tmp/samla-restore.db:ro" --entrypoint sh "$SERVICE" -c 'set -eu; target="${DB_PATH:-/data/samla.db}"; case "$target" in */oikos.db) target="${target%/oikos.db}/samla.db";; esac; stamp=$(date -u +%Y%m%dT%H%M%SZ); if [ -f "$target" ]; then cp "$target" "$target.pre-restore-$stamp"; fi; rm -f "$target-wal" "$target-shm"; cp /tmp/samla-restore.db "$target"; chown node:node "$target" 2>/dev/null || true'
 docker compose up -d "$SERVICE"
 ```
 
@@ -934,10 +934,10 @@ If your Compose service is renamed, set `SERVICE` to that name, for example `SER
 For a local CLI restore outside Docker, set the same environment variables used by the app and run:
 
 ```bash
-DB_PATH=/path/to/yuvomi.db node --import dotenv/config scripts/restore-backup.js ./yuvomi-backup-20260401.db
+DB_PATH=/path/to/samla.db node --import dotenv/config scripts/restore-backup.js ./samla-backup-20260401.db
 ```
 
-The restore helper validates that the file is an Yuvomi database before replacing the active database. It also keeps a pre-restore copy next to the database file for emergency rollback.
+The restore helper validates that the file is an Samla database before replacing the active database. It also keeps a pre-restore copy next to the database file for emergency rollback.
 
 ### Automated Backups
 
@@ -950,7 +950,7 @@ crontab -e
 Add this line:
 
 ```
-0 3 * * * docker compose exec -T yuvomi node -e "import('./server/db.js').then(async db => { await db.backupToFile('/data/yuvomi-cron-backup.db'); process.exit(0); })" && docker cp yuvomi:/data/yuvomi-cron-backup.db /path/to/backups/yuvomi-$(date +\%Y\%m\%d).db
+0 3 * * * docker compose exec -T samla node -e "import('./server/db.js').then(async db => { await db.backupToFile('/data/samla-cron-backup.db'); process.exit(0); })" && docker cp samla:/data/samla-cron-backup.db /path/to/backups/samla-$(date +\%Y\%m\%d).db
 ```
 
 This creates a backup at 3:00 AM every day.
@@ -968,10 +968,10 @@ If port 3000 is already occupied by another application:
 lsof -i :3000
 ```
 
-Either stop the conflicting process, or change the host port in your `.env` file — `docker-compose.yml` maps `OIKOS_HTTP_PORT` to the container's port 3000 automatically:
+Either stop the conflicting process, or change the host port in your `.env` file — `docker-compose.yml` maps `SAMLA_HTTP_PORT` to the container's port 3000 automatically:
 
 ```bash
-OIKOS_HTTP_PORT=8080
+SAMLA_HTTP_PORT=8080
 ```
 
 Then run `docker compose up -d` to apply it.
@@ -1048,7 +1048,7 @@ chcon -Rt container_file_t ./data ./backups ./modules
 
 3. Verify the port mapping:
    ```bash
-   docker port yuvomi
+   docker port samla
    ```
 
 4. Check your firewall rules if accessing from another device.
@@ -1116,7 +1116,7 @@ docker compose down -v
 Remove the repository:
 
 ```bash
-cd .. && rm -rf yuvomi
+cd .. && rm -rf samla
 ```
 
 > **Warning**: `docker compose down -v` permanently deletes all data including the database. Create a backup first if needed.

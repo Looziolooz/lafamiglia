@@ -1,5 +1,5 @@
 /**
- * Modul: yuvomi-datepicker Web Component
+ * Modul: samla-datepicker Web Component
  * Zweck: Gemeinsame Datum-/Zeit-Eingabe für die ganze App. Tippen bleibt der
  *        schnelle Pfad (locale-Parsing wie bisher, #442); ein Icon-Trigger
  *        öffnet auf Desktop ein Glass-Popover (Kalender-Grid / Zeit-Liste),
@@ -73,7 +73,7 @@ const ICON = {
 
 const VALID_TYPES = ['date', 'time', 'datetime'];
 
-class YuvomiDatepicker extends HTMLElement {
+class SamlaDatepicker extends HTMLElement {
   // form-associated: erscheint in form.elements / FormData über `name`,
   // damit `name`-basierte Reads (form.elements.x.value) den ISO-Wert erhalten.
   static formAssociated = true;
@@ -625,8 +625,8 @@ class YuvomiDatepicker extends HTMLElement {
   }
 }
 
-if (!customElements.get('yuvomi-datepicker')) {
-  customElements.define('yuvomi-datepicker', YuvomiDatepicker);
+if (!customElements.get('samla-datepicker')) {
+  customElements.define('samla-datepicker', SamlaDatepicker);
 }
 
-export { YuvomiDatepicker };
+export { SamlaDatepicker };

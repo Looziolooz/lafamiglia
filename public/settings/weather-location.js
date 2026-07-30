@@ -89,7 +89,7 @@ export function readWeatherLocation(container, scope) {
 
 function requestLocation(container, scope, locateButton) {
   if (!navigator.geolocation) {
-    window.yuvomi?.showToast(t('settings.weatherLocateUnsupported'), 'warning');
+    window.samla?.showToast(t('settings.weatherLocateUnsupported'), 'warning');
     return;
   }
 
@@ -103,13 +103,13 @@ function requestLocation(container, scope, locateButton) {
       container.querySelector(`#${scope}-lat`).value = position.coords.latitude.toFixed(4);
       container.querySelector(`#${scope}-lon`).value = position.coords.longitude.toFixed(4);
       locateButton.disabled = false;
-      window.yuvomi?.showToast(t('settings.weatherLocateSuccess'), 'success');
+      window.samla?.showToast(t('settings.weatherLocateSuccess'), 'success');
     },
     (error) => {
       if (!isConnectedWeatherControl(locateButton, container)) return;
 
       locateButton.disabled = false;
-      window.yuvomi?.showToast(error.message || t('common.errorGeneric'), 'danger');
+      window.samla?.showToast(error.message || t('common.errorGeneric'), 'danger');
     },
     { enableHighAccuracy: true, timeout: 8000 },
   );

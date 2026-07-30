@@ -1,5 +1,5 @@
 {
-  "title": "Yuvomi Setup",
+  "title": "Samla Setup",
   "common": {
     "continue": "Continue",
     "back": "Back",
@@ -14,10 +14,10 @@
   },
   "config": {
     "title": "Basic Configuration",
-    "subtitle": "How will you access Yuvomi?",
+    "subtitle": "How will you access Samla?",
     "existing": "Existing configuration detected — your current .env file will be backed up before saving.",
     "hostLabel": "Domain or IP address",
-    "hostHint": "The address you'll use to open Yuvomi in your browser.",
+    "hostHint": "The address you'll use to open Samla in your browser.",
     "portLabel": "Port",
     "tzLabel": "Timezone",
     "errHost": "Invalid hostname. Use only letters, digits, hyphens and dots.",
@@ -53,7 +53,7 @@
   },
   "calendar": {
     "title": "Calendar Sync",
-    "subtitle": "Connect Yuvomi to Google Calendar or Apple iCloud. Both optional — expand to configure.",
+    "subtitle": "Connect Samla to Google Calendar or Apple iCloud. Both optional — expand to configure.",
     "google": "Google Calendar",
     "googleHint": "Create OAuth credentials at {{link}}. Redirect URI: {{redirect}}",
     "googleLink": "console.cloud.google.com",
@@ -99,7 +99,7 @@
     "documentGoogleDrive": "Google Drive documents"
   },
   "docker": {
-    "title": "Starting Yuvomi",
+    "title": "Starting Samla",
     "subtitle": "Pulling the image and starting the Docker container.",
     "starting": "Starting container …",
     "elapsed": "{{n}}s elapsed",
@@ -111,7 +111,7 @@
   },
   "admin": {
     "title": "Create Admin Account",
-    "subtitle": "Set up your first login. This account has full access to Yuvomi.",
+    "subtitle": "Set up your first login. This account has full access to Samla.",
     "userLabel": "Username",
     "userHint": "3–64 characters: letters, numbers, . - _",
     "nameLabel": "Display Name",
@@ -127,9 +127,9 @@
     "errCreate": "Failed to create admin account."
   },
   "done": {
-    "title": "Yuvomi is ready!",
+    "title": "Samla is ready!",
     "subtitle": "Your family planner is running and your admin account is set up.",
-    "open": "Open Yuvomi →",
+    "open": "Open Samla →",
     "backupReminder": "Remember to back up your .env file now — it holds your keys.",
     "download": "Download .env file",
     "savedTo": "Saved to {{path}}"
@@ -138,7 +138,7 @@
     "tag": "Advanced · optional",
     "title": "Advanced Settings",
     "subtitle": "Reverse proxy, single sign-on and automatic backups. All optional — skipping is safe.",
-    "proxyLabel": "How is Yuvomi exposed?",
+    "proxyLabel": "How is Samla exposed?",
     "proxyBehindHttps": "Behind a reverse proxy with HTTPS (Caddy, nginx, Traefik)",
     "proxyDirect": "Direct access over localhost / HTTP",
     "proxyHint": "When unsure choose “Reverse proxy”: it enforces secure cookies. Pick “Direct” only for local HTTP access without HTTPS.",
@@ -161,7 +161,7 @@
     "documentWebdavUsernameLabel": "Username",
     "documentWebdavPasswordLabel": "Password",
     "documentWebdavPathLabel": "Base path",
-    "documentWebdavPathHint": "Remote folder for document files. Leave empty to use yuvomi-documents.",
+    "documentWebdavPathHint": "Remote folder for document files. Leave empty to use samla-documents.",
     "documentLocal": "Local Document Storage",
     "documentLocalEnable": "Store new documents in a local folder",
     "documentLocalPathLabel": "Folder path",
@@ -193,11 +193,11 @@
     "errDocumentGoogleDriveCredentials": "Google Drive requires either its own client ID and secret or configured Google Calendar credentials."
   },
   "welcome": {
-    "title": "Welcome to Yuvomi",
+    "title": "Welcome to Samla",
     "subtitle": "Let's get your private family planner running. Choose how you'd like to set it up.",
     "simpleTitle": "Simple setup",
     "simpleBadge": "Recommended",
-    "simpleDesc": "We handle the technical details for you. Perfect for running Yuvomi at home.",
+    "simpleDesc": "We handle the technical details for you. Perfect for running Samla at home.",
     "simpleTime": "About 2 minutes",
     "advancedTitle": "Advanced setup",
     "advancedDesc": "Full control: reverse proxy, calendar sync, email, single sign-on and backups.",
@@ -214,7 +214,7 @@
     "itemBackupsDesc": "A local backup is kept every night.",
     "backupReminder": "After setup, back up the generated .env file — it holds your only encryption keys.",
     "switchAdvanced": "Need more options? Switch to advanced setup",
-    "start": "Set up & start Yuvomi"
+    "start": "Set up & start Samla"
   },
   "email": {
     "title": "Email & Password Reset",

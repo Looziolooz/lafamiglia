@@ -236,13 +236,13 @@ test('POST /import: 400 on invalid color', async () => {
 const REPRO_ICS = [
   'BEGIN:VCALENDAR',
   'VERSION:2.0',
-  'PRODID:-//Yuvomi COUNT reproduction//EN',
+  'PRODID:-//Samla COUNT reproduction//EN',
   'BEGIN:VEVENT',
   'DTSTART;TZID=Europe/Vienna:20240930T170000',
   'DTEND;TZID=Europe/Vienna:20240930T180000',
   'RRULE:FREQ=WEEKLY;COUNT=10',
   'EXDATE;TZID=Europe/Vienna:20241125T170000',
-  'UID:yuvomi-count-reproduction@example.invalid',
+  'UID:samla-count-reproduction@example.invalid',
   'SUMMARY:Kinderturnen',
   'END:VEVENT',
   'END:VCALENDAR',
@@ -254,7 +254,7 @@ test('#513: COUNT+EXDATE import stays finite (10 instances, 9 visible, none afte
 
   await importToLocal(reproUid, { ics: REPRO_ICS });
   const master = db.prepare(
-    `SELECT * FROM calendar_events WHERE created_by = ? AND external_calendar_id = 'yuvomi-count-reproduction@example.invalid'`,
+    `SELECT * FROM calendar_events WHERE created_by = ? AND external_calendar_id = 'samla-count-reproduction@example.invalid'`,
   ).get(reproUid);
   assert.ok(master, 'imported as a single series master');
   assert.equal(master.recurrence_rule, 'FREQ=WEEKLY;COUNT=10', 'COUNT preserved on import');

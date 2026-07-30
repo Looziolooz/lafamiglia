@@ -1,4 +1,4 @@
-# UX/UI-Audit Yuvomi - Phase 1 (read-only)
+# UX/UI-Audit Samla - Phase 1 (read-only)
 
 Stand: 2026-07-19 · v1.38.0 · Methode: Code-Analyse (alle `public/`-Flächen) + Live-Prüfung (Dev-Server, Demo-Seed, Light+Dark, Desktop 1280 + Mobile 375). Messwerte stammen aus dem laufenden Browser (getComputedStyle/getBoundingClientRect).
 
@@ -113,7 +113,7 @@ Severity: P3 | Aufwand: S
 | Filter-Chips | Outline-Pille, aktive = Modul-Akzent (`filter-chip.css`) | Tasks, Kalender, Kontakte, Dokumente, Notizen, Health-Personen | Overflow-Verhalten uneinheitlich: nur Budget hat Fade-Affordanz (F-06) |
 | Suche | `page-search`-Feld in Toolbar (tasks/notes/documents/contacts) bzw. Kalender-Inline-Suche (#471, gepinnt) | ja | - |
 | Löschen einzelner Items | Undo-Toast 5s (`showToast(_,_,5000,undo)`) | tasks/notes/contacts/calendar/recipes/shopping-items | Container-Löschung Liste ohne Confirm (F-12) |
-| Toast | `window.yuvomi.showToast` types default/success/danger/warning (`router.js:2577`) | app-weit | - |
+| Toast | `window.samla.showToast` types default/success/danger/warning (`router.js:2577`) | app-weit | - |
 | Modal | `openModal`/`confirmModal` mit Dirty-Guard, zentrale Pflichtfeld-Validierung (`modal.js:261,597-634`) | app-weit | Settings-Leaves rendern Inline-Formulare (eigene Familie, ok) |
 | Fokus-Ring | 2px Ring + Offset, modul-akzentuiert (global `reset.css:65-69`) | überwiegend | F-10/F-16-Stellen |
 | Leere Zustände | `.empty-state` mit Icon/Titel/Beschreibung/CTA | 17 Seiten | Meals bewusst ohne (Slot-Grid ist der Leerzustand - ok) |

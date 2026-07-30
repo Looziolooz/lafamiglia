@@ -198,11 +198,11 @@ function usesTzid(ev) {
 
 function buildVEvent(ev, dtstamp, showAssignees = false) {
   const lines = ['BEGIN:VEVENT'];
-  lines.push(`UID:event-${ev.id}@yuvomi`);
+  lines.push(`UID:event-${ev.id}@samla`);
   lines.push(`DTSTAMP:${dtstamp}`);
   if (ev.all_day) {
     lines.push(`DTSTART;VALUE=DATE:${formatDate(ev.start_datetime)}`);
-    // DTEND ist exklusiv: Yuvomi speichert das letzte sichtbare Datum → +1 Tag.
+    // DTEND ist exklusiv: Samla speichert das letzte sichtbare Datum → +1 Tag.
     const endKey = ev.end_datetime || ev.start_datetime;
     lines.push(`DTEND;VALUE=DATE:${addDaysDateKey(endKey, 1)}`);
   } else if (usesTzid(ev)) {
@@ -313,10 +313,10 @@ function buildFeed(conn, userId, now = new Date()) {
   const out = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Yuvomi//Calendar Feed//DE',
+    'PRODID:-//Samla//Calendar Feed//DE',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
-    'X-WR-CALNAME:Yuvomi',
+    'X-WR-CALNAME:Samla',
   ];
   // Je referenzierter Zone genau ein VTIMEZONE (RFC 5545: vor den VEVENTs), damit
   // Abonnenten die TZID-Serien auflösen können (#549).

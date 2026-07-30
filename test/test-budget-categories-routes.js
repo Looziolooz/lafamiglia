@@ -70,18 +70,18 @@ test('GET /meta: liefert Kategorie-Buckets', async () => {
 });
 
 test('GET /categories: lokalisierte Liste mit genesteten Subkategorien + lang', async () => {
-  const r = await call('GET', '/categories?lang=de');
+  const r = await call('GET', '/categories?lang=it');
   assert.equal(r.status, 200);
-  assert.equal(r.body.lang, 'de');
+  assert.equal(r.body.lang, 'it');
   assert.ok(r.body.data.length > 0);
   const withSub = r.body.data.find((c) => Array.isArray(c.subcategories));
   assert.ok(withSub, 'jede Kategorie trägt ein subcategories-Array');
   assert.ok('label' in r.body.data[0], 'lokalisiertes label ergänzt');
 });
 
-test('GET /categories: unbekannte Sprache fällt auf en zurück', async () => {
+test('GET /categories: unbekannte Sprache fällt auf die Standardsprache zurück', async () => {
   const r = await call('GET', '/categories?lang=xx');
-  assert.equal(r.body.lang, 'en');
+  assert.equal(r.body.lang, 'it');
 });
 
 test('GET /categories/:key/subcategories: unbekannte Kategorie → 404', async () => {

@@ -76,7 +76,7 @@ function bindEvents(container, user) {
           auto_locate: location.auto_locate,
         },
       });
-      window.yuvomi?.showToast(t('settings.personalWeatherSaved'), 'success');
+      window.samla?.showToast(t('settings.personalWeatherSaved'), 'success');
       await render(container, { user });
     } catch (error) {
       errorElement.textContent = error.message || t('common.errorGeneric');
@@ -89,10 +89,10 @@ function bindEvents(container, user) {
       await savePreferences({
         weather_user: { lat: null, lon: null, city: null, units: null, auto_locate: null },
       });
-      window.yuvomi?.showToast(t('settings.personalWeatherReset'), 'success');
+      window.samla?.showToast(t('settings.personalWeatherReset'), 'success');
       await render(container, { user });
     } catch (error) {
-      window.yuvomi?.showToast(error.message || t('common.errorGeneric'), 'danger');
+      window.samla?.showToast(error.message || t('common.errorGeneric'), 'danger');
     }
   });
 }

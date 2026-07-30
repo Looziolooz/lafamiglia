@@ -1,4 +1,4 @@
-# Yuvomi CLI-Installer — Svenska (sv)
+# Samla CLI-Installer — Svenska (sv)
 # Auto-generiert (Schlüssel identisch zu allen Locales). en = Fallback, de = Referenz.
 # Wird von install.sh gesourct; setzt die englische Basis pro Schlüssel außer Kraft.
 # Punkt-Schlüssel → Variablen mit Unterstrich (MSG_<bereich>_<name>).
@@ -52,7 +52,7 @@ MSG_document_webdav_enable="Lagra nya dokument på WebDAV? [y/N]:"
 MSG_document_webdav_url="  WebDAV-URL:"
 MSG_document_webdav_username="  Användarnamn:"
 MSG_document_webdav_password="  Lösenord:"
-MSG_document_webdav_path="  Bassökväg [yuvomi-documents]:"
+MSG_document_webdav_path="  Bassökväg [samla-documents]:"
 MSG_document_local_step="Valfritt: lokal dokumentlagring"
 MSG_document_local_hint="Lagra uppladdade dokument i en monterad värdmapp."
 MSG_document_local_enable="Spara nya dokument i en lokal mapp? [y/N]:"
@@ -74,7 +74,7 @@ MSG_admin_password="Lösenord (minst 8 tecken):"
 MSG_admin_confirm="Bekräfta lösenord:"
 MSG_admin_mismatch="Lösenorden matchar inte, försök igen."
 MSG_admin_created="Administratörskonto skapat!"
-MSG_admin_ready="  Yuvomi är redo!"
+MSG_admin_ready="  Samla är redo!"
 MSG_admin_open="  Öppna: %s"
 MSG_admin_exists="Ett administratörskonto finns redan."
 MSG_admin_failed="Kunde inte skapa administratör (HTTP %s): %s"

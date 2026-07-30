@@ -29,7 +29,7 @@ function eq(actual, expected, msg) {
 
 console.log('\n[Contact-Names-Test] Strukturierte Namensteile (#535)\n');
 
-process.env.DB_PATH = path.join(os.tmpdir(), `yuvomi-contact-names-${process.pid}.db`);
+process.env.DB_PATH = path.join(os.tmpdir(), `samla-contact-names-${process.pid}.db`);
 process.env.SESSION_SECRET = 'contact-names-test-secret-32bytes-long';
 
 const db = await import('../server/db.js');

@@ -190,7 +190,7 @@ function openAddPlan() {
   if (!options.length) {
     // 'info' ist kein gestylter Toast-Typ (es gibt nur success/danger/warning) —
     // der Aufruf landete stumm im Default-Stil. Neutrale Meldung, also 'default'.
-    window.yuvomi?.showToast(t('budget.planAllCategoriesBudgeted'), 'default');
+    window.samla?.showToast(t('budget.planAllCategoriesBudgeted'), 'default');
     return;
   }
   const optHtml = options.map((c) =>
@@ -286,11 +286,11 @@ async function savePlan(panel, category) {
     vibrate(10);
     closeModal({ force: true });
     await load();
-    window.yuvomi?.showToast(t('budget.planSavedToast'), 'success');
+    window.samla?.showToast(t('budget.planSavedToast'), 'success');
   } catch (err) {
     console.error('[Budget] plan save error:', err);
     btn.disabled = false;
-    window.yuvomi?.showToast(t('budget.loadError'), 'danger');
+    window.samla?.showToast(t('budget.loadError'), 'danger');
   }
 }
 
@@ -307,18 +307,18 @@ async function deletePlan(category) {
     vibrate(10);
     closeModal({ force: true });
     await load();
-    window.yuvomi?.showToast(t('budget.planRemovedToast'), 'default', 5000, async () => {
+    window.samla?.showToast(t('budget.planRemovedToast'), 'default', 5000, async () => {
       if (previous == null) return;
       try {
         await api.put(`/budget/plans/${encodeURIComponent(category)}`, { amount: previous });
         await load();
       } catch (err) {
         console.error('[Budget] plan restore error:', err);
-        window.yuvomi?.showToast(t('common.unknownError'), 'danger');
+        window.samla?.showToast(t('common.unknownError'), 'danger');
       }
     });
   } catch (err) {
     console.error('[Budget] plan delete error:', err);
-    window.yuvomi?.showToast(t('budget.loadError'), 'danger');
+    window.samla?.showToast(t('budget.loadError'), 'danger');
   }
 }

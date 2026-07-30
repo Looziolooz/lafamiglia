@@ -20,11 +20,11 @@ ask()     { printf "%s%s%s " "$BOLD" "$*" "$RESET"; }
 # ── Internationalisierung (i18n) ────────────────────────────────────────────────
 # Lädt gesourcte Locale-Dateien (tools/installer/locales/cli/<lang>.sh). en bildet
 # die Fallback-Basis, die aktive Sprache überlagert sie. Sprache aus --lang oder
-# der Umgebung (OIKOS_INSTALLER_LANG > LC_ALL > LC_MESSAGES > LANG), analog der App.
+# der Umgebung (SAMLA_INSTALLER_LANG > LC_ALL > LC_MESSAGES > LANG), analog der App.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLI_LOCALES_DIR="$SCRIPT_DIR/tools/installer/locales/cli"
-SUPPORTED_LOCALES=(de en es fr it sv el ru tr zh ja ar hi pt uk pl nl cs vi hu ko id fa)
-FALLBACK_LOCALE=en
+SUPPORTED_LOCALES=(en it sv)
+FALLBACK_LOCALE=it
 ACTIVE_LOCALE=$FALLBACK_LOCALE
 
 in_array() { local needle="$1"; shift; local e; for e in "$@"; do [ "$e" = "$needle" ] && return 0; done; return 1; }
@@ -38,7 +38,7 @@ normalize_locale() {
 }
 
 resolve_locale() {
-  normalize_locale "${OIKOS_INSTALLER_LANG:-${LC_ALL:-${LC_MESSAGES:-${LANG:-}}}}"
+  normalize_locale "${SAMLA_INSTALLER_LANG:-${LC_ALL:-${LC_MESSAGES:-${LANG:-}}}}"
 }
 
 # en zuerst als Basis sourcen, dann die aktive Sprache darüberlegen. Fehlen die
@@ -142,10 +142,10 @@ configure_basic() {
   step "$(t basic.step)"
 
   ask "$(t basic.host)"
-  read -r YUVOMI_HOST; YUVOMI_HOST="${YUVOMI_HOST:-localhost}"
+  read -r SAMLA_HOST; SAMLA_HOST="${SAMLA_HOST:-localhost}"
 
   ask "$(t basic.port)"
-  read -r YUVOMI_PORT; YUVOMI_PORT="${YUVOMI_PORT:-3000}"
+  read -r SAMLA_PORT; SAMLA_PORT="${SAMLA_PORT:-3000}"
 
   local sys_tz="UTC"
   if [ -f /etc/timezone ]; then
@@ -157,7 +157,7 @@ configure_basic() {
   fi
 
   ask "$(t basic.tz "$sys_tz")"
-  read -r YUVOMI_TZ; YUVOMI_TZ="${YUVOMI_TZ:-$sys_tz}"
+  read -r SAMLA_TZ; SAMLA_TZ="${SAMLA_TZ:-$sys_tz}"
 }
 
 # ── Step 2: Secrets ────────────────────────────────────────────────────────────
@@ -197,15 +197,15 @@ configure_secrets() {
 # ── Step 3: Weather ────────────────────────────────────────────────────────────
 configure_weather() {
   step "$(t weather.step)"
-  OPENWEATHER_API_KEY=''; OPENWEATHER_CITY='Berlin'
-  OPENWEATHER_UNITS='metric'; OPENWEATHER_LANG='de'
+  OPENWEATHER_API_KEY=''; OPENWEATHER_CITY='Stockholm'
+  OPENWEATHER_UNITS='metric'; OPENWEATHER_LANG='it'
 
   ask "$(t weather.enable)"
   read -r want_weather
   if [ "${want_weather,,}" = "y" ]; then
     info "$(t weather.apikey_hint)"
     ask "$(t weather.apikey)"; read -r OPENWEATHER_API_KEY
-    ask "$(t weather.city)"; read -r city; OPENWEATHER_CITY="${city:-Berlin}"
+    ask "$(t weather.city)"; read -r city; OPENWEATHER_CITY="${city:-Stockholm}"
     ask "$(t weather.units)"; read -r units; OPENWEATHER_UNITS="${units:-metric}"
   fi
 }
@@ -220,10 +220,10 @@ configure_calendar() {
   read -r want_google
   if [ "${want_google,,}" = "y" ]; then
     info "$(t calendar.google_hint)"
-    info "$(t calendar.redirect_hint "http://${YUVOMI_HOST}:${YUVOMI_PORT}/api/v1/calendar/google/callback")"
+    info "$(t calendar.redirect_hint "http://${SAMLA_HOST}:${SAMLA_PORT}/api/v1/calendar/google/callback")"
     ask "$(t calendar.client_id)"; read -r GOOGLE_CLIENT_ID
     ask "$(t calendar.client_secret)"; read -rs GOOGLE_CLIENT_SECRET; printf "\n"
-    GOOGLE_REDIRECT_URI="http://${YUVOMI_HOST}:${YUVOMI_PORT}/api/v1/calendar/google/callback"
+    GOOGLE_REDIRECT_URI="http://${SAMLA_HOST}:${SAMLA_PORT}/api/v1/calendar/google/callback"
   fi
 
   ask "$(t calendar.apple_enable)"
@@ -268,7 +268,7 @@ configure_document_storage() {
     ask "$(t document_webdav.username)"; read -r DOCUMENT_STORAGE_WEBDAV_USERNAME
     ask "$(t document_webdav.password)"; read -rs DOCUMENT_STORAGE_WEBDAV_PASSWORD; printf "\n"
     ask "$(t document_webdav.path)"; read -r DOCUMENT_STORAGE_WEBDAV_PATH
-    DOCUMENT_STORAGE_WEBDAV_PATH="${DOCUMENT_STORAGE_WEBDAV_PATH:-yuvomi-documents}"
+    DOCUMENT_STORAGE_WEBDAV_PATH="${DOCUMENT_STORAGE_WEBDAV_PATH:-samla-documents}"
   fi
 
   step "$(t document_google_drive.step)"
@@ -276,7 +276,7 @@ configure_document_storage() {
   ask "$(t document_google_drive.enable)"
   read -r want_document_google_drive
   if [ "${want_document_google_drive,,}" = "y" ]; then
-    info "$(t document_google_drive.redirect_hint "http://${YUVOMI_HOST}:${YUVOMI_PORT}/api/v1/documents/storage/google-drive/callback")"
+    info "$(t document_google_drive.redirect_hint "http://${SAMLA_HOST}:${SAMLA_PORT}/api/v1/documents/storage/google-drive/callback")"
     ask "$(t document_google_drive.client_id)"; read -r GOOGLE_DRIVE_CLIENT_ID
     ask "$(t document_google_drive.client_secret)"; read -rs GOOGLE_DRIVE_CLIENT_SECRET; printf "\n"
     if { [ -n "$GOOGLE_DRIVE_CLIENT_ID" ] && [ -z "$GOOGLE_DRIVE_CLIENT_SECRET" ]; } || { [ -z "$GOOGLE_DRIVE_CLIENT_ID" ] && [ -n "$GOOGLE_DRIVE_CLIENT_SECRET" ]; }; then
@@ -285,7 +285,7 @@ configure_document_storage() {
     if [ -z "$GOOGLE_DRIVE_CLIENT_ID" ] && { [ -z "$GOOGLE_CLIENT_ID" ] || [ -z "$GOOGLE_CLIENT_SECRET" ]; }; then
       err "$(t document_google_drive.err_credentials)"
     fi
-    GOOGLE_DRIVE_REDIRECT_URI="http://${YUVOMI_HOST}:${YUVOMI_PORT}/api/v1/documents/storage/google-drive/callback"
+    GOOGLE_DRIVE_REDIRECT_URI="http://${SAMLA_HOST}:${SAMLA_PORT}/api/v1/documents/storage/google-drive/callback"
   fi
 }
 
@@ -293,9 +293,9 @@ configure_document_storage() {
 review_and_confirm() {
   step "$(t review.step)"
   printf "\n"
-  printf "  %-16s %s%s%s\n"  "$(t review.host)"     "$CYAN"   "$YUVOMI_HOST" "$RESET"
-  printf "  %-16s %s%s%s\n"  "$(t review.port)"     "$CYAN"   "$YUVOMI_PORT" "$RESET"
-  printf "  %-16s %s%s%s\n"  "$(t review.timezone)" "$CYAN"   "$YUVOMI_TZ"   "$RESET"
+  printf "  %-16s %s%s%s\n"  "$(t review.host)"     "$CYAN"   "$SAMLA_HOST" "$RESET"
+  printf "  %-16s %s%s%s\n"  "$(t review.port)"     "$CYAN"   "$SAMLA_PORT" "$RESET"
+  printf "  %-16s %s%s%s\n"  "$(t review.timezone)" "$CYAN"   "$SAMLA_TZ"   "$RESET"
   printf "  %-16s %s***%s%s\n" "SESSION_SECRET" "$YELLOW" "$RESET" "${SESSION_SECRET_REUSED:+ $(t review.secret_reused)}"
   printf "  %-16s %s***%s%s\n" "DB_ENCRYPT_KEY" "$YELLOW" "$RESET" "${DB_ENCRYPTION_KEY_REUSED:+ $(t review.secret_reused)}"
   [ -n "$OPENWEATHER_API_KEY" ] && printf "  %-16s %s%s%s\n" "$(t review.weather)" "$GREEN" "$(t review.weather_value "$OPENWEATHER_CITY")" "$RESET"
@@ -324,7 +324,7 @@ write_env_and_start() {
   fi
 
   cat > .env << ENVEOF
-# Generated by Yuvomi installer
+# Generated by Samla installer
 SESSION_SECRET=${SESSION_SECRET}
 DB_ENCRYPTION_KEY=${DB_ENCRYPTION_KEY}
 OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY}
@@ -347,8 +347,8 @@ DOCUMENT_STORAGE_WEBDAV_USERNAME=${DOCUMENT_STORAGE_WEBDAV_USERNAME}
 DOCUMENT_STORAGE_WEBDAV_PASSWORD=${DOCUMENT_STORAGE_WEBDAV_PASSWORD}
 DOCUMENT_STORAGE_WEBDAV_PATH=${DOCUMENT_STORAGE_WEBDAV_PATH}
 SYNC_INTERVAL_MINUTES=15
-TZ=${YUVOMI_TZ}
-OIKOS_HTTP_PORT=${YUVOMI_PORT}
+TZ=${SAMLA_TZ}
+SAMLA_HTTP_PORT=${SAMLA_PORT}
 ENVEOF
 
   success "$(t container.env_written)"
@@ -364,7 +364,7 @@ ENVEOF
   while [ $elapsed -lt 120 ]; do
     local http_code
     http_code=$(curl -s -o /dev/null -w "%{http_code}" \
-      "http://localhost:${YUVOMI_PORT}/health" 2>/dev/null || echo "000")
+      "http://localhost:${SAMLA_PORT}/health" 2>/dev/null || echo "000")
     if [ "$http_code" = "200" ]; then
       printf "\n"; success "$(t container.healthy)"; return 0
     fi
@@ -402,13 +402,13 @@ create_admin() {
 
   local response http_code body
   response=$(curl -s -w "\n%{http_code}" \
-    -X POST "http://localhost:${YUVOMI_PORT}/api/v1/auth/setup" \
+    -X POST "http://localhost:${SAMLA_PORT}/api/v1/auth/setup" \
     -H "Content-Type: application/json" \
     -d "$payload")
   http_code=$(printf '%s' "$response" | tail -n1)
   body=$(printf '%s' "$response" | head -n-1)
 
-  local url="http://${YUVOMI_HOST}:${YUVOMI_PORT}"
+  local url="http://${SAMLA_HOST}:${SAMLA_PORT}"
   if [ "$http_code" = "201" ]; then
     success "$(t admin.created)"
     printf "\n%s%s━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━%s\n"   "$BOLD" "$GREEN" "$RESET"
@@ -421,7 +421,7 @@ create_admin() {
   else
     warn "$(t admin.failed "$http_code" "$body")"
     printf "%s\n" "$(t admin.manual)"
-    printf "  curl -X POST http://localhost:%s/api/v1/auth/setup \\\n" "$YUVOMI_PORT"
+    printf "  curl -X POST http://localhost:%s/api/v1/auth/setup \\\n" "$SAMLA_PORT"
     printf "    -H 'Content-Type: application/json' \\\n"
     printf "    -d '{\"username\":\"admin\",\"display_name\":\"Admin\",\"password\":\"yourpassword\"}'\n\n"
   fi
@@ -437,9 +437,9 @@ run_noninteractive() {
   detect_engine || err "$(t noninteractive.no_engine)"
   info "$(t noninteractive.engine "$ENGINE_NAME" "${COMPOSE[*]}")"
 
-  YUVOMI_PORT=$(grep -E '^PORT=' .env 2>/dev/null | cut -d= -f2- | head -n1)
-  YUVOMI_PORT="${YUVOMI_PORT:-3000}"
-  YUVOMI_HOST="localhost"
+  SAMLA_PORT=$(grep -E '^PORT=' .env 2>/dev/null | cut -d= -f2- | head -n1)
+  SAMLA_PORT="${SAMLA_PORT:-3000}"
+  SAMLA_HOST="localhost"
 
   if ! "${COMPOSE[@]}" up -d; then "${COMPOSE[@]}" logs --tail 50; exit 1; fi
 
@@ -448,13 +448,13 @@ run_noninteractive() {
   while [ $elapsed -lt 120 ]; do
     local http_code
     http_code=$(curl -s -o /dev/null -w "%{http_code}" \
-      "http://localhost:${YUVOMI_PORT}/health" 2>/dev/null || echo "000")
+      "http://localhost:${SAMLA_PORT}/health" 2>/dev/null || echo "000")
     [ "$http_code" = "200" ] && { printf "\n"; success "$(t noninteractive.ready)"; break; }
     printf "."; sleep 2; elapsed=$((elapsed + 2))
   done
 
   printf "\n%s%s%s %s\n\n" "$GREEN" "$(t noninteractive.started)" "$RESET" "$(t noninteractive.create_admin)"
-  printf "  curl -X POST http://localhost:%s/api/v1/auth/setup \\\n" "$YUVOMI_PORT"
+  printf "  curl -X POST http://localhost:%s/api/v1/auth/setup \\\n" "$SAMLA_PORT"
   printf "    -H 'Content-Type: application/json' \\\n"
   printf "    -d '{\"username\":\"admin\",\"display_name\":\"Admin\",\"password\":\"yourpassword\"}'\n\n"
 }
@@ -473,7 +473,7 @@ main() {
   set -- ${positional[@]+"${positional[@]}"}
 
   printf "\n%s%s  ╔══════════════════════════════╗\n" "$BOLD" "$BLUE"
-  printf "  ║      Yuvomi  Installer        ║\n"
+  printf "  ║      Samla  Installer        ║\n"
   printf "  ╚══════════════════════════════╝%s\n\n" "$RESET"
 
   if [ "${1:-}" = "--env-file" ]; then

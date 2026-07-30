@@ -86,7 +86,7 @@ function bindWeatherEvents(container, user) {
         weather_provider: 'open-meteo',
         weather_auto_locate: location.auto_locate,
       });
-      window.yuvomi?.showToast(t('settings.weatherSaved'), 'success');
+      window.samla?.showToast(t('settings.weatherSaved'), 'success');
       await render(container, { user });
     } catch (error) {
       errorElement.textContent = error.message || t('common.errorGeneric');
@@ -97,10 +97,10 @@ function bindWeatherEvents(container, user) {
   container.querySelector('#weather-remove-btn')?.addEventListener('click', async () => {
     try {
       await savePreferences({ weather_provider: null });
-      window.yuvomi?.showToast(t('settings.weatherRemoved'), 'success');
+      window.samla?.showToast(t('settings.weatherRemoved'), 'success');
       await render(container, { user });
     } catch (error) {
-      window.yuvomi?.showToast(error.message || t('common.errorGeneric'), 'danger');
+      window.samla?.showToast(error.message || t('common.errorGeneric'), 'danger');
     }
   });
 

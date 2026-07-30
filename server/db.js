@@ -30,19 +30,19 @@ const log = createLogger('DB');
 const DB_KEY = process.env.DB_ENCRYPTION_KEY;
 
 // --------------------------------------------------------
-// Pfad-Auflösung (Legacy-Migration oikos.db → yuvomi.db)
+// Pfad-Auflösung (Legacy-Migration oikos.db → samla.db)
 // --------------------------------------------------------
 //
-// Yuvomi hieß früher „Oikos". Die DB-Datei lag standardmäßig unter `oikos.db`
+// Samla hieß früher „Oikos". Die DB-Datei lag standardmäßig unter `oikos.db`
 // (bzw. `/data/oikos.db` in allen ausgelieferten Docker-Templates). Damit
 // Bestands-Nutzer beim Update NICHTS von Hand ändern müssen, leiten wir den
 // effektiven Pfad ab:
-//   - kein DB_PATH gesetzt              → <root>/yuvomi.db
-//   - DB_PATH endet auf oikos.db        → <dir>/yuvomi.db  (Legacy-Default erkannt)
-//   - DB_PATH endet auf yuvomi.db       → <dir>/yuvomi.db  (neuer Default)
+//   - kein DB_PATH gesetzt              → <root>/samla.db
+//   - DB_PATH endet auf oikos.db        → <dir>/samla.db  (Legacy-Default erkannt)
+//   - DB_PATH endet auf samla.db       → <dir>/samla.db  (neuer Default)
 //   - beliebiger anderer DB_PATH        → unverändert (Custom-Pfad wird respektiert)
 // In allen „managed" Fällen wird eine vorhandene `oikos.db` beim Start einmalig
-// nach `yuvomi.db` migriert. Dass auch der NEUE Default `yuvomi.db` als managed
+// nach `samla.db` migriert. Dass auch der NEUE Default `samla.db` als managed
 // gilt, ist bewusst: aktualisiert ein Bestands-User seine Compose-Datei auf den
 // neuen Default, läge die Daten weiter in `oikos.db` — die Migration greift trotzdem.
 let DB_PATH;
@@ -53,13 +53,13 @@ let LEGACY_DB_PATH; // null außer bei „managed" Layout
     ? path.dirname(configured)
     : path.join(import.meta.dirname, '..');
   const base = configured ? path.basename(configured) : null;
-  const isManagedLayout = !configured || base === 'oikos.db' || base === 'yuvomi.db';
-  DB_PATH = isManagedLayout ? path.join(baseDir, 'yuvomi.db') : configured;
+  const isManagedLayout = !configured || base === 'oikos.db' || base === 'samla.db';
+  DB_PATH = isManagedLayout ? path.join(baseDir, 'samla.db') : configured;
   LEGACY_DB_PATH = isManagedLayout ? path.join(baseDir, 'oikos.db') : null;
 }
 
 /**
- * Einmalige, idempotente Migration der Legacy-Datenbankdatei `oikos.db` → `yuvomi.db`.
+ * Einmalige, idempotente Migration der Legacy-Datenbankdatei `oikos.db` → `samla.db`.
  * Läuft beim Start VOR dem Öffnen der Verbindung. Absturzsicher:
  *   - Nichts zu tun (frische Installation / bereits migriert) → return.
  *   - Doppelzustand (beide existieren) → Ziel gewinnt, Legacy bleibt liegen, Warnung.
@@ -125,7 +125,7 @@ function migrateLegacyDbFile() {
 
   // 2. Checkpoint gelang → die .db ist vollständig und eigenständig. Nur sie
   //    umbenennen; die nun leeren Legacy-Sidecars best-effort entfernen (SQLite
-  //    legt -wal/-shm für yuvomi.db bei Bedarf neu an).
+  //    legt -wal/-shm für samla.db bei Bedarf neu an).
   try {
     renameSync(LEGACY_DB_PATH, DB_PATH);
     for (const suffix of ['-wal', '-shm']) {
@@ -166,7 +166,7 @@ function init({ plaintextBackup = true } = {}) {
     log.warn(
       `DB_PATH "${DB_PATH}" is a relative path — inside Docker this resolves to ` +
       `"${path.resolve(DB_PATH)}", which is NOT the mounted volume. ` +
-      `Data will be lost on container restart. Use an absolute path, e.g. DB_PATH=/data/yuvomi.db`
+      `Data will be lost on container restart. Use an absolute path, e.g. DB_PATH=/data/samla.db`
     );
   }
   mkdirSync(path.dirname(DB_PATH), { recursive: true });
@@ -3908,7 +3908,7 @@ const MIGRATIONS = [
       -- Gegenstück zu v103 für Änderungen: ein bereits nach Google gespiegelter
       -- Termin wurde nach dem ersten Push nie wieder ausgehend angefasst, weil der
       -- Outbound-Zweig nur external_source='local' selektiert. Titel-, Zeit- oder
-      -- Farbänderungen blieben damit in Yuvomi hängen.
+      -- Farbänderungen blieben damit in Samla hängen.
       --
       -- outbound_dirty ist bewusst NICHT user_modified: das Flag bedeutet
       -- dauerhaft "lokal angefasst, Farbe nicht überschreiben" und würde als
@@ -4115,7 +4115,7 @@ const MIGRATIONS = [
       -- Der Google-Abruf stellt von singleEvents:true auf false um: eine Serie
       -- kommt künftig als EIN Master mit ihrer Wiederholungsregel statt als
       -- hunderte Einzelvorkommen, so wie CalDAV und ICS sie liefern und wie
-      -- Yuvomi Serien lokal führt.
+      -- Samla Serien lokal führt.
       --
       -- Der gespeicherte syncToken gehört zu den alten Abrufparametern. Google
       -- beantwortet ihn nach der Umstellung mit 410 GONE, was der Sync zwar
@@ -4302,7 +4302,7 @@ function validateBackupFile(sourcePath) {
       WHERE type = 'table' AND name = 'schema_migrations'
     `).get();
     if (!row) {
-      throw new Error('Backup file is not a valid Yuvomi database.');
+      throw new Error('Backup file is not a valid Samla database.');
     }
     return candidate.prepare('SELECT MAX(version) AS version FROM schema_migrations').get()?.version ?? 0;
   } finally {

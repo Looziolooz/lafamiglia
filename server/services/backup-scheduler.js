@@ -23,10 +23,10 @@ let scheduledTask = null;
 let lastBackup = null;
 let lastError = null;
 
-// New backups use the `yuvomi-` prefix; pre-rebrand files use `oikos-`.
+// New backups use the `samla-` prefix; pre-rebrand files use `oikos-`.
 // Both are still recognised for listing/rotation so legacy backups are not
 // orphaned (never rotated, invisible to the UI) after the rename.
-const BACKUP_FILE_PREFIX = 'yuvomi-backup-';
+const BACKUP_FILE_PREFIX = 'samla-backup-';
 const LEGACY_FILE_PREFIX = 'oikos-backup-';
 
 /** Whether a filename is a backup file (new or legacy naming). */

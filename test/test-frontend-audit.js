@@ -69,7 +69,7 @@ function assertRuleUsesToken(css, selector, property, token, file) {
 
 test('audited frontend files do not assign innerHTML', () => {
   const files = [
-    '../public/components/yuvomi-install-prompt.js',
+    '../public/components/samla-install-prompt.js',
     '../public/components/category-manager.js',
     '../public/pages/notes.js',
     '../public/pages/meals.js',
@@ -121,12 +121,14 @@ test('app locale values do not ship German placeholder markers', () => {
   assert.deepEqual(violations, []);
 });
 
-test('English and French user multi-select none labels are localized', () => {
+test('English, Italian and Swedish user multi-select none labels are localized', () => {
   const en = JSON.parse(read('../public/locales/en.json'));
-  const fr = JSON.parse(read('../public/locales/fr.json'));
+  const it = JSON.parse(read('../public/locales/it.json'));
+  const sv = JSON.parse(read('../public/locales/sv.json'));
 
   assert.equal(en.userMultiSelect.nobody, '- No one -');
-  assert.equal(fr.userMultiSelect.nobody, '- Personne -');
+  assert.equal(it.userMultiSelect.nobody, '- Nessuno -');
+  assert.equal(sv.userMultiSelect.nobody, '- Ingen -');
 });
 
 test('dynamic frontend translation key domains exist in every locale', () => {
@@ -221,8 +223,8 @@ test('service worker release caches track package version and include the early 
   const release = sw.match(/const APP_RELEASE\s*=\s*['"]([^'"]+)['"]/)?.[1];
 
   assert.equal(release, pkg.version, 'Service worker APP_RELEASE must match package.json');
-  assert.match(sw, /const SHELL_CACHE\s*=\s*`yuvomi-shell-\$\{APP_RELEASE\}`/);
-  assert.match(sw, /const PAGES_CACHE\s*=\s*`yuvomi-pages-\$\{APP_RELEASE\}`/);
+  assert.match(sw, /const SHELL_CACHE\s*=\s*`samla-shell-\$\{APP_RELEASE\}`/);
+  assert.match(sw, /const PAGES_CACHE\s*=\s*`samla-pages-\$\{APP_RELEASE\}`/);
   assert.match(sw, /['"]\/lang-init\.js['"]/, 'early lang/dir bootstrap must be available offline');
 });
 
@@ -230,7 +232,9 @@ test('runtime locale changes keep language and writing direction synchronized', 
   const i18n = read('../public/i18n.js');
   const router = read('../public/router.js');
 
-  assert.match(i18n, /const RTL_LOCALES\s*=\s*new Set\(\[['"]ar['"],\s*['"]fa['"]\]\)/);
+  // Keine der drei ausgelieferten Sprachen ist RTL; der Mechanismus bleibt aber
+  // bestehen, damit eine spaeter ergaenzte RTL-Sprache nur den Set fuellen muss.
+  assert.match(i18n, /const RTL_LOCALES\s*=\s*new Set\(/);
   assert.match(i18n, /function applyDocumentLocale\(locale\)/);
   assert.match(i18n, /document\.documentElement\.lang\s*=\s*locale/);
   assert.match(i18n, /document\.documentElement\.dir\s*=\s*RTL_LOCALES\.has\(locale\)\s*\?\s*['"]rtl['"]\s*:\s*['"]ltr['"]/);
@@ -243,7 +247,7 @@ test('runtime locale changes keep language and writing direction synchronized', 
 
 test('install prompt waits for initial translations before rendering text', () => {
   const i18n = read('../public/i18n.js');
-  const prompt = read('../public/components/yuvomi-install-prompt.js');
+  const prompt = read('../public/components/samla-install-prompt.js');
 
   assert.match(i18n, /export function whenI18nReady/);
   assert.match(prompt, /import \{ t,\s*whenI18nReady \} from '\/i18n\.js';/);
@@ -300,7 +304,7 @@ test('personal account leaf preserves self-profile, password, and logout contrac
   assert.match(source, /birth_date:/);
   assert.match(source, /api\.patch\('\/auth\/me\/password',\s*\{\s*current_password:/);
   assert.match(source, /await auth\.logout\(\)/);
-  assert.match(source, /window\.yuvomi\?\.navigate\('\/login'\)/);
+  assert.match(source, /window\.samla\?\.navigate\('\/login'\)/);
   assert.match(source, /id="profile-avatar-file"[^>]*aria-label=/);
   assert.match(source, /id="profile-avatar-file"[^>]*tabindex="-1"/);
   assert.match(source, /id="profile-avatar-file"[^>]*aria-describedby="profile-error"/);
@@ -906,7 +910,7 @@ test('admin-weather leaf owns the household default location', () => {
   assert.match(source, /HOUSEHOLD_WEATHER_SCOPE as SCOPE/);
   assert.match(source, /weather_provider: 'open-meteo'/);
   assert.match(source, /weather_provider: null/);
-  assert.match(source, /window\.yuvomi\?\.showToast/);
+  assert.match(source, /window\.samla\?\.showToast/);
   assert.match(source, /await render\(container, \{ user \}\)/);
   // Die Vorrangregel muss auf dem Blatt stehen: personal-weather überschreibt
   // diesen Standort, und ohne den Hinweis erklärt das nichts (Critique 2026-07-27).
@@ -944,7 +948,7 @@ test('admin-system leaf owns the app name next to the read-only version rows', (
 
 test('Shopping uses the shared category manager component (Audit F-15)', () => {
   const component = read('../public/components/category-manager.js');
-  assert.match(component, /customElements\.define\(\s*'yuvomi-category-manager'/);
+  assert.match(component, /customElements\.define\(\s*'samla-category-manager'/);
   assert.match(component, /import \{ api \} from '\/api\.js'/);
   assert.match(component, /import \{ t \} from '\/i18n\.js'/);
   assert.match(component, /import \{ esc \} from '\/utils\/html\.js'/);
@@ -956,7 +960,7 @@ test('Shopping uses the shared category manager component (Audit F-15)', () => {
 
   const shopping = read('../public/pages/shopping.js');
   assert.match(shopping, /components\/category-manager\.js/);
-  assert.match(shopping, /<yuvomi-category-manager>/);
+  assert.match(shopping, /<samla-category-manager>/);
   assert.match(shopping, /basePath: '\/shopping\/categories'/);
   assert.match(shopping, /shopping\.manageCategories/);
   assert.match(shopping, /category-manager-changed/);
@@ -970,7 +974,7 @@ test('Shopping uses the shared category manager component (Audit F-15)', () => {
 
 test('Kitchen settings copy directs Recipes and Shopping content settings to their modules', () => {
   const english = JSON.parse(read('../public/locales/en.json'));
-  const german = JSON.parse(read('../public/locales/de.json'));
+  const italian = JSON.parse(read('../public/locales/it.json'));
   const kitchenPage = read('../public/settings/pages/modules-kitchen.js');
 
   // Der Zeiger stand in der Leaf-Description und machte sie zum einzigen
@@ -980,9 +984,9 @@ test('Kitchen settings copy directs Recipes and Shopping content settings to the
   assert.match(english.settings.kitchenExternalHint, /Recipes/);
   assert.match(english.settings.kitchenExternalHint, /Shopping/);
   assert.match(english.settings.kitchenExternalHint, /modules/);
-  assert.match(german.settings.kitchenExternalHint, /Rezepte/);
-  assert.match(german.settings.kitchenExternalHint, /Einkauf/);
-  assert.match(german.settings.kitchenExternalHint, /Modulen/);
+  assert.match(italian.settings.kitchenExternalHint, /Ricette/);
+  assert.match(italian.settings.kitchenExternalHint, /Spesa/);
+  assert.match(italian.settings.kitchenExternalHint, /moduli/);
 });
 
 test('Recipes expose meal-type suitability controls for planner integrations', () => {
@@ -1935,7 +1939,7 @@ test('phase 4 locales include More active accessible label', () => {
   const localesDir = new URL('../public/locales/', import.meta.url);
   const files = readdirSync(localesDir).filter((f) => f.endsWith('.json'));
 
-  assert.ok(files.length >= 16, 'expected at least 16 locale files');
+  assert.ok(files.length >= 3, 'expected at least 3 locale files');
   for (const file of files) {
     const data = JSON.parse(readFileSync(new URL(file, localesDir), 'utf8'));
     assert.equal(typeof data.nav?.moreActiveLabel, 'string', `${file}: nav.moreActiveLabel must be a string`);
@@ -2008,7 +2012,7 @@ test('settings cutover: no obsolete settings-tab / panel references remain in pu
 test('settings cutover: the access-redirected notice is consumed once on the account leaf', () => {
   const account = read('../public/settings/pages/personal-account.js');
 
-  assert.match(account, /yuvomi:settings:notice/, 'account leaf must read the one-time redirect notice');
+  assert.match(account, /samla:settings:notice/, 'account leaf must read the one-time redirect notice');
   assert.match(account, /accessRedirected/, 'account leaf must surface the access-redirected message');
   assert.match(account, /removeItem\(/, 'account leaf must consume the notice once');
 });
@@ -2163,7 +2167,7 @@ test('every locale resolves the grouped navigation section labels', () => {
   const files = readdirSync(localesDir).filter((f) => f.endsWith('.json'));
   const sectionKeys = ['sectionOverview', 'sectionPlan', 'sectionHousehold', 'sectionPeople', 'sectionFinance', 'sectionCustomModules'];
 
-  assert.ok(files.length >= 16, 'expected at least 16 locale files');
+  assert.ok(files.length >= 3, 'expected at least 3 locale files');
   for (const file of files) {
     const data = JSON.parse(readFileSync(new URL(file, localesDir), 'utf8'));
     for (const key of sectionKeys) {
@@ -2174,19 +2178,25 @@ test('every locale resolves the grouped navigation section labels', () => {
   }
 });
 
-test('Brazilian Portuguese uses localized Help navigation copy', () => {
-  const data = JSON.parse(read('../public/locales/pt.json'));
+test('Italian and Swedish use localized Help navigation copy', () => {
+  const it = JSON.parse(read('../public/locales/it.json'));
+  const sv = JSON.parse(read('../public/locales/sv.json'));
 
-  assert.equal(data.nav?.help, 'Ajuda');
-  assert.equal(data.help?.title, 'Ajuda');
-  assert.doesNotMatch(JSON.stringify({ nav: data.nav, help: data.help }), /Hilfe/);
+  assert.equal(it.nav?.help, 'Aiuto');
+  assert.equal(it.help?.title, 'Aiuto');
+  assert.equal(sv.nav?.help, 'Hjälp');
+  assert.equal(sv.help?.title, 'Hjälp');
+  // Kein durchgereichter englischer Fallback in der Navigation.
+  for (const data of [it, sv]) {
+    assert.doesNotMatch(JSON.stringify({ nav: data.nav, help: data.help }), /"Help"/);
+  }
 });
 
-test('phase 7 locale files keep the de reference key set complete', () => {
-  const reference = JSON.parse(readFileSync(new URL('de.json', LOCALE_DIR), 'utf8'));
+test('phase 7 locale files keep the en reference key set complete', () => {
+  const reference = JSON.parse(readFileSync(new URL('en.json', LOCALE_DIR), 'utf8'));
   const referenceKeys = new Set(flattenLocaleKeys(reference));
 
-  assert.ok(referenceKeys.size > 0, 'de locale should expose reference keys');
+  assert.ok(referenceKeys.size > 0, 'en locale should expose reference keys');
   for (const file of LOCALES) {
     const data = JSON.parse(readFileSync(new URL(file, LOCALE_DIR), 'utf8'));
     const keys = new Set(flattenLocaleKeys(data));
@@ -2685,20 +2695,33 @@ test('split-expenses archive is reachable and offers a way back (#574)', () => {
   ]);
 });
 
-test('German housekeeping visit copy contains no English fallback strings', () => {
-  const locale = JSON.parse(read('../public/locales/de.json'));
+test('Italian and Swedish housekeeping visit copy contains no English fallback strings', () => {
   const expected = {
-    reports: 'Berichte',
-    visitRecordedAt: 'Einsatz erfasst um',
-    checkedInToday: 'Heute erfasst',
-    editVisit: 'Einsatz bearbeiten',
-    paymentPaid: 'Bezahlt',
-    paymentPending: 'Ausstehend',
-    filterMonth: 'Monat',
+    it: {
+      reports: 'Report',
+      visitRecordedAt: 'Visita registrata alle',
+      checkedInToday: 'Registrata oggi',
+      editVisit: 'Modifica visita',
+      paymentPaid: 'Pagato',
+      paymentPending: 'In attesa',
+      filterMonth: 'Mese',
+    },
+    sv: {
+      reports: 'Rapporter',
+      visitRecordedAt: 'Besök bokat kl',
+      checkedInToday: 'Bokat idag',
+      editVisit: 'Redigera besök',
+      paymentPaid: 'Betalt',
+      paymentPending: 'Väntande',
+      filterMonth: 'Månad',
+    },
   };
 
-  for (const [key, value] of Object.entries(expected)) {
-    assert.equal(locale.housekeeping[key], value, `housekeeping.${key} must be German`);
+  for (const [lang, keys] of Object.entries(expected)) {
+    const locale = JSON.parse(read(`../public/locales/${lang}.json`));
+    for (const [key, value] of Object.entries(keys)) {
+      assert.equal(locale.housekeeping[key], value, `${lang}: housekeeping.${key} is not localized`);
+    }
   }
 
   const housekeepingCss = read('../public/styles/housekeeping.css');
@@ -3355,7 +3378,7 @@ test('split activity feed translates every type the backend writes', () => {
   // Quellcode — der Guard wäre dann still wirkungslos statt rot.
   assert.ok(found.size >= 15, `erwartet mindestens 15 Aktivitätstypen, gefunden: ${[...found.keys()].join(', ')}`);
 
-  const de = JSON.parse(read('../public/locales/de.json'));
+  const de = JSON.parse(read('../public/locales/en.json'));
   const translated = Object.keys(de.splitExpenses.activityType);
 
   const untranslated = [...found].filter(([type]) => !translated.includes(type));
@@ -3824,7 +3847,7 @@ test('destruktive Settings-Dialoge nennen ihre Folgen und sind als gefaehrlich m
 
   // Der Text muss die Folgen benennen, nicht nur warnen: Mindestlaenge als
   // grober Schutz gegen ein spaeteres "Wirklich?" als Detail.
-  const de = JSON.parse(read('../public/locales/de.json'));
+  const de = JSON.parse(read('../public/locales/en.json'));
   for (const [, , detailKey] of dialoge) {
     const value = detailKey.split('.').reduce((o, k) => o?.[k], de);
     assert.ok(value.length >= 80, `${detailKey} ist zu knapp fuer eine Folgenbeschreibung`);

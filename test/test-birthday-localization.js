@@ -87,7 +87,7 @@ test('Nicht-Geburtstags-Termine tragen KEIN birthday_name-Feld', async () => {
 });
 
 test('de-Referenz-Locale trägt alle neuen Keys mit {{name}}-Platzhalter', () => {
-  const de = JSON.parse(readFileSync(new URL('../public/locales/de.json', import.meta.url)));
+  const de = JSON.parse(readFileSync(new URL('../public/locales/en.json', import.meta.url)));
   assert.match(de.birthdays.calendarEventTitle, /\{\{name\}\}/);
   assert.match(de.birthdays.calendarEventDescription, /\{\{name\}\}/);
   assert.match(de.birthdays.calendarEventDescription, /\{\{date\}\}/);

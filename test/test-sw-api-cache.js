@@ -148,7 +148,7 @@ async function dispatchMessage(env, data) {
 }
 
 async function apiCacheName(env) {
-  return (await env.caches.keys()).find((n) => n.startsWith('yuvomi-api-'));
+  return (await env.caches.keys()).find((n) => n.startsWith('samla-api-'));
 }
 
 // --------------------------------------------------------
@@ -252,19 +252,19 @@ test('CLEAR_API_CACHE ignoriert fremde Nachrichten', async () => {
 test('activate entfernt alte Vorversions- und Legacy-oikos-Caches, behält aktuelle Versions-Caches', async () => {
   const env = loadSw();
   // Vorzustand: alter API-Cache, ein Legacy-`oikos-*`-Cache aus der Zeit vor dem
-  // Yuvomi-Rename + aktueller Shell- und API-Cache der laufenden Version.
+  // Samla-Rename + aktueller Shell- und API-Cache der laufenden Version.
   const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
-  await env.caches.open('yuvomi-api-0.0.1');                 // Vorversion → löschen
+  await env.caches.open('samla-api-0.0.1');                 // Vorversion → löschen
   await env.caches.open('oikos-shell-0.0.1');               // Legacy-Rename → löschen
-  await env.caches.open(`yuvomi-shell-${pkg.version}`);     // aktuell → behalten
-  await env.caches.open(`yuvomi-api-${pkg.version}`);       // aktuell → behalten
+  await env.caches.open(`samla-shell-${pkg.version}`);     // aktuell → behalten
+  await env.caches.open(`samla-api-${pkg.version}`);       // aktuell → behalten
 
   await dispatchActivate(env);
 
-  assert.equal(await env.caches.has('yuvomi-api-0.0.1'), false, 'alter API-Cache muss weg sein');
+  assert.equal(await env.caches.has('samla-api-0.0.1'), false, 'alter API-Cache muss weg sein');
   assert.equal(await env.caches.has('oikos-shell-0.0.1'), false, 'Legacy-oikos-Cache muss weg sein');
-  assert.equal(await env.caches.has(`yuvomi-shell-${pkg.version}`), true, 'aktueller Shell-Cache bleibt');
-  assert.equal(await env.caches.has(`yuvomi-api-${pkg.version}`), true, 'aktueller API-Cache bleibt');
+  assert.equal(await env.caches.has(`samla-shell-${pkg.version}`), true, 'aktueller Shell-Cache bleibt');
+  assert.equal(await env.caches.has(`samla-api-${pkg.version}`), true, 'aktueller API-Cache bleibt');
 });
 
 test('im Bypass-Fenster (nach SW-Update) wird die API nicht gecacht', async () => {

@@ -11,7 +11,7 @@ const { stagger, vibrate, withBusy, scheduleUndoableDelete } = await (async () =
   global.window = {
     matchMedia: () => ({ matches: false }),
     addEventListener: () => {},
-    yuvomi: { showToast: () => {} },
+    samla: { showToast: () => {} },
   };
   global.t = (k) => k;
   Object.defineProperty(global, 'navigator', {
@@ -40,7 +40,7 @@ test('stagger: setzt opacity:0 auf alle Elemente', () => {
 });
 
 test('date inputs: accept slash, dot, and hyphen separators for DMY dates', () => {
-  localStorage.setItem('yuvomi-date-format', 'dmy');
+  localStorage.setItem('samla-date-format', 'dmy');
   assert.equal(parseDateInput('26/05/2026'), '2026-05-26');
   assert.equal(parseDateInput('26.05.2026'), '2026-05-26');
   assert.equal(parseDateInput('26-05-2026'), '2026-05-26');
@@ -48,21 +48,21 @@ test('date inputs: accept slash, dot, and hyphen separators for DMY dates', () =
 });
 
 test('date inputs: accept hyphen separators for YMD dates', () => {
-  localStorage.setItem('yuvomi-date-format', 'ymd');
+  localStorage.setItem('samla-date-format', 'ymd');
   assert.equal(parseDateInput('2026-5-6'), '2026-05-06');
   assert.equal(parseDateInput('2026/05/06'), '2026-05-06');
   assert.equal(parseDateInput('2026.05.06'), '2026-05-06');
 });
 
-test('task + recurrence date fields use the shared yuvomi-datepicker', () => {
+test('task + recurrence date fields use the shared samla-datepicker', () => {
   const tasksSource = readFileSync(new URL('../public/pages/tasks.js', import.meta.url), 'utf8');
   const rruleSource = readFileSync(new URL('../public/rrule-ui.js', import.meta.url), 'utf8');
   // Freies Tippen (inkl. Trennzeichen, #442) lebt jetzt im Component; die
   // Formulare binden nur noch das gemeinsame Element ein.
-  assert.match(tasksSource, /<yuvomi-datepicker type="date"[\s\S]*?name="start_date"/);
-  assert.match(tasksSource, /<yuvomi-datepicker type="date"[\s\S]*?name="due_date"/);
-  assert.match(tasksSource, /<yuvomi-datepicker type="time"[\s\S]*?name="due_time"/);
-  assert.match(rruleSource, /<yuvomi-datepicker type="date"[\s\S]*?id="\$\{prefix\}-rrule-until"/);
+  assert.match(tasksSource, /<samla-datepicker type="date"[\s\S]*?name="start_date"/);
+  assert.match(tasksSource, /<samla-datepicker type="date"[\s\S]*?name="due_date"/);
+  assert.match(tasksSource, /<samla-datepicker type="time"[\s\S]*?name="due_time"/);
+  assert.match(rruleSource, /<samla-datepicker type="date"[\s\S]*?id="\$\{prefix\}-rrule-until"/);
   assert.doesNotMatch(tasksSource, /js-date-input|js-time-input/);
 });
 
@@ -195,7 +195,7 @@ test('scheduleUndoableDelete: Undo verhindert den Server-Delete', async () => {
   let committed = false;
   let restored = false;
   let capturedUndo = null;
-  global.window.yuvomi = { showToast: (_msg, _type, _duration, undoFn) => { capturedUndo = undoFn; } };
+  global.window.samla = { showToast: (_msg, _type, _duration, undoFn) => { capturedUndo = undoFn; } };
 
   scheduleUndoableDelete({
     message: 'Gelöscht',
@@ -215,7 +215,7 @@ test('scheduleUndoableDelete: Undo verhindert den Server-Delete', async () => {
 test('scheduleUndoableDelete: ohne Undo läuft der Delete nach dem Fenster', async () => {
   let committed = false;
   let keepaliveFlag = null;
-  global.window.yuvomi = { showToast: () => {} };
+  global.window.samla = { showToast: () => {} };
 
   scheduleUndoableDelete({
     message: 'Gelöscht',
@@ -247,7 +247,7 @@ test('scheduleUndoableDelete ist das einzige Undo-Löschmuster', () => {
 });
 
 test('parseTimeInput: bare hour (24 h) expands to HH:00', () => {
-  localStorage.setItem('yuvomi-time-format', '24h');
+  localStorage.setItem('samla-time-format', '24h');
   assert.equal(parseTimeInput('15'), '15:00');
   assert.equal(parseTimeInput('9'),  '09:00');
   assert.equal(parseTimeInput('0'),  '00:00');
@@ -255,36 +255,36 @@ test('parseTimeInput: bare hour (24 h) expands to HH:00', () => {
 });
 
 test('parseTimeInput: bare hour out-of-range returns empty string', () => {
-  localStorage.setItem('yuvomi-time-format', '24h');
+  localStorage.setItem('samla-time-format', '24h');
   assert.equal(parseTimeInput('24'), '');
   assert.equal(parseTimeInput('99'), '');
 });
 
 test('formatTimeInput: bare hour (12 h) formats with AM/PM', () => {
-  localStorage.setItem('yuvomi-time-format', '12h');
+  localStorage.setItem('samla-time-format', '12h');
   assert.equal(formatTimeInput('9'),  '9:00 AM');
   assert.equal(formatTimeInput('15'), '3:00 PM');
-  localStorage.setItem('yuvomi-time-format', '24h');
+  localStorage.setItem('samla-time-format', '24h');
 });
 
 test('parseDateInput: 8 raw digits (DMY)', () => {
-  localStorage.setItem('yuvomi-date-format', 'dmy');
+  localStorage.setItem('samla-date-format', 'dmy');
   assert.equal(parseDateInput('09062026'), '2026-06-09');
   assert.equal(parseDateInput('01012000'), '2000-01-01');
 });
 
 test('parseDateInput: 8 raw digits (MDY)', () => {
-  localStorage.setItem('yuvomi-date-format', 'mdy');
+  localStorage.setItem('samla-date-format', 'mdy');
   assert.equal(parseDateInput('09062026'), '2026-09-06');
 });
 
 test('parseDateInput: 8 raw digits (YMD)', () => {
-  localStorage.setItem('yuvomi-date-format', 'ymd');
+  localStorage.setItem('samla-date-format', 'ymd');
   assert.equal(parseDateInput('20260609'), '2026-06-09');
 });
 
 test('parseDateInput: 8 raw digits — invalid date returns empty string', () => {
-  localStorage.setItem('yuvomi-date-format', 'dmy');
+  localStorage.setItem('samla-date-format', 'dmy');
   assert.equal(parseDateInput('99992026'), '');
   assert.equal(parseDateInput('00000000'), '');
 });

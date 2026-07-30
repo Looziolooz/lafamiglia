@@ -9,8 +9,8 @@ import { t } from '/i18n.js';
 import { esc } from '/utils/html.js';
 
 const VERSION_URL = '/api/v1/version';
-const DEFAULT_APP_NAME = 'Yuvomi';
-const APP_NAME_STORAGE_KEY = 'yuvomi-app-name';
+const DEFAULT_APP_NAME = 'Samla';
+const APP_NAME_STORAGE_KEY = 'samla-app-name';
 
 function getStoredAppName() {
   return localStorage.getItem(APP_NAME_STORAGE_KEY) || DEFAULT_APP_NAME;
@@ -110,7 +110,7 @@ export async function render(container) {
   const versionEl = container.querySelector('#login-version');
 
   container.querySelectorAll('a[data-link]').forEach((a) =>
-    a.addEventListener('click', (e) => { e.preventDefault(); window.yuvomi.navigate(a.getAttribute('href')); }));
+    a.addEventListener('click', (e) => { e.preventDefault(); window.samla.navigate(a.getAttribute('href')); }));
 
   // OIDC-Fehlermeldung aus URL-Parameter anzeigen (z.B. ?error=oidc_failed nach gescheitertem Callback)
   const urlParams = new URLSearchParams(window.location.search);
@@ -221,7 +221,7 @@ export async function render(container) {
 
     try {
       const result = await auth.login(username, password);
-      window.yuvomi.navigate('/', result.user);
+      window.samla.navigate('/', result.user);
     } catch (err) {
       // Fehler-Ehrlichkeit: nur 401 heißt „falsche Zugangsdaten". 429 ist die
       // Sperre; alles andere (Status 0 = offline, 5xx = Serverfehler) ist ein

@@ -235,8 +235,8 @@ function bindEvents() {
   // Deep-Link aus dem Kontakt-Import („Zu Geburtstagen"): Kandidaten-Modal direkt
   // öffnen, statt den Nutzer den Import-Button selbst suchen zu lassen.
   try {
-    if (sessionStorage.getItem('yuvomi:birthdays:autoImport')) {
-      sessionStorage.removeItem('yuvomi:birthdays:autoImport');
+    if (sessionStorage.getItem('samla:birthdays:autoImport')) {
+      sessionStorage.removeItem('samla:birthdays:autoImport');
       openImportModal();
     }
   } catch { /* sessionStorage evtl. nicht verfügbar */ }
@@ -311,7 +311,7 @@ function openBirthdayModal({ mode, birthday = null }) {
             </div>
             <div class="form-group">
               <label class="form-label" for="bd-birth-date">${t('birthdays.birthDateLabel')}</label>
-              <yuvomi-datepicker id="bd-birth-date" type="date" max="${today}" value="${esc(birthday?.birth_date || '')}"></yuvomi-datepicker>
+              <samla-datepicker id="bd-birth-date" type="date" max="${today}" value="${esc(birthday?.birth_date || '')}"></samla-datepicker>
             </div>
           </div>
         </div>
@@ -352,7 +352,7 @@ function openBirthdayModal({ mode, birthday = null }) {
           photoData = await readFileAsDataUrl(file);
           renderPreview();
         } catch (err) {
-          window.yuvomi?.showToast(err.message, 'danger');
+          window.samla?.showToast(err.message, 'danger');
         }
       });
       panel.querySelector('#bd-remove-photo').addEventListener('click', () => {
@@ -387,7 +387,7 @@ function openBirthdayModal({ mode, birthday = null }) {
         };
 
         if (!body.name || !body.birth_date || !isDateInputValid(birthDateRaw)) {
-          window.yuvomi?.showToast(t('birthdays.requiredFields'), 'warning');
+          window.samla?.showToast(t('birthdays.requiredFields'), 'warning');
           return;
         }
 
@@ -395,16 +395,16 @@ function openBirthdayModal({ mode, birthday = null }) {
         try {
           if (isEdit) {
             await api.put(`/birthdays/${birthday.id}`, body);
-            window.yuvomi?.showToast(t('birthdays.updatedToast'), 'success');
+            window.samla?.showToast(t('birthdays.updatedToast'), 'success');
           } else {
             await api.post('/birthdays', body);
-            window.yuvomi?.showToast(t('birthdays.createdToast'), 'success');
+            window.samla?.showToast(t('birthdays.createdToast'), 'success');
           }
           await loadData();
           renderList();
           closeModal({ force: true });
         } catch (err) {
-          window.yuvomi?.showToast(err.message, 'danger');
+          window.samla?.showToast(err.message, 'danger');
           saveBtn.disabled = false;
         }
       });
@@ -436,7 +436,7 @@ async function openImportModal() {
     const res = await api.get('/birthdays/import/candidates');
     candidates = res.data;
   } catch (err) {
-    window.yuvomi?.showToast(err.message, 'danger');
+    window.samla?.showToast(err.message, 'danger');
     return;
   }
 
@@ -496,18 +496,18 @@ async function openImportModal() {
       submitBtn.addEventListener('click', async () => {
         const ids = selectedIds();
         if (ids.length === 0) {
-          window.yuvomi?.showToast(t('birthdays.importNothingSelected'), 'warning');
+          window.samla?.showToast(t('birthdays.importNothingSelected'), 'warning');
           return;
         }
         submitBtn.disabled = true;
         try {
           const res = await api.post('/birthdays/import', { contact_ids: ids });
-          window.yuvomi?.showToast(t('birthdays.importSuccess', { count: res.data.imported }), 'success');
+          window.samla?.showToast(t('birthdays.importSuccess', { count: res.data.imported }), 'success');
           await loadData();
           renderList();
           closeModal({ force: true });
         } catch (err) {
-          window.yuvomi?.showToast(err.message, 'danger');
+          window.samla?.showToast(err.message, 'danger');
           submitBtn.disabled = false;
         }
       });
@@ -544,7 +544,7 @@ function deleteBirthday(id) {
       ];
       updateBirthdayBadge();
       renderList();
-      if (err) window.yuvomi?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
+      if (err) window.samla?.showToast(err.data?.error ?? t('common.unknownError'), 'danger');
     },
   });
 }
